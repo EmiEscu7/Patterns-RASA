@@ -90,3 +90,10 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+
+- intent: developer_finish_task
+  examples: |
+    - I finished the task
+    - I did the task
+    - I think that I finished the task
+    - I finished what you gave me

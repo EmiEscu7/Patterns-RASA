@@ -28,3 +28,9 @@ stories:
   - action: utter_did_that_help
   - intent: deny
   - action: utter_goodbye
+
+- story: developer finish task
+  steps:
+  - intent: developer_finish_task
+  - action: utter_congrats
+  - action: utter_get_new_task
