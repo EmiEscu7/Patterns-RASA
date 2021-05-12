@@ -4,18 +4,15 @@ nlu:
 - intent: greet
   examples: |
     - hey
+    - ey
     - hello
     - hi
-    - hello there
-    - good morning
-    - good evening
-    - moin
-    - hey there
-    - let's go
-    - hey dude
-    - goodmorning
-    - goodevening
-    - good afternoon
+    - hola
+    - buen dia
+    - buenas tardes
+    - como va
+    - buenas noches
+    
 
 - intent: goodbye
   examples: |
@@ -41,11 +38,11 @@ nlu:
   examples: |
     - no
     - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
+    - nunca
+    - para nada
+    - no concuerdo
+    - no gracias
+    - no me interesa
 
 - intent: mood_great
   examples: |
@@ -88,7 +85,8 @@ nlu:
     - am I talking to a bot?
     - am I talking to a human?
 
-- intent: informar_finalizacion_tarea
+##intents nuevos
+- intent: notif_finish_task
   examples: |
     - como vas con tu tarea, la terminaste?
     - ya terminaste tu tarea?
@@ -96,7 +94,7 @@ nlu:
     - terminaste con la task?
     - terminaste la tarea?
 
-- intent: recibo_nueva_tarea
+- intent: give_new_task
   examples: |
     - ten la nueva tarea
     - ten tu proxima tarea
@@ -106,7 +104,7 @@ nlu:
     - ten la nueva task
     - ten tu proxima task
 
-- intent: recibo_notificacion
+- intent: give_notification
   examples: |
     - te aviso
     - te aviso de

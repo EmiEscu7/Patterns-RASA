@@ -30,18 +30,18 @@ stories:
   - action: utter_goodbye
 
 ##stories nuevas
-- story: give new task
+- story: give new task path
   steps:
-  ##- intent: informar_finalizacion_tarea |-> esta esta de sobra si inicia la conver el Developer
-  ##- action: utter_fin_tarea |-> esta esta de sobra si inicia la conver el Developer
-  - intent: recibo_nueva_tarea 
-  - action: utter_confirm_tarea
+  ##- intent: notif_finish_task |-> esta esta de sobra si inicia la conver el Developer
+  ##- action: utter_finish_task |-> esta esta de sobra si inicia la conver el Developer
+  - intent: give_new_task 
+  - action: utter_confirm_task
   - intent: goodbye
   - action: utter_goodbye
 
 - story: recibo alertar
   steps:
-  - intent: recibo_notificacion
-  - action: utter_confirmo_notificacion
+  - intent: give_notification
+  - action: utter_confirm_notification
   - action: utter_goodbye
 
