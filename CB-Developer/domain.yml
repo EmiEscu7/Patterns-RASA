@@ -8,7 +8,10 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
-  - give_me_new_task
+  ##intents nuevos
+  - informar_finalizacion_tarea ##a futuro: informar status tarea
+  - recibo_nueva_tarea
+  - recibo_notificacion
 
 responses:
   utter_greet:
@@ -25,13 +28,35 @@ responses:
   - text: "Great, carry on!"
 
   utter_goodbye:
-  - text: "Bye"
+  - text: "Adios"
+  - text: "Nos vemos"
+  - text: "Hasta luego"
+  - text: "Chau"
+  - text: "Hasta la próxima!"
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
 
-  utter_confirm_new_task:
-  - text: "Okay. I going to do this task"
+##utter's nuevos
+  utter_fin_tarea:
+  - text: "Termine mi tarea"
+  - text: "Termine lo que estaba realizando"
+  - text: "Finalice con la task"
+  - text: "Termine con la task"
+
+  utter_confirm_tarea:
+  - text: "Bien me pongo a trabajar en ella"
+  - text: "Bien, ahora la miro a task y la hago"
+  - text: "Bien ahora me enfoco en ella"
+  - text: "Gracias por la task"
+
+  utter_confirmo_notificacion:
+  - text: "Gracias por la alerta"
+  - text: "Gracias por el aviso"
+  - text: "Gracias por avisar"
+  - text: "Recibido"
+  - text: "Okey, gracias por avisar"
+  - text: "Buenisimo, gracias por avisarme"
 
 
 session_config:

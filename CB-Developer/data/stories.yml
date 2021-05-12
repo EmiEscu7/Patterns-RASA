@@ -29,11 +29,19 @@ stories:
   - intent: deny
   - action: utter_goodbye
 
+##stories nuevas
 - story: give new task
   steps:
-  #- intent: notify_finishing_task
-  #- action: utter_end_task
-  - intent: give_me_new_task
-  - action: utter_confirm_new_task
+  ##- intent: informar_finalizacion_tarea |-> esta esta de sobra si inicia la conver el Developer
+  ##- action: utter_fin_tarea |-> esta esta de sobra si inicia la conver el Developer
+  - intent: recibo_nueva_tarea 
+  - action: utter_confirm_tarea
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: recibo alertar
+  steps:
+  - intent: recibo_notificacion
+  - action: utter_confirmo_notificacion
   - action: utter_goodbye
 

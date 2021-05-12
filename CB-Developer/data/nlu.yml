@@ -19,26 +19,23 @@ nlu:
 
 - intent: goodbye
   examples: |
-    - good afternoon
-    - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
+    - adios
+    - hasta luego
+    - hasta pronto
+    - chau
+    - nos vemos
+    - nos vemos pronto
+    - nos vemos mas tarde
 
 - intent: affirm
   examples: |
+    - si
     - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
+    - claro
+    - por supuesto
+    - suena bien
+    - okey
+    - correcto
 
 - intent: deny
   examples: |
@@ -91,13 +88,41 @@ nlu:
     - am I talking to a bot?
     - am I talking to a human?
 
-- intent: give_me_new_task
+- intent: informar_finalizacion_tarea
   examples: |
-    - your new task
-    - new task
-    - new order
-    - now you going to do
-    - now do
+    - como vas con tu tarea, la terminaste?
+    - ya terminaste tu tarea?
+    - finalizaste con tu task?
+    - terminaste con la task?
+    - terminaste la tarea?
 
+- intent: recibo_nueva_tarea
+  examples: |
+    - ten la nueva tarea
+    - ten tu proxima tarea
+    - esta es tu nueva tarea
+    - esto es lo que tenes que hacer ahora
+    - esta es tu nueva task
+    - ten la nueva task
+    - ten tu proxima task
 
+- intent: recibo_notificacion
+  examples: |
+    - te aviso
+    - te aviso de
+    - te aviso de que 
+    - te aviso que
+    - te aviso que tenes
+    - te aviso que tenes que
+    - acuerdate que
+    - acuerdate que tienes una reunion
+    - acuerdate que tienes que
+    - te recuerdo
+    - te recuerdo de la reunion
+    - te recuerdo de la
+    - te recuerdo que
+    - te recuerdo que tenes una reunion
+    - te recuerdo que tenes que
+    - te envio la notificacion de
+    - te envio la notificacion de la reunion
 
