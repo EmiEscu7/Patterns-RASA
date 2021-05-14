@@ -8,6 +8,7 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
+  - developer_finish_task
 
 responses:
   utter_greet:
@@ -28,6 +29,12 @@ responses:
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+
+  utter_congrats:
+  - text: "Fine. This is your obligations. I going to give you a new task!"
+
+  utter_get_new_task:
+  - text: "Now you programm the conection beteween database and application"
 
 session_config:
   session_expiration_time: 60

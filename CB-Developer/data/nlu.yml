@@ -90,3 +90,14 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+
+- intent: give_me_new_task
+  examples: |
+    - your new task
+    - new task
+    - new order
+    - now you going to do
+    - now do
+
+
+

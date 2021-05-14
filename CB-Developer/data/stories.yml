@@ -28,3 +28,12 @@ stories:
   - action: utter_did_that_help
   - intent: deny
   - action: utter_goodbye
+
+- story: give new task
+  steps:
+  #- intent: notify_finishing_task
+  #- action: utter_end_task
+  - intent: give_me_new_task
+  - action: utter_confirm_new_task
+  - action: utter_goodbye
+
