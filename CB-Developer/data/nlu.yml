@@ -4,51 +4,45 @@ nlu:
 - intent: greet
   examples: |
     - hey
+    - ey
     - hello
     - hi
-    - hello there
-    - good morning
-    - good evening
-    - moin
-    - hey there
-    - let's go
-    - hey dude
-    - goodmorning
-    - goodevening
-    - good afternoon
+    - hola
+    - buen dia
+    - buenas tardes
+    - como va
+    - buenas noches
+    
 
 - intent: goodbye
   examples: |
-    - good afternoon
-    - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
+    - adios
+    - hasta luego
+    - hasta pronto
+    - chau
+    - nos vemos
+    - nos vemos pronto
+    - nos vemos mas tarde
 
 - intent: affirm
   examples: |
+    - si
     - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
+    - claro
+    - por supuesto
+    - suena bien
+    - okey
+    - correcto
 
 - intent: deny
   examples: |
     - no
     - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
+    - nunca
+    - para nada
+    - no concuerdo
+    - no gracias
+    - no me interesa
 
 - intent: mood_great
   examples: |
@@ -91,13 +85,69 @@ nlu:
     - am I talking to a bot?
     - am I talking to a human?
 
-- intent: give_me_new_task
+##intents nuevos
+- intent: notif_finish_task
   examples: |
-    - your new task
-    - new task
-    - new order
-    - now you going to do
-    - now do
+    - como vas con tu tarea, la terminaste?
+    - ya terminaste tu tarea?
+    - finalizaste con tu task?
+    - terminaste con la task?
+    - terminaste la tarea?
 
+- intent: give_new_task
+  examples: |
+    - ten la nueva tarea
+    - ten tu proxima tarea
+    - esta es tu nueva tarea
+    - esto es lo que tenes que hacer ahora
+    - esta es tu nueva task
+    - ten la nueva task
+    - ten tu proxima task
 
+- intent: give_notification
+  examples: |
+    - te aviso
+    - te aviso de
+    - te aviso de que 
+    - te aviso que
+    - te aviso que tenes
+    - te aviso que tenes que
+    - acuerdate que
+    - acuerdate que tienes una reunion
+    - acuerdate que tienes que
+    - te recuerdo
+    - te recuerdo de la reunion
+    - te recuerdo de la
+    - te recuerdo que
+    - te recuerdo que tenes una reunion
+    - te recuerdo que tenes que
+    - te envio la notificacion de
+    - te envio la notificacion de la reunion
 
+- intent: give_actual_state
+  examples: |
+    - Como vas con la tarea?
+    - Como vas
+    - Vas bien con la tarea que te di?
+    - Vas bien
+    - En que estado se encuentra la tarea que te fue asignada?
+    - Cual es tu estado en la tarea
+    - Alguna novedad de la tarea que se te fue asignada?
+    - Estado de tu tarea
+    - Como te fue con la tarea?
+
+- intent: congrats
+  examples: |
+    - Buen trabajo!
+    - Excelente
+    - Bien hecho
+    - Enhorabuena
+
+- intent: informado
+  examples: |
+    - Recibido.
+    - OK
+    - Intentare asistir
+    - Asistire
+    - Correcto
+    - Alli estare
