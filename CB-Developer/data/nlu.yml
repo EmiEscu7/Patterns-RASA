@@ -106,35 +106,23 @@ nlu:
 
 - intent: give_notification
   examples: |
-    - te aviso
-    - te aviso de
-    - te aviso de que 
-    - te aviso que
-    - te aviso que tenes
     - te aviso que tenes que
-    - acuerdate que
     - acuerdate que tienes una reunion
     - acuerdate que tienes que
-    - te recuerdo
     - te recuerdo de la reunion
     - te recuerdo de la
-    - te recuerdo que
     - te recuerdo que tenes una reunion
-    - te recuerdo que tenes que
     - te envio la notificacion de
-    - te envio la notificacion de la reunion
 
 - intent: give_actual_state
   examples: |
-    - Como vas con la tarea?
-    - Como vas
-    - Vas bien con la tarea que te di?
-    - Vas bien
-    - En que estado se encuentra la tarea que te fue asignada?
-    - Cual es tu estado en la tarea
-    - Alguna novedad de la tarea que se te fue asignada?
-    - Estado de tu tarea
-    - Como te fue con la tarea?
+    - que te encuentras haciendo?
+    - en que andas trabajando?
+    - en que andas ahora?
+    - que andas haciendo ahora?
+    - con que andas?
+    - con que te encontras trabajando?
+    - con que estas trabajando?
 
 - intent: congrats
   examples: |
