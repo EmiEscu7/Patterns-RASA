@@ -12,6 +12,9 @@ intents:
   - notif_finish_task ##a futuro: informar status tarea
   - give_new_task
   - give_notification
+  - give_actual_state
+  - congrats
+  - informado
 
 responses:
   utter_greet:
@@ -57,6 +60,22 @@ responses:
   - text: "Recibido"
   - text: "Okey, gracias por avisar"
   - text: "Buenisimo, gracias por avisarme"
+
+  utter_answer_actual_state:
+  - text: "Voy bien"
+  - text: "Me queda poco trabajo"
+  - text: "Recien comienzo"
+  - text: "Mas o menos"
+  - text: "terminando"
+  - text: "comenzando"
+  - text: "Casi listo"
+
+  utter_question_event_day:
+  - text: "Cuando es el proximo evento"
+  - text: "Cuando es evento"
+  - text: "Cuando es el proximo scrum event"
+  - text: "El proximo evento"
+  - text: "El dia del evento"
 
 
 

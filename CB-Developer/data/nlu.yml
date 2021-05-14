@@ -124,3 +124,30 @@ nlu:
     - te envio la notificacion de
     - te envio la notificacion de la reunion
 
+- intent: give_actual_state
+  examples: |
+    - Como vas con la tarea?
+    - Como vas
+    - Vas bien con la tarea que te di?
+    - Vas bien
+    - En que estado se encuentra la tarea que te fue asignada?
+    - Cual es tu estado en la tarea
+    - Alguna novedad de la tarea que se te fue asignada?
+    - Estado de tu tarea
+    - Como te fue con la tarea?
+
+- intent: congrats
+  examples: |
+    - Buen trabajo!
+    - Excelente
+    - Bien hecho
+    - Enhorabuena
+
+- intent: informado
+  examples: |
+    - Recibido.
+    - OK
+    - Intentare asistir
+    - Asistire
+    - Correcto
+    - Alli estare

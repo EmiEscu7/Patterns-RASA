@@ -45,3 +45,19 @@ stories:
   - action: utter_confirm_notification
   - action: utter_goodbye
 
+- story: recibo pregunta estado
+  steps:
+  ##esta de mas si developer inicia conver  - intent: consultar_tiempo_evento
+  ##esta de mas si developer inicia conver  - action: utter_question_event_day
+  - intent: give_actual_state
+  - action: utter_answer_actual_state
+  - intent: congrats
+  - action: utter_goodbye
+
+- story: consultar eventos
+  steps:
+  - intent: greet
+  - action: utter_question_event_day
+  - intent: informado
+  - action: utter_goodbye
+
