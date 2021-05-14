@@ -11,6 +11,7 @@ intents:
   - developer_finish_task
   - accept_task
   - verify_state
+  - consultas_de_eventos
 
 responses:
   utter_saludo:
