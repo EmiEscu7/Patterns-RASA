@@ -2,35 +2,61 @@ version: "2.0"
 
 stories:
 
-- story: happy path
+- story: camino feliz
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
+  - intent: grret
+  - action: utter_saludo
+  - intent: mood_happy
+  - action: utter_feliz
 
-- story: sad path 1
+- story: camino triste 1
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: utter_saludo
   - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
+  - action: utter_animar
+  - action: utter_eso_ayudo
   - intent: affirm
-  - action: utter_happy
+  - action: utter_chau
 
-- story: sad path 2
+- story: camino triste 2
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: utter_saludo
   - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
+  - action: utter_animar
+  - action: utter_eso_ayudo
   - intent: deny
-  - action: utter_goodbye
+  - action: utter_chau
 
-- story: developer finish task
+- story: desarrollador termino tarea
   steps:
   - intent: developer_finish_task
-  - action: utter_congrats
-  - action: utter_get_new_task
+  - action: utter_felicitar
+  - action: utter_dar_nueva_tarea
+  - intent: acept_task
+  - action: utter_chau
+
+
+- story: consultar esatdo
+  steps:
+  - action: utter_consultar_estado
+  - intent: verify_state
+  - action: utter_vas_bien
+  - intent: goodbye
+  - action: utter_chau
+
+
+- story: alertar
+  steps:
+    - intent: informar_developers
+    - action: utter_lanzar_alerta
+    - intent: goodbye
+    - action: utter_chau
+
+- story: recibo consulta
+  steps:
+    - action: utter_responder_consultas_eventos
+    - intent: goodbye
+    - action: utter_chau
+

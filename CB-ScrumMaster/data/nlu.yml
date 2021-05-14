@@ -4,96 +4,117 @@ nlu:
 - intent: greet
   examples: |
     - hey
-    - hello
-    - hi
-    - hello there
-    - good morning
-    - good evening
-    - moin
-    - hey there
-    - let's go
-    - hey dude
-    - goodmorning
-    - goodevening
-    - good afternoon
+    - hola
+    - buenas
+    - buen dia
+    - buenas tardes
+    - vamos
+    - hey bro
+    - bro
 
 - intent: goodbye
   examples: |
-    - good afternoon
-    - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
+    - hasta la proxima
+    - nos vemos
+    - chau
+    - hasta luego
+    - buenas noches
+    - adios
+    - hasta la proxima
+    - que tengas un buen dia
+    - nos vemos luego
+    - chau chau
 
 - intent: affirm
   examples: |
-    - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
+    - si
+    - sisi
+    - si si
+    - por supuesto
+    - eso suena bien
+    - correcto
+    - joya
+    - dale dale
+    - dale
 
 - intent: deny
   examples: |
     - no
-    - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
+    - nono
+    - no no
+    - nunca
+    - no pienso eso
+    - no me gusta
+    - de ninguna manera
+    - no realmente
 
 - intent: mood_great
   examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
+    - prefect
+    - genial
+    - me siento como un rey
+    - increible
+    - me siento muy bien
+    - estoy genial
+    - estoy increible
+    - voy a salvar al mundo
+    - super emocionado
+    - extremadamente bien
+    - tan tan perfecto
+    - tan bien
+    - tan perfecto
 
 - intent: mood_unhappy
   examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
+    - mi dia fue horrible
+    - estoy triste
+    - no me siento muy bien
+    - estoy en desacuerdo
+    - super triste
+    - estoy muy triste
+    - triste
+    - muy triste
+    - desanimado
+    - malo
+    - no muy bien
+    - extremadamente trsite
+    - tan triste
 
 - intent: bot_challenge
   examples: |
-    - are you a bot?
-    - are you a human?
-    - am I talking to a bot?
-    - am I talking to a human?
+    - ¿Sos un bot?
+    - ¿Sos un humano?
+    - ¿Estoy hablando con un bot?
+    - ¿Estoy hablando con un humano?
 
 - intent: developer_finish_task
   examples: |
-    - I finished the task
-    - I did the task
-    - I think that I finished the task
-    - I finished what you gave me
+    - Terminé la tarea
+    - Ya hice la tarea
+    - Creo que finalicé la tarea
+    - Terminé la tarea que me diste
+    - Ya está terminada mi tarea
+
+- intent: accept_task
+  examples: |
+    - Genial, hago eso
+    - hago la nueva tarea
+    - voy a hacerla
+    - Genial, hago esa tarea
+
+- intent: verify_state
+  examples: |
+    - voy bien
+    - me queda poco
+    - casi está lista
+    - recién empiezo
+    - ahí voy
+    - más o menos
+
+
+
+-intent: consultas_de_eventos
+ examples:
+    - Cuando es el proximo evento
+    - Cuando vamos a tener el proximo evento de Scrum
+    - Cuando ocurre el proximo Scrum Event

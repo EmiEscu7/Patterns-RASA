@@ -9,32 +9,48 @@ intents:
   - mood_unhappy
   - bot_challenge
   - developer_finish_task
+  - accept_task
+  - verify_state
+  - consultas_de_eventos
 
 responses:
-  utter_greet:
-  - text: "Hey! How are you?"
+  utter_saludo:
+  - text: "Hola! ¿Cómo estás?"
 
-  utter_cheer_up:
-  - text: "Here is something to cheer you up:"
+  utter_animar:
+  - text: "Aquí hay algo que puede animarte:"
     image: "https://i.imgur.com/nGF1K8f.jpg"
 
-  utter_did_that_help:
-  - text: "Did that help you?"
+  utter_eso_ayudo:
+  - text: "¿Te srivió eso?"
 
-  utter_happy:
-  - text: "Great, carry on!"
+  utter_feliz:
+  - text: "Genial, continuemos!"
 
-  utter_goodbye:
-  - text: "Bye"
+  utter_chau:
+  - text: "Chau"
 
-  utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
+  utter_soy_un_bot:
+  - text: "Soy un bot, desarrollado por RASA."
 
-  utter_congrats:
-  - text: "Fine. This is your obligations. I going to give you a new task!"
+  utter_felicitar:
+  - text: "Bien. Esa es tu obligación. Ahora te doy una nueva tarea!"
 
-  utter_get_new_task:
-  - text: "Now you programm the conection beteween database and application"
+  utter_dar_nueva_tarea:
+  - text: "Ahora tenes que hacer la interfaz para la conexión entre la base de datos y la aplicación. Tenés como máximo 3 días para hacerlo!"
+
+  utter_consultar_estado:
+  - text: "¿Cómo vas con la tarea que te di?"
+
+  utter_vas_bien:
+  - text: "Bien, continuá así"
+
+  utter_lanzar_alerta:
+  - text: "Acordate que dentro de dos semanas es el Sprint Review"
+
+  utter_responder_consultas_eventos:
+  - text: "Es dentro de dos dias"
+  
 
 session_config:
   session_expiration_time: 60
