@@ -133,9 +133,6 @@ nlu:
 
 - intent: informado
   examples: |
-    - Recibido.
-    - OK
-    - Intentare asistir
-    - Asistire
-    - Correcto
-    - Alli estare
+    - El evento sera el (dia) [lunes] a las [20:30] (horas)
+    - La reunion sera el (dia) [miercoles] a las [12:00] (horas)
+    - El meeting sera el (dia) [viernes] a las [07:30] (horas)
