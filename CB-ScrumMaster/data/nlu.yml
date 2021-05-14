@@ -110,4 +110,11 @@ nlu:
     - recién empiezo
     - ahí voy
     - más o menos
-  
+
+
+
+-intent: consultas_de_eventos
+ examples:
+    - Cuando es el proximo evento
+    - Cuando vamos a tener el proximo evento de Scrum
+    - Cuando ocurre el proximo Scrum Event
