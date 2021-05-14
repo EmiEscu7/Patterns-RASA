@@ -44,6 +44,13 @@ responses:
   utter_vas_bien:
   - text: "Bien, continuá así"
 
+  utter_lanzar_alerta:
+  - text: "Acordate que dentro de dos semanas es el Sprint Review"
+
+  utter_responder_consultas_eventos:
+  - text: "Es dentro de dos dias"
+  
+
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
