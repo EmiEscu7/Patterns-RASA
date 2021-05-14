@@ -103,6 +103,7 @@ nlu:
     - esta es tu nueva task
     - ten la nueva task
     - ten tu proxima task
+    - ahora tenes que hacer
 
 - intent: give_notification
   examples: |

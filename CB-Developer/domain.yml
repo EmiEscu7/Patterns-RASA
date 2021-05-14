@@ -1,84 +1,66 @@
-version: "2.0"
-
-intents:
-  - greet
-  - goodbye
-  - affirm
-  - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
-  ##intents nuevos
-  - notif_finish_task ##a futuro: informar status tarea
-  - give_new_task
-  - give_notification
-  - give_actual_state
-  - congrats
-  - informado
-
-responses:
-  utter_greet:
-  - text: "Hey! How are you?"
-
-  utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
-
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great, carry on!"
-
-  utter_goodbye:
-  - text: "Adios"
-  - text: "Nos vemos"
-  - text: "Hasta luego"
-  - text: "Chau"
-  - text: "Hasta la próxima!"
-
-  utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
-
-##utter's nuevos
-  utter_finish_task:
-  - text: "Termine mi tarea"
-  - text: "Termine lo que estaba realizando"
-  - text: "Finalice con la task"
-  - text: "Termine con la task"
-
-  utter_confirm_task:
-  - text: "Bien me pongo a trabajar en ella"
-  - text: "Bien, ahora la miro a task y la hago"
-  - text: "Bien ahora me enfoco en ella"
-  - text: "Gracias por la task"
-
-  utter_confirm_notification:
-  - text: "Gracias por la alerta"
-  - text: "Gracias por el aviso"
-  - text: "Gracias por avisar"
-  - text: "Recibido"
-  - text: "Okey, gracias por avisar"
-  - text: "Buenisimo, gracias por avisarme"
-
-  utter_answer_actual_state:
-  - text: "Voy bien"
-  - text: "Me queda poco trabajo"
-  - text: "Recien comienzo"
-  - text: "Mas o menos"
-  - text: "terminando"
-  - text: "comenzando"
-  - text: "Casi listo"
-
-  utter_question_event_day:
-  - text: "Cuando es el proximo evento"
-  - text: "Cuando es evento"
-  - text: "Cuando es el proximo scrum event"
-  - text: "El proximo evento"
-  - text: "El dia del evento"
-
-
-
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
+intents:
+- greet
+- goodbye
+- affirm
+- deny
+- mood_great
+- mood_unhappy
+- bot_challenge
+- notif_finish_task
+- give_new_task
+- give_notification
+- give_actual_state
+- congrats
+- informado
+responses:
+  utter_greet:
+  - text: Hey! How are you?
+  utter_cheer_up:
+  - image: https://i.imgur.com/nGF1K8f.jpg
+    text: 'Here is something to cheer you up:'
+  utter_did_that_help:
+  - text: Did that help you?
+  utter_happy:
+  - text: Great, carry on!
+  utter_goodbye:
+  - text: Adios
+  - text: Nos vemos
+  - text: Hasta luego
+  - text: Chau
+  - text: Hasta la próxima!
+  utter_iamabot:
+  - text: I am a bot, powered by Rasa.
+  utter_finish_task:
+  - text: Termine mi tarea
+  - text: Termine lo que estaba realizando
+  - text: Finalice con la task
+  - text: Termine con la task
+  utter_confirm_task:
+  - text: Bien me pongo a trabajar en ella
+  - text: Bien, ahora la miro a task y la hago
+  - text: Bien ahora me enfoco en ella
+  - text: Gracias por la task
+  utter_confirm_notification:
+  - text: Gracias por la alerta
+  - text: Gracias por el aviso
+  - text: Gracias por avisar
+  - text: Recibido
+  - text: Okey, gracias por avisar
+  - text: Buenisimo, gracias por avisarme
+  utter_answer_actual_state:
+  - text: Voy bien
+  - text: Me queda poco trabajo
+  - text: Recien comienzo
+  - text: Mas o menos
+  - text: terminando
+  - text: comenzando
+  - text: Casi listo
+  utter_question_event_day:
+  - text: Cuando es el proximo evento
+  - text: Cuando es evento
+  - text: Cuando es el proximo scrum event
+  - text: El proximo evento
+  - text: El dia del evento

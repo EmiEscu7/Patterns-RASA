@@ -1,57 +1,42 @@
-version: "2.0"
-
-intents:
-  - greet
-  - goodbye
-  - affirm
-  - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
-  - developer_finish_task
-  - accept_task
-  - verify_state
-  - consultas_de_eventos
-
-responses:
-  utter_saludo:
-  - text: "Hola! ¿Cómo estás?"
-
-  utter_animar:
-  - text: "Aquí hay algo que puede animarte:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
-
-  utter_eso_ayudo:
-  - text: "¿Te srivió eso?"
-
-  utter_feliz:
-  - text: "Genial, continuemos!"
-
-  utter_chau:
-  - text: "Chau"
-
-  utter_soy_un_bot:
-  - text: "Soy un bot, desarrollado por RASA."
-
-  utter_felicitar:
-  - text: "Bien. Esa es tu obligación. Ahora te doy una nueva tarea!"
-
-  utter_dar_nueva_tarea:
-  - text: "Ahora tenes que hacer la interfaz para la conexión entre la base de datos y la aplicación. Tenés como máximo 3 días para hacerlo!"
-
-  utter_consultar_estado:
-  - text: "¿Cómo vas con la tarea que te di?"
-
-  utter_vas_bien:
-  - text: "Bien, continuá así"
-
-  utter_lanzar_alerta:
-  - text: "Acordate que dentro de dos semanas es el Sprint Review"
-
-  utter_responder_consultas_eventos:
-  - text: "Es dentro de dos dias"
-  
-
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
+intents:
+- greet
+- goodbye
+- affirm
+- deny
+- mood_great
+- mood_unhappy
+- bot_challenge
+- developer_finish_task
+- accept_task
+- verify_state
+- consultas_de_eventos
+responses:
+  utter_saludo:
+  - text: Hola! Como estas?
+  utter_animar:
+  - image: https://i.imgur.com/nGF1K8f.jpg
+    text: 'Aqui hay algo que puede animarte:'
+  utter_eso_ayudo:
+  - text: ¿Te sirvio eso?
+  utter_feliz:
+  - text: Genial, continuemos!
+  utter_chau:
+  - text: Chau
+  utter_soy_un_bot:
+  - text: Soy un bot, desarrollado por RASA.
+  utter_felicitar:
+  - text: Bien. Esa es tu obligacion. Ahora te doy una nueva tarea!
+  utter_dar_nueva_tarea:
+  - text: Ahora tenes que hacer la interfaz para la conexion entre la base de datos
+      y la aplicacion. Tenes como maximo 3 dias para hacerlo!
+  utter_consultar_estado:
+  - text: Como vas con la tarea que te di?
+  utter_vas_bien:
+  - text: Bien, continua asi
+  utter_lanzar_alerta:
+  - text: Acordate que dentro de dos semanas es el Sprint Review
+  utter_responder_consultas_eventos:
+  - text: Es dentro de dos dias

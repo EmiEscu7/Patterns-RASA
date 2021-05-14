@@ -107,14 +107,20 @@ nlu:
     - voy bien
     - me queda poco
     - casi está lista
-    - recién empiezo
-    - ahí voy
-    - más o menos
+    - recien empiezo
+    - ahi voy
+    - mas o menos
+    - terminando
+    - casi listo
+    - comenzando
+    - recien comienzo
+    - me queda poco trabajo
+    - mas o menos
 
 
 
--intent: consultas_de_eventos
- examples:
+- intent: consultas_de_eventos
+  examples: |
     - Cuando es el proximo evento
     - Cuando vamos a tener el proximo evento de Scrum
     - Cuando ocurre el proximo Scrum Event

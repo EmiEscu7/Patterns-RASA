@@ -49,13 +49,14 @@ stories:
 
 - story: alertar
   steps:
-    - intent: informar_developers
+    #- intent: informar_developers
     - action: utter_lanzar_alerta
     - intent: goodbye
     - action: utter_chau
 
 - story: recibo consulta
   steps:
+    - intent: consultas_de_eventos
     - action: utter_responder_consultas_eventos
     - intent: goodbye
     - action: utter_chau
