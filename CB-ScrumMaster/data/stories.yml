@@ -40,7 +40,11 @@ stories:
 
 - story: consultar esatdo
   steps:
-  - action: utter_consultar_estado
+  #- action: utter_consultar_estado
+  - intent: presentation_user
+  - slot_was_set: 
+    - name: Emiliano
+  - action: action_consultar_estado
   - intent: verify_state
   - action: utter_vas_bien
   - intent: goodbye

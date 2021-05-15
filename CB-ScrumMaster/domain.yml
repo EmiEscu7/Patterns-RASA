@@ -1,18 +1,26 @@
-session_config:
-  session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+version: "2.0"
+
 intents:
-- greet
-- goodbye
-- affirm
-- deny
-- mood_great
-- mood_unhappy
-- bot_challenge
-- developer_finish_task
-- accept_task
-- verify_state
-- consultas_de_eventos
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - developer_finish_task
+  - accept_task
+  - verify_state
+  - presentation_user
+
+entities:
+  - name
+
+slots:
+  name:
+    type: text
+
+
 responses:
   utter_saludo:
   - text: Hola! Como estas?
@@ -40,3 +48,11 @@ responses:
   - text: Acordate que dentro de dos semanas es el Sprint Review
   utter_responder_consultas_eventos:
   - text: Es dentro de dos dias
+
+
+actions:
+  - action_consultar_estado
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

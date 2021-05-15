@@ -7,7 +7,7 @@ rules:
   - intent: goodbye
   - action: utter_chau
 
-- rule: Say 'I am a bot' anytime the user challenges
-  steps:
-  - intent: bot_challenge
-  - action: utter_soy_un_bot
+#- rule: Say 'I am a bot' anytime the user challenges
+#  steps:
+#  - intent: bot_challenge
+#  - action: utter_soy_un_bot

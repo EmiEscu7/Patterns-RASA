@@ -124,3 +124,11 @@ nlu:
     - Cuando es el proximo evento
     - Cuando vamos a tener el proximo evento de Scrum
     - Cuando ocurre el proximo Scrum Event
+
+
+- intent: presentation_user
+  examples: |
+    - Hola soy [Emiliano](name)
+    - Buenas, me llamo [Matias](name)
+    - Que tal, soy [Pedro](name)
+    - Que onda, soy [Agustin](name)
