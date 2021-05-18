@@ -4,7 +4,7 @@ stories:
 
 - story: camino feliz
   steps:
-  - intent: grret
+  - intent: greet
   - action: utter_saludo
   - intent: mood_happy
   - action: utter_feliz
@@ -34,13 +34,18 @@ stories:
   - intent: developer_finish_task
   - action: utter_felicitar
   - action: utter_dar_nueva_tarea
-  - intent: acept_task
+  - intent: accept_task
   - action: utter_chau
 
 
 - story: consultar esatdo
   steps:
-  - action: utter_consultar_estado
+  #- action: utter_consultar_estado
+  - intent: presentation_user
+  - slot_was_set: 
+    - name: Emiliano
+  #- action: saludar
+  - action: action_consultar_estado
   - intent: verify_state
   - action: utter_vas_bien
   - intent: goodbye

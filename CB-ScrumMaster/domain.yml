@@ -7,10 +7,20 @@ intents:
   - deny
   - mood_great
   - mood_unhappy
+  - mood_happy
   - bot_challenge
   - developer_finish_task
   - accept_task
   - verify_state
+  - presentation_user
+
+entities:
+  - name
+
+slots:
+  name:
+    type: text
+
 
 responses:
   utter_saludo:
@@ -43,6 +53,25 @@ responses:
 
   utter_vas_bien:
   - text: "Bien, continuá así"
+
+  utter_formal:
+  - text: "Un gusto {name}, como va tu dia "
+  - text: "Un  placer {name}"
+  - text: "Un placer encontrarte de nuevo {name}"
+
+  utter_comun:
+  - text: "Hola {name} como te esta yendo?"
+  - text: "Que tal {name} como vas con tu task"
+  - text: "Como te va {name}"
+  
+  utter_informal:
+  - text: "Que onda gato, como venis {name}"
+  - text: "Que pasa, calabaza, como te esta yendo"
+  - text: "Que haces centenialito, me imagino que ya te leiste toda la documentacion"
+
+
+actions:
+  - action_consultar_estado
 
 session_config:
   session_expiration_time: 60

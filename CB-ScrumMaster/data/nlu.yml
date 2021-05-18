@@ -64,6 +64,15 @@ nlu:
     - tan bien
     - tan perfecto
 
+- intent: mood_happy
+  examples: |
+    - mi dia fue genial
+    - super bien
+    - todo bien
+    - todo perfecto
+    - en perfectas condiciones
+   
+
 - intent: mood_unhappy
   examples: |
     - mi dia fue horrible
@@ -110,4 +119,11 @@ nlu:
     - recién empiezo
     - ahí voy
     - más o menos
+
+- intent: presentation_user
+  examples: |
+    - Hola soy [Emiliano](name)
+    - Buenas, me llamo [Matias](name)
+    - Que tal, soy [Pedro](name)
+    - Que onda, soy [Agustin](name) 
   
