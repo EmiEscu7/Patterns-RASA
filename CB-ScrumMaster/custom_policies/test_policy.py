@@ -26,6 +26,7 @@ from rasa.core.constants import MEMOIZATION_POLICY_PRIORITY
 #importaciones nuevas
 from rasa.core.policies.policy import confidence_scores_for, PolicyPrediction
 from rasa.shared.nlu.constants import INTENT_NAME_KEY
+from rasa_sdk.events import SlotSet
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +82,7 @@ class TestPolicy(Policy):
             personality = json.load(file)[name]
         
 
+
         #print(personality)
         vectorP = []
         for key, value in personality.items():
@@ -118,12 +120,11 @@ class TestPolicy(Policy):
 
            #intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
         intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
-        if(not self.answered and intent == 'presentation_user'):
+        if(not self.answered and intent == 'presentation_user'):            
             result = confidence_scores_for(rta, 1.0, domain)
             self.answered = True
         else:
-                self.answered = False
-
+            self.answered = False
         return self._prediction(result)
         
 

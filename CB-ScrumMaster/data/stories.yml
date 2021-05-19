@@ -46,6 +46,10 @@ stories:
     - name: Emiliano
   #- action: saludar
   - action: action_consultar_estado
+  #- or: 
+  #  - action: utter_formal
+  #  - action: utter_comun
+  #  - action: utter_informal
   - intent: verify_state
   - action: utter_vas_bien
   - intent: goodbye

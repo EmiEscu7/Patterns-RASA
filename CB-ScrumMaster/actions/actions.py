@@ -32,10 +32,14 @@ class ActionConsultEstado(Action):
         #dev = 'developer'+str(numDev)
         with open('tasks.json', 'r') as file:
             developer = json.load(file)[nombre] #Pedro{}
+        
+        respuesta = tracker.get_slot('rta')
 
         name = developer['name']
         task = developer['currentTask']
-
-        dispatcher.utter_message(text="Buenas {}. Cómo vas con {}?".format(name, task))
+        print(respuesta)
+        dispatcher.utter_message(template= respuesta)
+        dispatcher.utter_message(text = "Acordate que te di {}".format(task))
+        #dispatcher.utter_message(text="Buenas {}. Cómo vas con {}?".format(name, task))
 
         return []
