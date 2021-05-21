@@ -99,19 +99,20 @@ class TestPolicy(Policy):
         
         #print(relation)
 
-        res = [ [float(0.3), "formal"], 
-                [float(0.6), "comun"], 
-                [float(1.0), "informal"] ]
+        res = [ [float(0.3), "_formal"], 
+                [float(0.6), "_comun"], 
+                [float(1.0), "_informal"] ]
        
         #print(res[0][1])
-        rta = 'utter_'
         #for i in range(3):
         #    val = float(res[i][0])
         #    if (relation <= val):
         #        rta += res[i][1]
         #        #print(rta)
         #        break
-       
+        rta = 'utter_'
+        intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
+        rta += intent
         i = 0 
         while (relation > res[i][0]):
             i+=1
@@ -119,8 +120,8 @@ class TestPolicy(Policy):
         result = self._default_predictions(domain)
 
            #intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
-        intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
-        if(not self.answered and intent == 'presentation_user'):            
+        
+        if(not self.answered): #and intent == 'presentation_user'):            
             result = confidence_scores_for(rta, 1.0, domain)
             self.answered = True
         else:

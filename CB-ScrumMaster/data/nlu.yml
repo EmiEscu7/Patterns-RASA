@@ -36,7 +36,11 @@ nlu:
     - joya
     - dale dale
     - dale
-
+    - me parece bien
+    - perfecto
+    - estoy de acuerdo
+    - tal cual
+    
 - intent: deny
   examples: |
     - no
@@ -47,6 +51,9 @@ nlu:
     - no me gusta
     - de ninguna manera
     - no realmente
+    - no concuerdo
+    - no me parece
+    - no estoy de acuerdo
 
 - intent: mood_great
   examples: |
@@ -127,3 +134,69 @@ nlu:
     - Que tal, soy [Pedro](name)
     - Que onda, soy [Agustin](name) 
   
+- intent: answer_problem
+  examples: |
+    - problemas con la [base de datos](tema)
+    - complico haciendo la [base de datos](tema)
+    - trabe realizando el logaritmo de [machine learning](tema)
+    - inconvenientes con la [plataforma](tema)
+    - problemas con la [conexion](tema)
+    - trabado con el [modo oscuro](tema)
+    - serie de problemas con la [base de datos](tema)
+    - varios problemas con la [plataforma](tema)
+
+- intent: answer_done
+  examples: |
+    - Tuve que optimizar la funcionalidad de la [plataforma](tema)
+    - Termine de crear las vistas para la [base de datos](tema)
+    - Logre arreglar el algoritmo de [machine learning](tema) 
+    - Estuve implementando la funcionalidad del [modo oscuro](tema)
+    - hice la conexion entre la [base de datos](tema) y la [interfaz](tema)
+    - termine con lo que me tocaba
+    - realice la parte de la
+    - estuve con la [base de datos](tema)
+    
+- intent: no_problem
+  examples: |
+    - nono, todo joya
+    - no hubo ningun problema
+    - por suerte no tuve ningun problema
+    - No me produjo ninguna complicacion
+    - No tuve ningun inconveniente
+
+- intent: have_problem
+  examples: |
+    - Si, tuve problemas
+    - Se me complico demasiado
+    - tuve complejidades trabajando
+    - Hubo inconvenientes
+    - Se me presentaron algunas complicaciones
+    - Surgieron algunos obstaculos
+
+- intent: going_to_do
+  examples: |
+    - Terminar mi task
+    - Terminar lo que estaba haciendo 
+    - Acabar con mi tarea
+    - Hacer un chequeo de que todo lo que hice para verificar que funcione correctamente
+    - Terminar de darle los ultimos detalles a mi task
+    - Ayudar a [Agustin](name) con un problema que tuvo
+
+- intent: dk_to_do
+  examples: |
+    - La verdad que no tengo idea
+    - No se 
+    - No se me ocurre con que podria seguir
+    - Estoy en duda de con que podria seguir
+    - No tengo nada en mente
+   
+
+- intent: helped
+  examples: |
+    - gracias por la ayuda
+    - me sirvió
+    - por ayudarme
+    - me ayudaste
+    - ahhh, voy a probarlo
+    - intento con eso
+    - buena idea
