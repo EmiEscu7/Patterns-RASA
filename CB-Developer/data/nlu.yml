@@ -4,100 +4,192 @@ nlu:
 - intent: greet
   examples: |
     - hey
-    - hello
-    - hi
-    - hello there
-    - good morning
-    - good evening
-    - moin
-    - hey there
-    - let's go
-    - hey dude
-    - goodmorning
-    - goodevening
-    - good afternoon
+    - hola
+    - buenas
+    - buen dia
+    - buenas tardes
+    - vamos
+    - hey bro
+    - bro
 
 - intent: goodbye
   examples: |
-    - good afternoon
-    - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
+    - hasta la proxima
+    - nos vemos mañana
+    - nos vemos mañana a la misma hora como siempre
+    - hasta mañana
+    - chau
+    - hasta luego
+    - buenas noches
+    - adios
+    - hasta la proxima
+    - que tengas un buen dia
+    - nos vemos luego
+    - chau chau
 
 - intent: affirm
   examples: |
-    - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
-
+    - si
+    - sisi
+    - si si
+    - por supuesto
+    - eso suena bien
+    - correcto
+    - joya
+    - dale dale
+    - dale
+    - me parece bien
+    - perfecto
+    - estoy de acuerdo
+    - tal cual
+    
 - intent: deny
   examples: |
     - no
-    - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
+    - nono
+    - no no
+    - nunca
+    - no pienso eso
+    - no me gusta
+    - de ninguna manera
+    - no realmente
+    - no concuerdo
+    - no me parece
+    - no estoy de acuerdo
 
 - intent: mood_great
   examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
+    - prefect
+    - genial
+    - me siento como un rey
+    - increible
+    - me siento muy bien
+    - estoy genial
+    - estoy increible
+    - voy a salvar al mundo
+    - super emocionado
+    - extremadamente bien
+    - tan tan perfecto
+    - tan bien
+    - tan perfecto
+
+- intent: mood_happy
+  examples: |
+    - mi dia fue genial
+    - super bien
+    - todo bien
+    - todo perfecto
+    - en perfectas condiciones
+   
 
 - intent: mood_unhappy
   examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
+    - mi dia fue horrible
+    - estoy triste
+    - no me siento muy bien
+    - estoy en desacuerdo
+    - super triste
+    - estoy muy triste
+    - triste
+    - muy triste
+    - desanimado
+    - malo
+    - no muy bien
+    - extremadamente trsite
+    - tan triste
 
 - intent: bot_challenge
   examples: |
-    - are you a bot?
-    - are you a human?
-    - am I talking to a bot?
-    - am I talking to a human?
+    - ¿Sos un bot?
+    - ¿Sos un humano?
+    - ¿Estoy hablando con un bot?
+    - ¿Estoy hablando con un humano?
 
-- intent: give_me_new_task
+- intent: whatYouDo
   examples: |
-    - your new task
-    - new task
-    - new order
-    - now you going to do
-    - now do
+    - con que trabajaste el dia de ayer?
+    - que hiciste el dia de ayer?
+    - que estuviste haciendo el dia de ayer?
+    - que anduviste haciendo ayer?
+    - con que estuviste trabajando ayer?
+    - que hiciste ayer?
 
+- intent: doYouHaveProblem
+  examples: |
+    - tuviste algun problema?
+    - se te complico con algo?
+    - tuviste algun problemita mientras hacias las cosas?
+    - tuviste algun inconveniente?
+    - te has encontrado con algun problema?
+    - has tenido problemas mientras hacias tu tarea?
+    - has tenido algun problema con tu task?
 
+- intent: whatYouDoToday
+  examples: |
+    - con que tenes pensado continuar?
+    - con que tenes pensado continuar el dia de hoy?
+    - con que vas a continuar el dia de hoy?
+    - con que vas a seguir?
+    - con que vas a continuar hoy?
+    - con que continuas?
+    - que vas a hacer hoy?
+    - que pensas hacer durante el dia de hoy?
+    - que tenes pensado hacer hoy?
+    - cual es el objetivo de hoy?
+    - cual es tu tarea el dia de hoy?
+    
 
+- intent: whatIsYourProblem
+  examples: |
+    - con que se te complico
+    - con que tuviste problema
+    - cuentame con que se te dificulto
+    - cuentame que problemas has tenido
+    - por favor cuentame cual ha sido tu problema
+    - que se te complico?
+    - que se te complica?
+    - en que podemos ayudar?
+  
+- intent: pendientTask
+  examples: |
+    - Terminaste lo que tenias pendiente?
+    - terminaste la tarea que te asigne?
+    - terminaste lo asignado?
+    - terminaste tu task?
+    - terminaste con lo tuyo?
+    - hiciste lo que te di?
+    - hiciste la task que te di?
+    - finalizaste la tarea que tenias asignada?
+    - pudo terminar la tarea que le asigne?
+
+- intent: ScrumHelpMe
+  examples: |
+    - Yo te ayudo hace
+    - Hace esto
+    - Lo podes hacer asi mira
+    - Seguro alguno esta dispuesto a ayudarte
+    - veo como te ayudo
+    - yo te ayudo
+    - busca ayuda en un foro
+    - decile a tu compañero que te de una mano
+    - consulta con el
+
+- intent: ScrumSendMeToWork
+  examples: |
+    - Dejate de joder y ponete a laburar
+    - Dejate de boludear y ponete a terminar eso
+    - ponete a trabajar
+    - trata de priorizar asi pdoes terminar rapido
+    - trata de terminarla
+    - metele pila con eso
+    - no pierdas tiempo con otras cosas, enfocate en esto
+    - tenes que ponerte a trabajar
+    - tenes que ponerte a hacer tu tareas
+    - toma trabaja con esta task
+    - que haces que no estas haciendo nada mas
+    - ponete a hacer algo
+    - quizas podrias trabajar con Unity
+    - que te parece trabajar con UnReal?
+    - te gustaria trabajar con Unity?
+    - como te ves trabajando con Rasa?
+    - queres sumarte a lo que estan haciendo en Rasa?

@@ -126,6 +126,8 @@ nlu:
     - recién empiezo
     - ahí voy
     - más o menos
+    - estoy yendo joya
+    - voy perfecto
 
 - intent: presentation_user
   examples: |
@@ -185,6 +187,7 @@ nlu:
 - intent: dk_to_do
   examples: |
     - La verdad que no tengo idea
+    - no tengo ni idea
     - No se 
     - No se me ocurre con que podria seguir
     - Estoy en duda de con que podria seguir
@@ -194,7 +197,7 @@ nlu:
 - intent: helped
   examples: |
     - gracias por la ayuda
-    - me sirvió
+    - me sirvio pa gracias
     - por ayudarme
     - me ayudaste
     - ahhh, voy a probarlo

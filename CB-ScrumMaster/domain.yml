@@ -153,7 +153,7 @@ responses:
   - text: "Hiciste la task que te di loco?"
   utter_dk_to_do_formal:
   - text: Pudiste terminar la tarea que te habia asignado?
-  - text: "Finalizaste la tarea quie tenias asignada?"
+  - text: "Finalizaste la tarea que tenias asignada?"
   - text: "Pudo terminar la tarea que le asigne?"
   utter_dk_to_do_comun:
   - text: "{name} hiciste la task que tenias?"
