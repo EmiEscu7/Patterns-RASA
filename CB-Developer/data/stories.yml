@@ -21,6 +21,7 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
+
 - story: dialy unHappy Yes Problem
   steps:
   - intent: whatYouDo
@@ -34,6 +35,7 @@ stories:
   - intent: whatYouDoToday
   - action: utter_my_next_to_do
   - intent: goodbye
+
   - action: utter_goodbye
 
 - story: dialy unHappy Idk Next To Do
