@@ -1,0 +1,30 @@
+{
+    "Pedro": {
+      "name": "Pedro",
+      "currentTask": "development bbdd",
+      "progress": "doing",
+      "dedicatedTime": 16,
+      "maxTime": 24
+    },
+    "Emiliano": {
+      "name": "Emiliano",
+      "currentTask": "development user interface",
+      "progress": "testing",
+      "dedicatedTime": 14,
+      "maxTime": 16
+    },
+    "Matias": {
+      "name": "Matias",
+      "currentTask": "restore last version in git",
+      "progress": "done",
+      "dedicatedTime": 1,
+      "maxTime": 4
+    },
+    "Agustin": {
+      "name": "Agustin",
+      "currentTask": "development conexion to bbdd",
+      "progress": "doing",
+      "dedicatedTime": 18,
+      "maxTime": 28
+    }
+  }

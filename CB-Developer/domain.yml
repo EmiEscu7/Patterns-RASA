@@ -2,65 +2,68 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
 intents:
-- greet
-- goodbye
-- affirm
-- deny
-- mood_great
-- mood_unhappy
-- bot_challenge
-- notif_finish_task
-- give_new_task
-- give_notification
-- give_actual_state
-- congrats
-- informado
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - ScrumSendMeToWork
+  - ScrumHelpMe
+  - pendientTask
+  - whatIsYourProblem
+  - whatYouDoToday
+  - doYouHaveProblem
+  - whatYouDo
+   
 responses:
-  utter_greet:
-  - text: Hey! How are you?
-  utter_cheer_up:
-  - image: https://i.imgur.com/nGF1K8f.jpg
-    text: 'Here is something to cheer you up:'
-  utter_did_that_help:
-  - text: Did that help you?
-  utter_happy:
-  - text: Great, carry on!
+
+  utter_finish_task_yes:
+  - text: "Termine mi tarea gato"
+  - text: "Termine lo que estaba haciendo bro"
+
+  utter_finish_task_no:
+  - text: "No"
+  
+  utter_accept_task:
+  - text: "Dale me pongo a hacer esta task bro"
+  - text: "Dale, joya me pongo a laburar en eso"
+
+  utter_im_going:
+  - text: "Voy bien"
+
+  utter_my_problem_is:
+  - text: "Tuve un problema con la base de datos rey"
+
+  utter_my_task_done:
+  - text: "Tuve que hacer algo de la funcionalidad de la plataforma gato"
+  - text: "Re chill bro, hice el modo oscuro de la aplicacion"
+  - text: "Estuve renegando con la base de datos un rato bro"
+
+  utter_my_problem_no:
+  - text: "No bro no tuve problema todo va joya"
+  - text: "No tuve incovenientes bro"
+
+  utter_my_problem_yes:
+  - text: "Si tuve un par de problemas broda"
+  - text: "Se me complico un toque bro"
+
+  utter_my_next_to_do:
+  - text: "Voy a terminar mi task que aun me falta un poco bro"
+  - text: "Voy a terminar lo que estaba haciendo bro"
+
+  utter_idk_to_do:
+  - text: "No se"
+  - text: "No tengo nada en mente"
+
+  utter_thanks_help:
+  - text: "Gracias por la ayuda broo"
+  - text: "Me sirvio pa gracias"
+  
   utter_goodbye:
-  - text: Adios
-  - text: Nos vemos
-  - text: Hasta luego
-  - text: Chau
-  - text: Hasta la próxima!
-  utter_iamabot:
-  - text: I am a bot, powered by Rasa.
-  utter_finish_task:
-  - text: Termine mi tarea
-  - text: Termine lo que estaba realizando
-  - text: Finalice con la task
-  - text: Termine con la task
-  utter_confirm_task:
-  - text: Bien me pongo a trabajar en ella
-  - text: Bien, ahora la miro a task y la hago
-  - text: Bien ahora me enfoco en ella
-  - text: Gracias por la task
-  utter_confirm_notification:
-  - text: Gracias por la alerta
-  - text: Gracias por el aviso
-  - text: Gracias por avisar
-  - text: Recibido
-  - text: Okey, gracias por avisar
-  - text: Buenisimo, gracias por avisarme
-  utter_answer_actual_state:
-  - text: Voy bien
-  - text: Me queda poco trabajo
-  - text: Recien comienzo
-  - text: Mas o menos
-  - text: terminando
-  - text: comenzando
-  - text: Casi listo
-  utter_question_event_day:
-  - text: Cuando es el proximo evento
-  - text: Cuando es evento
-  - text: Cuando es el proximo scrum event
-  - text: El proximo evento
-  - text: El dia del evento
+  - text: "Nos re vimos perrito"
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

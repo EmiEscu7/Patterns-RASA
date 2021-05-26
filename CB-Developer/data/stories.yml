@@ -2,62 +2,53 @@ version: "2.0"
 
 stories:
 
-- story: happy path
+- story: give new task
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
-
-- story: sad path 1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
-
-- story: sad path 2
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
+  #- intent: notify_finishing_task
+  #- action: utter_end_task
+  - intent: give_me_new_task
+  - action: utter_accept_task
   - action: utter_goodbye
 
-##stories nuevas
-- story: give new task path
+- story: dialy happy
   steps:
-  ##- intent: notif_finish_task |-> esta esta de sobra si inicia la conver el Developer
-  ##- action: utter_finish_task |-> esta esta de sobra si inicia la conver el Developer
-  - intent: give_new_task 
-  - action: utter_confirm_task
+  - intent: whatYouDo
+  - action: utter_my_task_done
+  - intent: doYouHaveProblem
+  - action: utter_my_problem_no
+  - intent: whatYouDoToday
+  - action: utter_my_next_to_do
   - intent: goodbye
   - action: utter_goodbye
 
-- story: recibo alertar
+
+- story: dialy unHappy Yes Problem
   steps:
-  - intent: give_notification
-  - action: utter_confirm_notification
+  - intent: whatYouDo
+  - action: utter_my_task_done
+  - intent: doYouHaveProblem
+  - action: utter_my_problem_yes
+  - intent: whatIsYourProblem
+  - action: utter_my_problem_is
+  - intent: ScrumHelpMe
+  - action: utter_thanks_help
+  - intent: whatYouDoToday
+  - action: utter_my_next_to_do
+  - intent: goodbye
+
   - action: utter_goodbye
 
-- story: recibo pregunta estado
+- story: dialy unHappy Idk Next To Do
   steps:
-  ##esta de mas si developer inicia conver  - intent: consultar_tiempo_evento
-  ##esta de mas si developer inicia conver  - action: utter_question_event_day
-  - intent: give_actual_state
-  - action: utter_answer_actual_state
-  - intent: congrats
+  - intent: whatYouDo
+  - action: utter_my_task_done
+  - intent: doYouHaveProblem
+  - action: utter_my_problem_no
+  - intent: whatYouDoToday
+  - action: utter_idk_to_do
+  - intent: pendientTask
+  - action: utter_finish_task_no
+  - intent: ScrumSendMeToWork
+  - action: utter_accept_task
+  - intent: goodbye
   - action: utter_goodbye
-
-- story: consultar eventos
-  steps:
-  - intent: greet
-  - action: utter_question_event_day
-  - intent: informado
-  - action: utter_goodbye
-

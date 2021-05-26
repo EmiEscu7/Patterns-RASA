@@ -2,62 +2,101 @@ version: "2.0"
 
 stories:
 
-- story: camino feliz
-  steps:
-  - intent: grret
-  - action: utter_saludo
-  - intent: mood_happy
-  - action: utter_feliz
+#- story: camino feliz
+ # steps:
+ # - intent: greet
+ # - action: utter_saludo
+ # - intent: mood_happy
+ # - action: utter_feliz
 
-- story: camino triste 1
-  steps:
-  - intent: greet
-  - action: utter_saludo
-  - intent: mood_unhappy
-  - action: utter_animar
-  - action: utter_eso_ayudo
-  - intent: affirm
-  - action: utter_chau
+#- story: camino triste 1
+ # steps:
+# - intent: greet
+#  - action: utter_saludo
+#  - intent: mood_unhappy
+#  - action: utter_animar
+#  - action: utter_eso_ayudo
+#  - intent: affirm
+#  - action: utter_chau
 
-- story: camino triste 2
-  steps:
-  - intent: greet
-  - action: utter_saludo
-  - intent: mood_unhappy
-  - action: utter_animar
-  - action: utter_eso_ayudo
-  - intent: deny
-  - action: utter_chau
+#- story: camino triste 2
+#  steps:
+#  - intent: greet
+#  - action: utter_saludo
+#  - intent: mood_unhappy
+#  - action: utter_animar
+#  - action: utter_eso_ayudo
+#  - intent: deny
+#  - action: utter_chau
 
 - story: desarrollador termino tarea
   steps:
   - intent: developer_finish_task
   - action: utter_felicitar
   - action: utter_dar_nueva_tarea
-  - intent: acept_task
+  - intent: accept_task
   - action: utter_chau
 
 
-- story: consultar esatdo
+#- story: consultar esatdo
+#  steps:
+#  - intent: presentation_user
+#  - slot_was_set: 
+#    - name: Emiliano
+#  - action: action_consultar_estado
+#  - intent: verify_state
+#  - action: utter_vas_bien
+#  - intent: goodbye
+#  - action: utter_chau
+
+- story: dialogo happy daily 
   steps:
-  - action: utter_consultar_estado
-  - intent: verify_state
-  - action: utter_vas_bien
-  - intent: goodbye
-  - action: utter_chau
+  - intent: presentation_user
+  - slot_was_set: 
+    - name: Emiliano
+  - action: utter_presentation_user_comun
+  - intent: answer_done
+  - action: utter_answer_done_comun #consulta si tuvo problemas con algo
+  - intent: no_problem
+  - action: utter_no_problem_comun #consulta que va a hacer hoy
+  - checkpoint: c_do_today
 
-
-- story: alertar
+- story: dialogo unhappy daily
   steps:
-    #- intent: informar_developers
-    - action: utter_lanzar_alerta
-    - intent: goodbye
-    - action: utter_chau
+  - intent: answer_done
+  - action: utter_answer_done_comun #consulta si tuvo problemas con algo
+  - intent: have_problem
+  - checkpoint: c_have_problem
 
-- story: recibo consulta
+- story: dialogo daily con problema
   steps:
-    - intent: consultas_de_eventos
-    - action: utter_responder_consultas_eventos
-    - intent: goodbye
-    - action: utter_chau
+  - checkpoint: c_have_problem
+  - intent: have_problem
+  - action: utter_have_problem_comun #pregunta que probelma tiene
+  - intent: answer_problem
+  - action: utter_answer_problem_comun #dice con que ayudarlo
+  - intent: helped
+  - action: utter_helped_comun #consulta que va a hacer
+  - checkpoint: c_do_today
 
+- story: sigue flujo daily con que hacer hoy
+  steps:
+  - checkpoint: c_do_today
+  - intent: going_to_do 
+  - action: utter_going_to_do_comun #le dice al dev que va bien
+
+- story: sigue flujo daily sin saber que hacer
+  steps:
+  - checkpoint: c_do_today
+  - intent: dk_to_do
+  - action: utter_dk_to_do_comun #consulta si termino la tarea
+  - intent: deny
+  - action: utter_deny_comun #decirle que se ponga a terminar la task
+
+- story: sigue flujo daily sin saber que hacer
+  steps:
+  - checkpoint: c_do_today 
+  - intent: dk_to_do 
+  - action: utter_dk_to_do_comun #consulta si termino la tarea
+  - intent: affirm
+  - action: utter_affirm_comun #le da una nueva task al dev
