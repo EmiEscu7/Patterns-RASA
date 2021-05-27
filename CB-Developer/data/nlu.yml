@@ -113,6 +113,7 @@ nlu:
     - que anduviste haciendo ayer?
     - con que estuviste trabajando ayer?
     - que hiciste ayer?
+    - que haces centenialito, que hiciste ayer??
 
 - intent: doYouHaveProblem
   examples: |
