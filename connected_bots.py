@@ -1,4 +1,5 @@
 import requests
+import json
 import time
 
 
@@ -20,11 +21,15 @@ def send_message(port, message, sender):
 
     #cambie el parametro que pasan, en vez de data lo paso por json
     x = requests.post(url, json = data)
-
-    print(sender + ": " + x.text)
+    rta = x.json()
+    text = ""
+    for entry in rta:
+        text += entry['text']
+    #text = rta[0]['text']
+    print(sender + ": " + text)
 
     if x.status_code == 200:
-        return x.text
+        return text
     else:
         print(x.raw)
         return None
@@ -38,8 +43,9 @@ delay = 0.5
 
 
 # Mando el mensaje inicial simulando que soy el chatbot 1
-print("Developer: Termine la tarea")
-message_c1 = send_message(port_SM, "Termine la tarea", "Developer")
+print("Developer: Hola soy Emiliano")
+#puerto destino, msj a enviar, chatbot destino
+message_c1 = send_message(port_SM, "Hola soy Emiliano", "Scrum Master")
 
 # Loop infinito de los chatbots mandandose mensajes entre si, la conversacion se imprime en consola desde la funcion send_message
 while True:
