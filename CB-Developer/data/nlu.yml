@@ -117,7 +117,7 @@ nlu:
 - intent: doYouHaveProblem
   examples: |
     - tuviste algun problema?
-    - se te complico con algo?
+    - se te complico con algo rey?
     - tuviste algun problemita mientras hacias las cosas?
     - tuviste algun inconveniente?
     - te has encontrado con algun problema?
@@ -193,4 +193,3 @@ nlu:
     - te gustaria trabajar con Unity?
     - como te ves trabajando con Rasa?
     - queres sumarte a lo que estan haciendo en Rasa?
-

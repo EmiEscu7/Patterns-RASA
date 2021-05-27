@@ -7,10 +7,11 @@
 
 # This is a simple example for a custom action which utters "Hello World!"
 
-# from typing import Any, Text, Dict, List
-#
-# from rasa_sdk import Action, Tracker
-# from rasa_sdk.executor import CollectingDispatcher
+from typing import Any, Text, Dict, List
+from rasa_sdk import Action, Tracker
+from rasa_sdk.executor import CollectingDispatcher
+from random import seed
+from random import random
 #
 #
 # class ActionHelloWorld(Action):
@@ -25,3 +26,21 @@
 #         dispatcher.utter_message(text="Hello World!")
 #
 #         return []
+class respuesta(Action):
+    def name(self) -> Text:
+        return "action_dar_respuesta"
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        res = [ [float(0.3), "_yes"],
+                [float(1.0), "_no"] ] 
+        rta = "utter_my_problem"
+        seed(1)
+        nro = random()
+        i = 0
+        while(nro > res[i][0]):
+            i+=1
+        rta += res[i][1]
+
+        dispatcher.utter_message(template = rta)
+        return[]

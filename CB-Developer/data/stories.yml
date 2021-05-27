@@ -15,36 +15,37 @@ stories:
   - intent: whatYouDo
   - action: utter_my_task_done
   - intent: doYouHaveProblem
-  - action: utter_my_problem_no
-  - intent: whatYouDoToday
-  - action: utter_my_next_to_do
-  - intent: goodbye
-  - action: utter_goodbye
+  - checkpoint: c_have_problem
 
-
+  
 - story: dialy unHappy Yes Problem
   steps:
-  - intent: whatYouDo
-  - action: utter_my_task_done
-  - intent: doYouHaveProblem
-  - action: utter_my_problem_yes
+  - checkpoint: c_have_problem
+  - action: action_dar_respuesta
   - intent: whatIsYourProblem
   - action: utter_my_problem_is
   - intent: ScrumHelpMe
   - action: utter_thanks_help
+  - checkpoint: c_what_you_do_today
+
+- story: dialy unHappy No Problem
+  steps:
+  - checkpoint: c_have_problem
+  - action: action_dar_respuesta
+  - intent: whatYouDoToday
+  - checkpoint: c_what_you_do_today
+
+
+- story: what you do today continue
+  steps:
+  - checkpoint: c_what_you_do_today
   - intent: whatYouDoToday
   - action: utter_my_next_to_do
   - intent: goodbye
-
   - action: utter_goodbye
 
 - story: dialy unHappy Idk Next To Do
   steps:
-  - intent: whatYouDo
-  - action: utter_my_task_done
-  - intent: doYouHaveProblem
-  - action: utter_my_problem_no
-  - intent: whatYouDoToday
   - action: utter_idk_to_do
   - intent: pendientTask
   - action: utter_finish_task_no

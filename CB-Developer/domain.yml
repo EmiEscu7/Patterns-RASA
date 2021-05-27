@@ -1,6 +1,5 @@
-session_config:
-  session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+version: "2.0"
+
 intents:
   - greet
   - goodbye
@@ -16,7 +15,10 @@ intents:
   - whatYouDoToday
   - doYouHaveProblem
   - whatYouDo
-   
+
+actions:
+  - action_dar_respuesta
+ 
 responses:
 
   utter_finish_task_yes:
@@ -38,8 +40,8 @@ responses:
 
   utter_my_task_done:
   - text: "Tuve que hacer algo de la funcionalidad de la plataforma gato"
-  - text: "Re chill bro, hice el modo oscuro de la aplicacion"
-  - text: "Estuve renegando con la base de datos un rato bro"
+  - text: "bro, hice el modo oscuro de la aplicacion"
+  - text: "Estuve con la base de datos un rato bro"
 
   utter_my_problem_no:
   - text: "No bro no tuve problema todo va joya"
@@ -63,6 +65,7 @@ responses:
   
   utter_goodbye:
   - text: "Nos re vimos perrito"
+
 
 session_config:
   session_expiration_time: 60

@@ -156,19 +156,24 @@ nlu:
     - hice la conexion entre la [base de datos](tema) y la [interfaz](tema)
     - termine con lo que me tocaba
     - realice la parte de la
+    - hice el modo oscuro de la aplicacion
     - estuve con la [base de datos](tema)
     
-- intent: no_problem
+- intent: have_problem_no
   examples: |
     - nono, todo joya
+    - No bro no tuve problema todo va joya
+    - No tuve incovenientes bro
     - no hubo ningun problema
     - por suerte no tuve ningun problema
     - No me produjo ninguna complicacion
     - No tuve ningun inconveniente
 
-- intent: have_problem
+- intent: have_problem_yes
   examples: |
     - Si, tuve problemas
+    - Si tuve un par de problemas broda
+    - Se me complico un toque bro
     - Se me complico demasiado
     - tuve complejidades trabajando
     - Hubo inconvenientes
