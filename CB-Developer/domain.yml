@@ -15,56 +15,165 @@ intents:
   - whatYouDoToday
   - doYouHaveProblem
   - whatYouDo
+  - test
 
 actions:
   - action_dar_respuesta
- 
+
+slots:
+  name:
+    type: text
+  tipoRta:
+    type: text
+
 responses:
 
-  utter_finish_task_yes:
+  utter_pendientTask_yes_informal:
   - text: "Termine mi tarea gato"
   - text: "Termine lo que estaba haciendo bro"
 
-  utter_finish_task_no:
-  - text: "No"
+  utter_pendientTask_yes_formal:
+  - text: "Termine mi task asignada"
+  - text: "Termine lo que tenia asignado"
+
+  utter_pendientTask_yes_comun:
+  - text: "Termine mi tarea"
+  - text: "Termine lo que me tocaba hacer"
+
+  utter_pendientTask_no_informal:
+  - text: "No bro, no la termine aun"
+  - text: "No compa, aun no termine"
+  utter_pendientTask_no_formal:
+  - text: "No lo he hecho aun"
+  - text: "No lo hice aun"
+  utter_pendientTask_no_comun:
+  - text: "Nono"
+  - text: "no"
   
-  utter_accept_task:
+  utter_ScrumSendMeToWorkinformal:
   - text: "Dale me pongo a hacer esta task bro"
   - text: "Dale, joya me pongo a laburar en eso"
 
-  utter_im_going:
+  utter_ScrumSendMeToWork_formal:
+  - text: "Perfecto, un placer hacer esa task"
+  - text: "Bien, ya mismo me centro en la task que usted di"
+  
+  utter_ScrumSendMeToWork_comun:
+  - text: "Dale me pongo a hacer eso"
+  - text: "Dale, me pongo a trabajar en eso"
+
+  utter_im_going_informal:
+  - text: "Voy bien bro"
+  - text: "todo va joya bro"
+
+  utter_im_going_formal:
+  - text: "Estoy yendo bien señor"
+  - text: "Esta yendo todo bien por el momento"
+  
+  utter_im_going_comun:
   - text: "Voy bien"
+  - text: "Todo marcha bien por ahora"
 
-  utter_my_problem_is:
+  utter_whatIsYourProblem_informal:
   - text: "Tuve un problema con la base de datos rey"
+  - text: "Se me complico con la base de datos broda"
 
-  utter_my_task_done:
+  utter_whatIsYourProblem_formal:
+  - text: "Mi inconveniente esta con la base de datos"
+  - text: "Mi problema esta en la base de datos"
+
+  utter_whatIsYourProblem_comun:
+  - text: "Tuve un lio ahi con la base de datos"
+  - text: "Se me complico un poco con la base de datos"
+  
+  utter_whatYouDo_informal:
   - text: "Tuve que hacer algo de la funcionalidad de la plataforma gato"
   - text: "bro, hice el modo oscuro de la aplicacion"
   - text: "Estuve con la base de datos un rato bro"
 
-  utter_my_problem_no:
+  utter_whatYouDo_formal:
+  - text: "Mi tarea era realizar una funcionalidad especifica de la plataforma"
+  - text: "Mi task trataba sobre modo oscuro de la aplicacion"
+  - text: "El dia de ayer estuve conectando la aplicacion con la base de datos"
+
+  utter_whatYouDo_comun:
+  - text: "estuve con el modo oscuro de la aplicacion"
+  - text: "Estuve con la base de datos un rato viendo como conectarla a la app"
+
+  utter_my_problem_no_informal:
   - text: "No bro no tuve problema todo va joya"
   - text: "No tuve incovenientes bro"
 
-  utter_my_problem_yes:
+  utter_my_problem_no_formal:
+  - text: "No, no se me presento ninguna complicacion"
+  - text: "No se me presento ningun problema por suerte"
+  
+  utter_my_problem_no_comun:
+  - text: "Nono, todo Ok por ahora"
+  - text: "Gracias a dios no tuve ninguna complicacion"
+
+  utter_my_problem_yes_informal:
   - text: "Si tuve un par de problemas broda"
   - text: "Se me complico un toque bro"
 
-  utter_my_next_to_do:
+  utter_my_problem_yes_formal:
+  - text: "Si, se me presentaron algunas complicaciones."
+  - text: "Si, tuve un par de inconvenientes."
+
+  utter_my_problem_yes_comun:
+  - text: "Hubo ahi par de problemitas ahi, si"
+  - text: "Si, lamentablemente si. Se me complico con un par de cositas"
+
+  utter_whatYouDoToday_informal:
   - text: "Voy a terminar mi task que aun me falta un poco bro"
   - text: "Voy a terminar lo que estaba haciendo bro"
 
-  utter_idk_to_do:
+  utter_whatYouDoToday_formal:
+  - text: "Me falta demasiado poco para terminar mi task. Voy a continuar con eso"
+  - text: "Mi objetivo es lograr terminar lo que estaba haciendo"
+  
+  utter_whatYouDoToday_comun:
+  - text: "Me falta poquito para terminar mi task. Voy a hacer eso"
+  - text: "Ya casi termino mi task. Voy a ponerme con eso"
+
+  utter_idk_to_do_informal:
+  - text: "Ni idea"
+  - text: "Ni puta idea"
+
+  utter_idk_to_do_formal:
+  - text: "Sinceramente, no se me habia ocurrido nada"
+  - text: "Por ahora no tenia nada en mente"
+
+  utter_idk_to_do_comun:
   - text: "No se"
   - text: "No tengo nada en mente"
 
-  utter_thanks_help:
+  utter_ScrumHelpMe_informal:
   - text: "Gracias por la ayuda broo"
   - text: "Me sirvio pa gracias"
+
+  utter_ScrumHelpMe_formal:
+  - text: "Muchas Gracias por la ayuda"
+  - text: "Excelente. Muchisimas gracias"
+
+  utter_ScrumHelpMe_comun:
+  - text: "Perfectoo, Gracias!"
+  - text: "Piola piola, muchas gracias"
   
-  utter_goodbye:
+  utter_goodbye_informal:
   - text: "Nos re vimos perrito"
+  - text: "nv bro"
+  
+  utter_goodbye_formal:
+  - text: "Hasta mañana, que le vaya bien"
+  - text: "Hasta la proxima, que vaya bien"
+
+  utter_goodbye_comun:
+  - text: "Nos re vimos mañana"
+  - text: "Nos vemos mañana"
+
+  utter_goodbye:
+  - text: "chau"
 
 
 session_config:

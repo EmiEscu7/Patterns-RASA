@@ -128,6 +128,9 @@ nlu:
     - más o menos
     - estoy yendo joya
     - voy perfecto
+    - estoy yendo bien
+    - esta yendo todo bien
+    - todo va joya
 
 - intent: presentation_user
   examples: |
@@ -135,7 +138,13 @@ nlu:
     - Buenas, me llamo [Matias](name)
     - Que tal, soy [Pedro](name)
     - Que onda, soy [Agustin](name) 
-  
+    - Como te va soy, soy [Matias](name)
+    - Que onda, me llamo [Matias](name)
+    - Me dicen [Matias](name)
+    - Que pasa bro, soy [Emiliano](name)
+    - Buen dia caballero, soy Emiliano(name)
+    - Como estas?, Soy [Agustin](name)
+
 - intent: answer_problem
   examples: |
     - problemas con la [base de datos](tema)
@@ -146,6 +155,9 @@ nlu:
     - trabado con el [modo oscuro](tema)
     - serie de problemas con la [base de datos](tema)
     - varios problemas con la [plataforma](tema)
+    - el problema estuvo con la [base de datos](tema)
+    - se me rompio toda la [plataforma](tema)
+    - Hubo varias complicaciones con [machine learning](tema)
 
 - intent: answer_done
   examples: |
@@ -158,6 +170,9 @@ nlu:
     - realice la parte de la
     - hice el modo oscuro de la aplicacion
     - estuve con la [base de datos](tema)
+    - mi task era de añadir el login y toda la logica que lleva con la db
+    - me tocaba la parte de la conexion a los servidores externos de la empresa
+    - Hice varias cosas, pero me centre en la optimizacion de la bd
     
 - intent: have_problem_no
   examples: |
@@ -168,6 +183,10 @@ nlu:
     - por suerte no tuve ningun problema
     - No me produjo ninguna complicacion
     - No tuve ningun inconveniente
+    - no tuve problemas
+    - no me encontre con ningun problema
+    - por suerte, no tuve problemas
+    - tuve la suerte de no encontrarme con ningun problema
 
 - intent: have_problem_yes
   examples: |
@@ -179,6 +198,9 @@ nlu:
     - Hubo inconvenientes
     - Se me presentaron algunas complicaciones
     - Surgieron algunos obstaculos
+    - Si, lamentablemente me trabe con un temita
+    - Si estoy trabado ahi con un tema que no me sale
+    - Si estoy trabado con una porqueria que no la puedo resolver
 
 - intent: going_to_do
   examples: |
@@ -188,7 +210,9 @@ nlu:
     - Hacer un chequeo de que todo lo que hice para verificar que funcione correctamente
     - Terminar de darle los ultimos detalles a mi task
     - Ayudar a [Agustin](name) con un problema que tuvo
-
+    - Lograr terminar mi tarea
+    - Fijarme si lo que hice funciona correctamente
+    
 - intent: dk_to_do
   examples: |
     - La verdad que no tengo idea
@@ -197,7 +221,11 @@ nlu:
     - No se me ocurre con que podria seguir
     - Estoy en duda de con que podria seguir
     - No tengo nada en mente
-   
+    - no tengo ni puta idea que hacer
+    - no se con que continuar
+    - no se que me toca hacer
+    - no tengo ni idea cual es mi proxima tarea
+    - no se que me toca hacer ahora en este momento   
 
 - intent: helped
   examples: |
@@ -208,3 +236,9 @@ nlu:
     - ahhh, voy a probarlo
     - intento con eso
     - buena idea
+    - dale no se me habia ocurrido esa
+    - dale gracias por la ayuda te agradezco
+    - dale gracias por la info la voy a tener en cuenta
+    - dale me parece buena idea voy a tenerla en cuenta
+    - gracias por la info
+    - lo podes hacer asi ...

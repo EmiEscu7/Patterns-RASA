@@ -10,7 +10,6 @@
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-from random import seed
 from random import random
 #
 #
@@ -34,14 +33,20 @@ class respuesta(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         res = [ [float(0.2), "_yes"],
                 [float(1.0), "_no"] ] 
+
         rta = "utter_my_problem"
-        seed(1)
+        
         nro = random()
         print(nro)
+
         i = 0
         while(nro > res[i][0]):
             i+=1
         rta += res[i][1]
-
+        
+        ##rta += "_comun" ##acomodar esto porque siempre va a responder con comun 
+        tipoRta = tracker.get_slot('tipoRta')
+        print(tipoRta)
+        rta += tipoRta
         dispatcher.utter_message(template = rta)
         return[]

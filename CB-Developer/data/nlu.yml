@@ -127,17 +127,20 @@ nlu:
 
 - intent: whatYouDoToday
   examples: |
-    - con que tenes pensado continuar?
-    - con que tenes pensado continuar el dia de hoy?
-    - con que vas a continuar el dia de hoy?
-    - con que vas a seguir?
-    - con que vas a continuar hoy?
-    - con que continuas?
+    - Con que tenes pensado continuar?
+    - Con que tenes pensado continuar el dia de hoy?
+    - Con que vas a continuar el dia de hoy?
+    - Con que vas a seguir?
+    - Con que vas a continuar hoy?
+    - Con que continuas?
     - que vas a hacer hoy?
     - que pensas hacer durante el dia de hoy?
     - que tenes pensado hacer hoy?
     - cual es el objetivo de hoy?
     - cual es tu tarea el dia de hoy?
+    - Me alegro. Con que vas a continuar?
+    - Con que continuas hoy?
+    - Con que tenias pensado continuar hoy?
     
 
 - intent: whatIsYourProblem
@@ -176,6 +179,9 @@ nlu:
     - consulta con el
     - Yo sabia que te ibas a trabar con eso. Te conozco mucho bola. Hace esto..
     - Lo podes hacer asi ...
+    - busca en stackoverflow.com de seguro te va ayudar a encontrar la solucion
+    - busca ayuda en algun foro
+    - fijate en algun foro de ayuda
 
 - intent: ScrumSendMeToWork
   examples: |
@@ -196,3 +202,13 @@ nlu:
     - te gustaria trabajar con Unity?
     - como te ves trabajando con Rasa?
     - queres sumarte a lo que estan haciendo en Rasa?
+
+- intent: test
+  examples: |
+    - activar intent
+    - test
+    - testeo
+    - testear cosas
+    - intent de test
+    - run test
+    - run     
