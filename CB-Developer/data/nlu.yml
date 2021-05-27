@@ -173,6 +173,7 @@ nlu:
     - busca ayuda en un foro
     - decile a tu compañero que te de una mano
     - consulta con el
+    - Yo sabia que te ibas a trabar con eso. Te conozco mucho bola. Hace esto ...
 
 - intent: ScrumSendMeToWork
   examples: |
