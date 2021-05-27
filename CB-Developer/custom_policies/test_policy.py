@@ -74,9 +74,9 @@ class TestPolicy(Policy):
         **kwargs: Any,
     ) -> PolicyPrediction:
         
-        #name = tracker.get_slot('name')
+        name = tracker.get_slot('name')
         with open("personalities.json", "r") as file:
-            personality = json.load(file)['Emiliano']
+            personality = json.load(file)[name]
 
         vectorP = []
         for key, value in personality.items():

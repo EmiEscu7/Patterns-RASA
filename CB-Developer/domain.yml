@@ -22,6 +22,7 @@ actions:
   - action_tipo_informal
   - action_tipo_formal
   - action_tipo_comun
+  - action_session_start
 
 slots:
   name:
@@ -177,6 +178,15 @@ responses:
 
   utter_goodbye:
   - text: "chau"
+
+  utter_greet_formal:
+  - text: "Buenos dias, me presento soy {name}"
+
+  utter_greet_informal:
+  - text: "Que onda perri, soy {name}"
+    
+  utter_greet_comun:
+  - text: "Buenas, soy {name}"
 
 
 session_config:

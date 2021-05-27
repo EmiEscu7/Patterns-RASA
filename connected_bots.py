@@ -43,9 +43,10 @@ delay = 0.5
 
 
 # Mando el mensaje inicial simulando que soy el chatbot 1
-print("Developer: Hola soy Emiliano")
+print("Developer: Hola soy Pedro")
 #puerto destino, msj a enviar, chatbot destino
-message_c1 = send_message(port_SM, "Hola soy Emiliano", "Scrum Master")
+#message_c1 tiene la respuesta del send_message
+message_c1 = send_message(port_SM, "Hola soy Pedro", "Scrum Master")
 
 
 # Loop infinito de los chatbots mandandose mensajes entre si, la conversacion se imprime en consola desde la funcion send_message

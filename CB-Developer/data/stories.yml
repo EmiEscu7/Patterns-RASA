@@ -55,7 +55,7 @@ stories:
   - intent: goodbye
   - action: utter_goodbye_comun
 
-- story: test
-  steps: 
-  - intent: test
-  - action: action_dar_respuesta
+#- story: test
+#  steps: 
+#  - intent: test
+#  - action: utter_test
