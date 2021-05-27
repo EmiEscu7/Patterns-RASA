@@ -141,6 +141,7 @@ nlu:
     - Me alegro. Con que vas a continuar?
     - Con que continuas hoy?
     - Con que tenias pensado continuar hoy?
+    - Que pensas hacer hoy?
     
 
 - intent: whatIsYourProblem

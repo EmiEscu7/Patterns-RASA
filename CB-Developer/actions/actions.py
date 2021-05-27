@@ -10,6 +10,7 @@
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.events import SlotSet, FollowupAction
 from random import random
 #
 #
@@ -25,28 +26,71 @@ from random import random
 #         dispatcher.utter_message(text="Hello World!")
 #
 #         return []
-class respuesta(Action):
+class Respuesta(Action):
+
     def name(self) -> Text:
         return "action_dar_respuesta"
+        
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        res = [ [float(0.2), "_yes"],
+        res = [ [float(0.5), "_yes"],
                 [float(1.0), "_no"] ] 
 
-        rta = "utter_my_problem"
-        
-        nro = random()
+        rta = "utter_my_problem"      
+       
+        nro = round(random(), 2)
         print(nro)
-
         i = 0
         while(nro > res[i][0]):
             i+=1
         rta += res[i][1]
+
+        tipo = tracker.get_slot('tipoRta')
+        rta += tipo
         
-        ##rta += "_comun" ##acomodar esto porque siempre va a responder con comun 
-        tipoRta = tracker.get_slot('tipoRta')
-        print(tipoRta)
-        rta += tipoRta
         dispatcher.utter_message(template = rta)
         return[]
+
+class RespuestaFormal(Action):
+
+    def name(self) -> Text:
+        return 'action_tipo_formal'
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        rta = "_formal"
+ 
+        #dispatcher.utter_message(template = rta)
+
+        return [SlotSet("tipoRta", rta), FollowupAction("action_dar_respuesta")]
+
+class RespuestaComun(Action):
+
+    def name(self) -> Text:
+        return 'action_tipo_comun'
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        rta = "_comun"
+        #dispatcher.utter_message(template = rta)
+
+        return [SlotSet("tipoRta", rta), FollowupAction("action_dar_respuesta")]
+
+class RespuestaInformal(Action):
+
+    def name(self) -> Text:
+        return 'action_tipo_informal'
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        rta = "_informal"
+        #dispatcher.utter_message(template = rta)
+
+        return [SlotSet("tipoRta", rta), FollowupAction("action_dar_respuesta")]

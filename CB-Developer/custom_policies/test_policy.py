@@ -73,23 +73,14 @@ class TestPolicy(Policy):
         interpreter: NaturalLanguageInterpreter,
         **kwargs: Any,
     ) -> PolicyPrediction:
-    
         
-
-        
-        
-        name = tracker.get_slot('name')
+        #name = tracker.get_slot('name')
         with open("personalities.json", "r") as file:
-            personality = json.load(file)[name]
-     
+            personality = json.load(file)['Emiliano']
 
-
-        #print(personality)
         vectorP = []
         for key, value in personality.items():
             vectorP.append(value)
-        
-        #print(vectorP)
 
         pesos = [0.35,0.4,0.1,0.05,0.3]
 
@@ -97,20 +88,10 @@ class TestPolicy(Policy):
         for i in range(4):
             relation += vectorP[i] * pesos[i]
 
-        
-        #print(relation)
-
         res = [ [float(0.3), "_formal"], 
                 [float(0.6), "_comun"], 
                 [float(1.0), "_informal"] ]
        
-        #print(res[0][1])
-        #for i in range(3):
-        #    val = float(res[i][0])
-        #    if (relation <= val):
-        #        rta += res[i][1]
-        #        #print(rta)
-        #        break
         rta = 'utter_'
         intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
         rta += intent
@@ -120,18 +101,15 @@ class TestPolicy(Policy):
         rta += res[i][1]
         tipoRta = res[i][1]
         
-        SlotSet("tipoRta",tipoRta)
-        
-
         result = self._default_predictions(domain)
 
            #intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
-        if (intent == 'doYouHaveProblem'):
-            result = confidence_scores_for('action_dar_respuesta',1.0,domain)
-            self.answered = True
-
-        if(not self.answered): #and intent == 'presentation_user'):            
-            result = confidence_scores_for(rta, 1.0, domain)
+        if(not self.answered): #and intent == 'presentation_user'):
+            if (intent == 'doYouHaveProblem'):
+                prox = 'action_tipo' + tipoRta
+                result = confidence_scores_for(prox,1.0,domain)
+            else:
+                result = confidence_scores_for(rta, 1.0, domain)
             self.answered = True
         else:
             self.answered = False

@@ -38,12 +38,12 @@ stories:
   - action: utter_chau
 
 
-#- story: consultar esatdo
-#  steps:
-#  - intent: presentation_user
+- story: consultar esatdo
+  steps:
+  - intent: greet
 #  - slot_was_set: 
 #    - name: Emiliano
-#  - action: action_consultar_estado
+  - action: action_consultar_estado
 #  - intent: verify_state
 #  - action: utter_vas_bien
 #  - intent: goodbye

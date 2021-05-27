@@ -19,6 +19,9 @@ intents:
 
 actions:
   - action_dar_respuesta
+  - action_tipo_informal
+  - action_tipo_formal
+  - action_tipo_comun
 
 slots:
   name:
