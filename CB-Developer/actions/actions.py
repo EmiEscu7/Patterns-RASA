@@ -32,11 +32,12 @@ class respuesta(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        res = [ [float(0.3), "_yes"],
+        res = [ [float(0.2), "_yes"],
                 [float(1.0), "_no"] ] 
         rta = "utter_my_problem"
         seed(1)
         nro = random()
+        print(nro)
         i = 0
         while(nro > res[i][0]):
             i+=1

@@ -113,6 +113,7 @@ nlu:
     - que anduviste haciendo ayer?
     - con que estuviste trabajando ayer?
     - que hiciste ayer?
+    - que haces centenialito, que hiciste ayer??
 
 - intent: doYouHaveProblem
   examples: |
@@ -173,6 +174,8 @@ nlu:
     - busca ayuda en un foro
     - decile a tu compañero que te de una mano
     - consulta con el
+    - Yo sabia que te ibas a trabar con eso. Te conozco mucho bola. Hace esto..
+    - Lo podes hacer asi ...
 
 - intent: ScrumSendMeToWork
   examples: |
