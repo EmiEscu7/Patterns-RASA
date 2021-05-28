@@ -10,6 +10,11 @@ stories:
 #  - action: utter_accept_task
 #  - action: utter_goodbye_comun
 
+- story: saludo
+  steps:
+  - intent: greet
+  - action: utter_greet_comun
+
 - story: dialy happy
   steps:
   - intent: whatYouDo

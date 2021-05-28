@@ -50,6 +50,15 @@ class Respuesta(Action):
         tipo = tracker.get_slot('tipoRta')
         rta += tipo
         
+    #    sender_id = tracker.current_state()['sender_id']
+    #    print("SENDER1:"+sender_id)
+
+     #   name = tracker.get_slot("name")
+     #   print("name inicial"+name)
+     #   tracker._set_slot("name",'testeo')
+     #   name = tracker.get_slot("name")
+     #   print("name cambiado"+name)
+
         dispatcher.utter_message(template = rta)
         return[]
 
@@ -105,30 +114,37 @@ class ActionSessionStart(Action):
     def fetch_slots(tracker: Tracker) -> List[EventType]:
         """Collect slots that contain the user's name and phone number."""
 
-        nombres = [ [0.3 , 'Emiliano'],
-                    [0.6 , 'Pedro'],
-                    [1.0 , 'MatiasB'] ]
-        nro = round(random(), 2)
+        #nombres = [ [0.3 , 'Emiliano'],
+        #            [0.6 , 'Pedro'],
+        #            [1.0 , 'MatiasB'] ]
+        #nro = round(random(), 2)
 
-        i = 0
-        while(nro > nombres[i][0]):
-            i+=1
-        nombre = nombres[i][1]
-        print(nombre)
+        #i = 0
+        #while(nro > nombres[i][0]):
+        #    i+=1
+        #nombre = nombres[i][1]
+        #print(nombre)
 
         slots = []
+        sender_id = tracker.current_state()['sender_id']
+        #print(sender_id)
+        #print("----> Action seasion start:" + sender_id)
         #logger.info("keeping only name/phone_number slots")
         #for key in ("username"):
         #    value = tracker.get_slot(key)
         #    if value is not None:
-        slots.append(SlotSet("name", nombre))
+        #nombre = tracker.get_slot('name')
+        #if(nombre == None):
+        slots.append(SlotSet("name", sender_id))
+        #else:
+        #    slots.append(SlotSet("name", nombre))
         return slots
 
     async def run(
       self, dispatcher, tracker: Tracker, domain: Dict[Text, Any]
     ) -> List[Dict[Text, Any]]:
         # the session should begin with a `session_started` event
-       
+
         events = [SessionStarted()]
 
         # any slots that should be carried over should come after the
@@ -139,3 +155,6 @@ class ActionSessionStart(Action):
         events.append(ActionExecuted("utter_greet"))
 
         return events
+
+
+        #Tracker.get_intent_of_latest_message

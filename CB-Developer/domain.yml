@@ -24,6 +24,8 @@ actions:
   - action_tipo_comun
   - action_session_start
 
+entities:
+  - name
 slots:
   name:
     type: text

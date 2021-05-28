@@ -158,6 +158,8 @@ nlu:
     - el problema estuvo con la [base de datos](tema)
     - se me rompio toda la [plataforma](tema)
     - Hubo varias complicaciones con [machine learning](tema)
+    - tuve un lio ahi con la base de datos
+    - tuve un par de lios con el sistema
 
 - intent: answer_done
   examples: |
@@ -212,6 +214,7 @@ nlu:
     - Ayudar a [Agustin](name) con un problema que tuvo
     - Lograr terminar mi tarea
     - Fijarme si lo que hice funciona correctamente
+    - Ya casi termino mi task. Voy a ponerme con eso
     
 - intent: dk_to_do
   examples: |

@@ -5,9 +5,9 @@ nlu:
   examples: |
     - hey
     - hola
-    - buenas
-    - buen dia
-    - buenas tardes
+    - buenas [Matias](name)
+    - buen dia [Pedro](name)
+    - buenas tardes[Emiliano](name)
     - vamos
     - hey bro
     - bro

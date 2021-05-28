@@ -74,6 +74,7 @@ class TestPolicy(Policy):
         **kwargs: Any,
     ) -> PolicyPrediction:
         
+
         name = tracker.get_slot('name')
         with open("personalities.json", "r") as file:
             personality = json.load(file)[name]
@@ -103,22 +104,34 @@ class TestPolicy(Policy):
         
         result = self._default_predictions(domain)
 
-           #intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
-        if(not self.answered): #and intent == 'presentation_user'):
-            if (intent == 'doYouHaveProblem'):
-                prox = 'action_tipo' + tipoRta
-                result = confidence_scores_for(prox,1.0,domain)
+
+
+       # sender_id = tracker.sender_id
+       # print("sender ID =" + sender_id2)
+       # latest = tracker.latest_message.get('text')
+       # print("latest: "+ latest)
+       #intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
+       #and intent == 'presentation_user'):
+        sender_id = tracker.current_state()['sender_id']
+        #nombrev2 = tracker.current_state()['name']
+        #print("----> nombrev2" + nombrev2)
+        print("---------------------> SENDER:"+ sender_id)
+        print("---------------------> NOMBRE:"+ name)
+        if (sender_id == name):
+            if(not self.answered): 
+                if (intent == 'doYouHaveProblem'):
+                    prox = 'action_tipo' + tipoRta
+                    result = confidence_scores_for(prox,1.0,domain)
+                else:
+                    result = confidence_scores_for(rta, 1.0, domain)
+                self.answered = True
             else:
-                result = confidence_scores_for(rta, 1.0, domain)
-            self.answered = True
+                self.answered = False
         else:
-            self.answered = False
+            result = confidence_scores_for('action_listen', 1.0, domain)
+            self.answered = True
 
         return self._prediction(result)
-        
-
-
-        
 
     def _metadata(self) -> Dict[Text, Any]:   
         return {
