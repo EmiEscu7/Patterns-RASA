@@ -126,16 +126,11 @@ class ActionSessionStart(Action):
         #print(nombre)
 
         slots = []
+        
+        cant = tracker.get_slot('cant')
         sender_id = tracker.current_state()['sender_id']
-        #print(sender_id)
-        #print("----> Action seasion start:" + sender_id)
-        #logger.info("keeping only name/phone_number slots")
-        #for key in ("username"):
-        #    value = tracker.get_slot(key)
-        #    if value is not None:
-        #nombre = tracker.get_slot('name')
-        #if(nombre == None):
         slots.append(SlotSet("name", sender_id))
+        #slots.append(SlotSet("cant", cant+1))
         #else:
         #    slots.append(SlotSet("name", nombre))
         return slots
@@ -145,11 +140,13 @@ class ActionSessionStart(Action):
     ) -> List[Dict[Text, Any]]:
         # the session should begin with a `session_started` event
 
+        
         events = [SessionStarted()]
 
         # any slots that should be carried over should come after the
         # `session_started` event
         events.extend(self.fetch_slots(tracker))
+        
 
         # an `action_listen` should be added at the end as a user message follows
         events.append(ActionExecuted("utter_greet"))

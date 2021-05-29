@@ -19,7 +19,7 @@ class Developer():
         return ((self.get_name() == other.get_name())  and (self.get_port() == other.get_port()))
 
 
-def send_message(message, developer, portDestino):
+def send_message(message, developer, developer_destino):
     """
     Esta función manda un mensaje a un chatbot corriendo en local host y imprime el mensaje recibido (tmb lo devuelve si lo queres usar para algo)
     Parametros:
@@ -32,7 +32,7 @@ def send_message(message, developer, portDestino):
         None si tiro error
     """
     #ESTO LO AGREGO YO A VER SI FUNCA
-    url = 'http://localhost:'+str(portDestino)+'/webhooks/rest/webhook'
+    url = 'http://localhost:'+str(developer_destino.get_port())+'/webhooks/rest/webhook'
     data = {"sender": developer.get_name(), "message": message}
     #print(developer.get_name())
     #cambie el parametro que pasan, en vez de data lo paso por json
@@ -42,8 +42,8 @@ def send_message(message, developer, portDestino):
     for entry in rta:
         text += entry['text']
     #text = rta[0]['text']
-    if((developer.get_port() == portDestino) or (5007 == portDestino)):
-        print(developer.get_name() + ": " + text)
+    #if((developer.get_port() == portDestino) or (5007 == portDestino)):
+    print(developer_destino.get_name() + ": " + text)
 
     if x.status_code == 200:
         return text
@@ -56,6 +56,7 @@ emi = Developer("Emiliano", 5005)
 matiB = Developer("MatiasB", 5006)
 sm = Developer("Scrum Master", 5007)
 pedro = Developer("Pedro", 5008)
+escuchador = Developer("Escucha", 1111)
 # Puertos donde tienen que estar corriendo los dos chatbots
 
 #port_EMI = 5005
@@ -71,13 +72,13 @@ delay = 0.5
 
 # Mando el mensaje inicial simulando que soy el chatbot 1
 print("Scrum Master: Buenas")
-actual_dev = emi
+actual_dev = [emi, escuchador, escuchador]
 #actual_dev_name = emi.get_name()
 #puerto destino, msj a enviar, chatbot destino
 #message_c1 tiene la respuesta del send_message
-message_emi = send_message("Buenas Emiliano", emi, emi.get_port())  #Chatbot Emiliano
-message_mati = send_message("Buenas MatiasB", matiB, matiB.get_port())  #Chatbot MatiasB
-message_pedro = send_message("Buenas Pedro", pedro, pedro.get_port())  #Chatbot Pedro
+message_emi = send_message("Buenas Emiliano", emi, emi)  #Chatbot Emiliano
+message_mati = send_message("Buenas MatiasB", matiB, matiB)  #Chatbot MatiasB
+message_pedro = send_message("Buenas Pedro", pedro, pedro)  #Chatbot Pedro
 #print(message_emi)
 #print(message_mati)
 
@@ -91,28 +92,30 @@ adios = ["Hasta mañana, que le vaya bien", "Hasta la proxima, que vaya bien",
 # Loop infinito de los chatbots mandandose mensajes entre si, la conversacion se imprime en consola desde la funcion send_message
 while True:
     if(not msg_to_send in adios):
-        message_sm = send_message(msg_to_send, sm, sm.get_port())
+        message_sm = send_message(msg_to_send, sm, sm)
         time.sleep(delay)
-        message_emi = send_message(message_sm, actual_dev, emi.get_port())
-        message_mati = send_message(message_sm, actual_dev, matiB.get_port())
-        message_pedro = send_message(message_sm, actual_dev, pedro.get_port())
+        message_emi = send_message(message_sm, actual_dev[0], emi)
+        message_mati = send_message(message_sm, actual_dev[1], matiB)
+        message_pedro = send_message(message_sm, actual_dev[2], pedro)
         #Si emi es el primero que esta hablando, Mati no va a responder hasta que Emi se despida
         #Cuando Emi se despide, se hace el pop de la lista de mensajes
         #y queda el primer mensaje que mati envio para continuar la conversacion con el
         #verificar con quien habla y cambiar el msg_to_send
-        if(actual_dev.equals(emi)):
+        if(actual_dev[0].equals(emi)):
             msg_to_send = message_emi
-        elif (actual_dev.equals(matiB)):
+        elif (actual_dev[1].equals(matiB)):
             msg_to_send = message_mati
         else:
             msg_to_send = message_pedro
     else:
         if (len(lista_msg) == 2): 
             msg_to_send = lista_msg.pop(0)
-            actual_dev = matiB
+            actual_dev[0] = escuchador
+            actual_dev[1] = matiB
         elif (len(lista_msg) == 1):
             msg_to_send = lista_msg.pop(0)
-            actual_dev = pedro
+            actual_dev[1] = escuchador
+            actual_dev[2] = pedro
         else:
             break
     

@@ -117,7 +117,7 @@ class TestPolicy(Policy):
         #print("----> nombrev2" + nombrev2)
         print("---------------------> SENDER:"+ sender_id)
         print("---------------------> NOMBRE:"+ name)
-        if (sender_id == name):
+        if (sender_id != 'Escucha'):
             if(not self.answered): 
                 if (intent == 'doYouHaveProblem'):
                     prox = 'action_tipo' + tipoRta
