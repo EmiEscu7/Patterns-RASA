@@ -1,13 +1,16 @@
 import requests
 import json
 import time
+import Queue
 
+class Bot():
 
-class Developer():
-
-    def __init__(self, name, port):
+    def __init__(self, name, port, mediator):
         self.name = name
-        self.port = port   
+        self.port = port  
+        self.url =  'http://localhost:'+port+'/webhooks/rest/webhook'
+        self.mediator = mediator
+        self.instance_chatbot()
 
     def get_name(self):
         return self.name
@@ -15,48 +18,151 @@ class Developer():
     def get_port(self):
         return self.port
 
+    def get_url(self):
+        return self.url
+
     def equals(self, other):
         return ((self.get_name() == other.get_name())  and (self.get_port() == other.get_port()))
+    
+    def __instance_chatbot(self):
+        #seteo el nombre de mi bot!!
+        url = self.get_url()
+        data = {"sender": self.get_name(), "message": ""}
+        x = requests.post(url, json = data)
+        if(x.json()[0]['text']=='Bot Activado'):
+            return True
+        return False
+    
+    def send_message(self, msg, rol):
+        data = {"sender":rol.get_name(), "message": msg}
+        x = requests.post(self.url, json =data)
+        rta = x.json()
+        text = ""
+        for entry in rta:
+            text += entry['text']
+        if x.status_code == 200:
+            return text
+        else:
+            print(x.raw)
+            return None
+            
+    def send_message(self, message, developer, developer_destino):
+        
+        mediator.send_message(self, message, developer, developer_destino)
+        """
+        Esta función manda un mensaje a un chatbot corriendo en local host y imprime el mensaje recibido (tmb lo devuelve si lo queres usar para algo)
+        Parametros:
+            port -> numero de puerto donde corre el chatbot (int) Puerto de destino
+            message -> mensaje que se le quiere enviar (string) Mensaje que se envia
+            sender -> identificador de quien lo envia (string)	Nombre del receptor
+
+        Devuelve:
+            string con el texto del mensaje si esta todo ok
+            None si tiro error
+        """
+        #ESTO LO AGREGO YO A VER SI FUNCA
+        url = 'http://localhost:'+str(developer_destino.get_port())+'/webhooks/rest/webhook'
+        data = {"sender": developer.get_name(), "message": message}
+        #print(developer.get_name())
+        #cambie el parametro que pasan, en vez de data lo paso por json
+        
+        #text = rta[0]['text']
+        #if((developer.get_port() == portDestino) or (5007 == portDestino)):
+        if (text != "Bot Activado"):
+            print(developer_destino.get_name() + ": " + text)
 
 
-def send_message(message, developer, developer_destino):
-    """
-    Esta función manda un mensaje a un chatbot corriendo en local host y imprime el mensaje recibido (tmb lo devuelve si lo queres usar para algo)
-    Parametros:
-        port -> numero de puerto donde corre el chatbot (int) Puerto de destino
-        message -> mensaje que se le quiere enviar (string) Mensaje que se envia
-        sender -> identificador de quien lo envia (string)	Nombre del receptor
-
-    Devuelve:
-        string con el texto del mensaje si esta todo ok
-        None si tiro error
-    """
-    #ESTO LO AGREGO YO A VER SI FUNCA
-    url = 'http://localhost:'+str(developer_destino.get_port())+'/webhooks/rest/webhook'
-    data = {"sender": developer.get_name(), "message": message}
-    #print(developer.get_name())
-    #cambie el parametro que pasan, en vez de data lo paso por json
-    x = requests.post(url, json = data)
-    rta = x.json()
-    text = ""
-    for entry in rta:
-        text += entry['text']
-    #text = rta[0]['text']
-    #if((developer.get_port() == portDestino) or (5007 == portDestino)):
-    print(developer_destino.get_name() + ": " + text)
-
-    if x.status_code == 200:
-        return text
-    else:
-        print(x.raw)
-        return None
 
 
-emi = Developer("Emiliano", 5005)
-matiB = Developer("MatiasB", 5006)
-sm = Developer("Scrum Master", 5007)
-pedro = Developer("Pedro", 5008)
-escuchador = Developer("Escucha", 1111)
+class Mediator():
+    def __init__(self,name,developers,activo1,activo2):
+        self.name = name
+        self.developers = developers
+        #tomo por convencion que siempre que este el Scrum Master lo ponemos en el 0
+        self.activo1 = activo1
+        self.activo2 = activo2 
+
+    def notifyAll(self, message, developer_destino):
+
+        for dev in developer:
+            if(dev == developer_destino):
+                rta = dev.send_message(msj,respondeme)
+            else:
+                rta = dev.send_message(msj,escuchar)
+            
+            if(dev==SM):
+                cola.append([rta,dev])
+            elif(rta != ''):
+                cola.insert(0, [rta,dev])
+            
+            ######
+            def send_message(msj,rol):
+                x = requests.post(url, json = msj)
+                self.imprimir_msj(x.text)
+                if(x.text != '')
+                    mediator.notifyAll(x.text)
+            #####
+        recorres la cola, vas sacando los mensajes y     
+
+
+        activo2 = remitente.
+        #envia el mensaje a todos los otros developers
+        fifo_queue = queue.Queue(len(developers))
+        for developer in listadevelopers:
+            if developer != remitente:
+                #respuesta del developer al mensaje enviado por remitente
+                mensaje = send_message(message, remitente, developer) 
+                if mensaje != None:
+                    dev = [mensaje,developer]
+                    fifo_queue.put(dev)
+
+        while not fifo_queue.empty():
+            dev = fifo_queue.get()
+            #Camino Feliz
+            if dev.developer == activo:
+                
+
+            #Hubo interrupcion
+
+
+    def send_message(message, developer, developer_destino):
+        """
+        Esta función manda un mensaje a un chatbot corriendo en local host y imprime el mensaje recibido (tmb lo devuelve si lo queres usar para algo)
+        Parametros:
+            port -> numero de puerto donde corre el chatbot (int) Puerto de destino
+            message -> mensaje que se le quiere enviar (string) Mensaje que se envia
+            sender -> identificador de quien lo envia (string)	Nombre del receptor
+
+        Devuelve:
+            string con el texto del mensaje si esta todo ok
+            None si tiro error
+        """
+        #ESTO LO AGREGO YO A VER SI FUNCA
+        url = 'http://localhost:'+str(developer_destino.get_port())+'/webhooks/rest/webhook'
+        data = {"sender": developer.get_name(), "message": message}
+        #print(developer.get_name())
+        #cambie el parametro que pasan, en vez de data lo paso por json
+        x = requests.post(url, json = data)
+        rta = x.json()
+        text = ""
+        for entry in rta:
+            text += entry['text']
+        #text = rta[0]['text']
+        #if((developer.get_port() == portDestino) or (5007 == portDestino)):
+        print(developer_destino.get_name() + ": " + text)
+
+        if x.status_code == 200:
+            return text
+        else:
+            print(x.raw)
+            return None
+
+
+emi = Bot("Emiliano", 5005)
+matiB = Bot("MatiasB", 5006)
+sm = Bot("Scrum Master", 5007)
+pedro = Bot("Pedro", 5008)
+escuchador = Bot("Escucha", 1111)
 # Puertos donde tienen que estar corriendo los dos chatbots
 
 #port_EMI = 5005
