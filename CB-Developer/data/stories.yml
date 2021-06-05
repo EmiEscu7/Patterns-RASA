@@ -13,6 +13,8 @@ stories:
 - story: saludo
   steps:
   - intent: greet
+  - slot_was_set:
+    - name: Emiliano
   - action: utter_greet_comun
 
 - story: dialy happy
@@ -59,6 +61,9 @@ stories:
   - action: utter_ScrumSendMeToWork_comun
   - intent: goodbye
   - action: utter_goodbye_comun
+
+
+  
 
 #- story: test
 #  steps: 

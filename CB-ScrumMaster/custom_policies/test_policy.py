@@ -121,13 +121,19 @@ class TestPolicy(Policy):
 
            #intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
         
-        if(not self.answered): #and intent == 'presentation_user'):            
-            result = confidence_scores_for(rta, 1.0, domain)
-            self.answered = True
+        sender_id = tracker.current_state()['sender_id']
+
+        if(sender_id != 'Escucha'):
+
+            if(not self.answered): #and intent == 'presentation_user'):            
+                result = confidence_scores_for(rta, 1.0, domain)
+                self.answered = True
+            else:
+                self.answered = False
+            return self._prediction(result)
         else:
-            self.answered = False
-        return self._prediction(result)
-        
+            result = confidence_scores_for('action_listen', 1.0, domain)
+            self.answered = True
 
 
         

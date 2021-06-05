@@ -4,10 +4,10 @@ nlu:
 - intent: greet
   examples: |
     - hey
-    - hola
-    - buenas [Matias](name)
+    - hola [Agustin](name)
+    - buenas [MatiasB](name)
     - buen dia [Pedro](name)
-    - buenas tardes[Emiliano](name)
+    - buenas tardes [Emiliano](name)
     - vamos
     - hey bro
     - bro
@@ -213,3 +213,24 @@ nlu:
     - intent de test
     - run test
     - run     
+
+- intent: agradecimiento
+  examples: |
+    - gracias
+    - muchas gracias
+    - que groso, gracias
+    - piola, gracias
+    - muchisimas gracias
+    - genial, gracias 
+    - te lo agradezco
+    - gracias por la ayuda
+    - aprecio tu ayuda
+    - Gracias por la ayuda broo
+    - Me sirvio pa gracias
+    - Muchas Gracias por la ayuda
+    - Excelente. Muchisimas gracias
+    - Perfectoo, Gracias!
+
+- intent: initBot
+  examples: |
+    -

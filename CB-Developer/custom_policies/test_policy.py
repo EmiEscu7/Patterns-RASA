@@ -76,6 +76,7 @@ class TestPolicy(Policy):
         
 
         name = tracker.get_slot('name')
+        print("ESTE ES EL NAME QUE ENTRO A LA POLICY: " + name)
         with open("personalities.json", "r") as file:
             personality = json.load(file)[name]
 
@@ -117,12 +118,15 @@ class TestPolicy(Policy):
         #print("----> nombrev2" + nombrev2)
         print("---------------------> SENDER:"+ sender_id)
         print("---------------------> NOMBRE:"+ name)
+        
         if (sender_id != 'Escucha'):
             if(not self.answered): 
                 if (intent == 'doYouHaveProblem'):
                     prox = 'action_tipo' + tipoRta
                     result = confidence_scores_for(prox,1.0,domain)
-                else:
+                elif(intent == 'agradecimiento'):
+                    result = confidence_scores_for('action_listen', 1.0, domain)
+                else:    
                     result = confidence_scores_for(rta, 1.0, domain)
                 self.answered = True
             else:
