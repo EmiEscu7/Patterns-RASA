@@ -120,6 +120,7 @@ class TestPolicy(Policy):
         print("---------------------> NOMBRE:"+ name)
         
         if (sender_id != 'Escucha'):
+            print("Entro al escucha, va a respondeer")
             if(not self.answered): 
                 if (intent == 'doYouHaveProblem'):
                     prox = 'action_tipo' + tipoRta

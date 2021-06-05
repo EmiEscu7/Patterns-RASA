@@ -72,17 +72,13 @@ class TestPolicy(Policy):
         interpreter: NaturalLanguageInterpreter,
         **kwargs: Any,
     ) -> PolicyPrediction:
-    
-        
 
-        
-        
-        name = tracker.get_slot('name')
+                
+        name = tracker.current_state()['sender_id'] #tracker.get_slot('name')
+
         with open("personalities.json", "r") as file:
             personality = json.load(file)[name]
         
-
-
         #print(personality)
         vectorP = []
         for key, value in personality.items():
@@ -121,11 +117,11 @@ class TestPolicy(Policy):
 
            #intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
         
-        sender_id = tracker.current_state()['sender_id']
+        
 
-        if(sender_id != 'Escucha'):
-
+        if(name != 'Escucha'):
             if(not self.answered): #and intent == 'presentation_user'):            
+                print("ESTO ESTA VALIENDO RTA EN SC: " + rta)
                 result = confidence_scores_for(rta, 1.0, domain)
                 self.answered = True
             else:

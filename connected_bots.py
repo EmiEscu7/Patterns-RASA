@@ -10,7 +10,8 @@ class Bot():
         self.port = port  
         self.url =  'http://localhost:'+str(port)+'/webhooks/rest/webhook'
         self.mediator = mediator
-        self.__instance_chatbot()
+        if(name != "Scrum Master"):
+            self.__instance_chatbot()
 
     def get_name(self):
         return self.name
@@ -26,22 +27,27 @@ class Bot():
     
     def __instance_chatbot(self):
         #seteo el nombre de mi bot!!
-        url = self.get_url()
-        data = {"sender": self.get_name(), "message": "Init "+str(self.get_name)}
-        x = requests.post(url, json = data)
-        print(x.json())
-        if(json.load(x.json())['text'] == 'Bot Activado'):
-            return True
-        return False
+       #url = self.get_url()
+        data = {"sender": self.get_name(), "message": "Hola "+self.get_name()}
+        x = requests.post(self.get_url(), json = data)
+        #print(x.json())
+        #if(json.load(x.json())['text'] == 'Bot Activado'):
+        #    return True
+        #return False
     
-    def send_message(self, msg, rol):
-        data = {"sender":rol, "message": msg}
-        x = requests.post(self.url, json =data)
+    def send_message(self, msg, rol, other=None):
+        if(rol == 'Respondeme' and self.get_name() != "Scrum Master"):
+            data = {"sender":self.get_name(), "message": msg}
+        elif (self.get_name() == "Scrum Master"):
+            data = {"sender":other.get_name(), "message": msg}
+        else:
+            data = {"sender":'Escucha', "message": msg}
+        x = requests.post(self.get_url(), json = data)
         rta = x.json()
         text = ""
         for entry in rta:
             text += entry['text']
-        print(self.get_name() + ": " + text)
+        
         if x.status_code == 200:
             return text
         else:
@@ -66,37 +72,41 @@ class Mediator():
         self.scrum = scrums
 
     def notifyAll(self,origen, message, destino):
-        answer_queue = queue[len(self.scrum)+len(self.developers)] #lista de las rta's que recibe el mediator
-        
+        answer_queue = [] #lista de las rta's que recibe el mediator
         for sc in self.scrum:
             if(sc == destino):
-                rta = sc.send_message(message,'Respondeme')
+                rta = sc.send_message(message,'Respondeme', other=origen)
                 if(rta != ''):
                     answer_queue.append([rta,sc])
                 else:
                     print("-----> El SM:" + sc.get_name() +"que le tocaba responder dijo vacio <-----")
-            else:
-                rta = sc.send_message(message,'Escucha')
+            elif(sc != origen):
+                rta = sc.send_message(message,'Escucha', other=origen)
                 if(rta != ''):
                     answer_queue.insert(0,[rta,sc])
-            
 
-        for dev in self.developer: #recorre la lista dev y les pide que genern una rta al message
+        for dev in self.developers: #recorre la lista dev y les pide que genern una rta al message
             if(dev == destino):
                 rta = dev.send_message(message,'Respondeme')
                 if(rta == ''):
                     print("-----> El DEV: " + dev.get_name() + " que le tocaba responder dijo vacio <-----")
                 else:
                     answer_queue.append([rta,dev])
-            else:    #esto es una "interrupcion"
+                
+                #esto es una "interrupcion"
+            elif(dev != origen):  
                 rta = dev.send_message(message,'Escucha')
                 if(rta != ''):
                     answer_queue.insert(0,[rta,dev])
+                else:
+                    print(dev.get_name() + ": " + rta)
 
+            
         #en este punto en la answer_queue tenes todas las respuestas a 'message'
 
-        while (not answer_queue.empty()): #ahora recorremos la lista de rtas enviando todo al que origino
-            variable = answer_queue.get() #la invocacion del notifyAll
+        while (len(answer_queue) != 0): #ahora recorremos la lista de rtas enviando todo al que origino
+            variable = answer_queue.pop(0) #la invocacion del notifyAll
+            print(variable[1].get_name() + ": " + variable[0])
             self.notifyAll(variable[1],variable[0], origen)          
             #si el mensaje es chau, no llamo a recursion
             #esto corta cuando se vacia la queue o todos lanzan ''. Para que lancen '' los dev's cuando
@@ -115,12 +125,11 @@ class Mediator():
             #una especie de clave o algo por el estilo le estas avisando al SC que hubo una "interrupcion"
             #en su conversacion, por lo que su logica interna resolverá que hacer, si preguntar otra cosa o lo q se le cante
 
-            if(answer_queue.qsize() == 1): #es decir queda un solo bot, el SM. Esto es para que retome la conversacion
-                scrum_master = answer_queue.get()##un paso más adelante de como habia quedado tras la interrupcion
+            if(len(answer_queue) == 1): #es decir queda un solo bot, el SM. Esto es para que retome la conversacion
+                scrum_master = answer_queue.pop(0)##un paso más adelante de como habia quedado tras la interrupcion
                 rta = scrum_master[1].send_message(scrum_master[0], "Respondeme")
                 #answer_queue.append([rta,scrum_master[0]])
                 scrum_master[1].notifyAll(rta, self, scrum_master[0]) #entro en recurrencia al notifyAll del SM
-
 
 
 mediator = Mediator("mediator")
@@ -133,7 +142,7 @@ pedro = Bot("Pedro", 5008, mediator)
 mediator.set_developers([emi,matiB,pedro])
 mediator.set_scrum([sm])
 
-sm.notifyAll("Hola que hiciste ayer",emi)
+sm.notifyAll("Con que trabajaste el dia de ayer?",pedro)
 
 #escuchador = Bot("Escucha", 1111)
 # Puertos donde tienen que estar corriendo los dos chatbots
