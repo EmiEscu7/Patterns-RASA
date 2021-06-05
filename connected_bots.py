@@ -27,8 +27,8 @@ class Bot():
     
     def __instance_chatbot(self):
         #seteo el nombre de mi bot!!
-       #url = self.get_url()
-        data = {"sender": self.get_name(), "message": "Hola "+self.get_name()}
+       #url = self.get_url()  "sender": self.get_name()
+        data = {"sender": 'Escucha', "message": "Hola "+self.get_name()}
         x = requests.post(self.get_url(), json = data)
         #print(x.json())
         #if(json.load(x.json())['text'] == 'Bot Activado'):
@@ -57,7 +57,11 @@ class Bot():
     def notifyAll(self, msg, destino):
         mediator.notifyAll(self,msg,destino)
 
-
+    def notifyAllMeeting(self,msg,dev):
+        for d in dev:
+            mediator.notifyAll(self,msg,d)
+ 
+ 
 
 class Mediator():
     def __init__(self,name,scrum=None,developers=None):
@@ -142,7 +146,8 @@ pedro = Bot("Pedro", 5008, mediator)
 mediator.set_developers([emi,matiB,pedro])
 mediator.set_scrum([sm])
 
-sm.notifyAll("Con que trabajaste el dia de ayer?",pedro)
+#sm.notifyAll("Con que trabajaste el dia de ayer?",pedro)
+sm.notifyAllMeeting("Con que trabajaste ayer?",[pedro,emi,matiB])
 
 #escuchador = Bot("Escucha", 1111)
 # Puertos donde tienen que estar corriendo los dos chatbots
