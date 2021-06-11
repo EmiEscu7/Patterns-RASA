@@ -28,12 +28,15 @@ actions:
 entities:
   - name
 slots:
-  name:
+  my_name:
     type: text
-    auto_fill: True
+    auto_fill: false
+  sender:
+    type: text
+    auto_fill: false
   tipoRta:
     type: text
-
+  
 
 responses:
 
@@ -185,15 +188,21 @@ responses:
   - text: "chau"
 
   utter_greet_formal:
-  - text: "Buenos dias, me presento soy {name}"
+  - text: "Buenos dias, me presento soy {my_name}"
 
   utter_greet_informal:
-  - text: "Que onda perri, soy {name}"
+  - text: "Que onda perri, soy {my_name}"
     
   utter_greet_comun:
-  - text: "Buenas, soy {name}"
+  - text: "Buenas, soy {my_name}"
 
-
+  utter_test_informal:
+  - text: "valores -> {my_name} - {sender}"
+  utter_test_formal:
+  - text: "valores -> {my_name} - {sender}"
+  utter_test_comun:
+  - text: "valores -> {my_name} - {sender}"
+  
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

@@ -30,7 +30,7 @@ policies:
 # # If you'd like to customize them, uncomment and adjust the policies.
 # # See https://rasa.com/docs/rasa/policies for more information.
   - name: RulePolicy
-  - name: MemoizationPolicy
+  - name: MemoizationPolicy #sigue el flujo del stories, predice tal cual la story
   - name: TEDPolicy
     max_history: 5
     epochs: 100

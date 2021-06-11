@@ -28,20 +28,24 @@ class Bot():
     def __instance_chatbot(self):
         #seteo el nombre de mi bot!!
        #url = self.get_url()  "sender": self.get_name()
-        data = {"sender": 'Escucha', "message": "Hola "+self.get_name()}
+        #data = {"sender": 'Escucha', "message": "Hola "+self.get_name()}
+        data = {"sender": self.get_name(), "message": "Hola "+self.get_name(), "metadata": { "flag": 1 }}
         x = requests.post(self.get_url(), json = data)
         #print(x.json())
         #if(json.load(x.json())['text'] == 'Bot Activado'):
         #    return True
         #return False
     
-    def send_message(self, msg, rol, other=None):
+    def send_message(self, msg, sender, flag, other=None):
+        """
         if(rol == 'Respondeme' and self.get_name() != "Scrum Master"):
             data = {"sender":self.get_name(), "message": msg}
         elif (self.get_name() == "Scrum Master"):
             data = {"sender":other.get_name(), "message": msg}
         else:
             data = {"sender":'Escucha', "message": msg}
+        """
+        data = {"sender": sender, "message": msg, "metadata": { "flag": flag } }
         x = requests.post(self.get_url(), json = data)
         rta = x.json()
         text = ""
@@ -139,15 +143,25 @@ class Mediator():
 mediator = Mediator("mediator")
 
 emi = Bot("Emiliano", 5005, mediator)
-matiB = Bot("MatiasB", 5006, mediator)
-sm = Bot("Scrum Master", 5007, mediator)
-pedro = Bot("Pedro", 5008, mediator)
+#matiB = Bot("MatiasB", 5006, mediator)
+#sm = Bot("Scrum Master", 5007, mediator)
+#pedro = Bot("Pedro", 5008, mediator)
 
-mediator.set_developers([emi,matiB,pedro])
-mediator.set_scrum([sm])
+#mediator.set_developers([emi,matiB,pedro])
+#mediator.set_scrum([sm])
 
 #sm.notifyAll("Con que trabajaste el dia de ayer?",pedro)
-sm.notifyAllMeeting("Con que trabajaste ayer?",[pedro,emi,matiB])
+#sm.notifyAllMeeting("Con que trabajaste ayer?",[pedro,emi,matiB])
+
+emi.send_message("hola Emiliano","Emiliano", 1)
+emi.send_message("test","Emiliano", 1)
+#emi.send_message("Como andas?","Emiliano")
+emi.send_message("test","Matias", 0) 
+emi.send_message("test","Pedro", 1) 
+emi.send_message("test","Emiliano", 1)
+emi.send_message("test","Matias", 1)
+
+
 
 #escuchador = Bot("Escucha", 1111)
 # Puertos donde tienen que estar corriendo los dos chatbots
