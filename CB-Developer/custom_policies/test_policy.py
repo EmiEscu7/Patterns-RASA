@@ -37,6 +37,8 @@ from rasa.shared.nlu.constants import (
     ACTION_NAME,
     ENTITIES,
 )
+from .custom_tracker import CustomTracker
+
 
 logger = logging.getLogger(__name__)
 
@@ -47,12 +49,32 @@ OLD_DEFAULT_MAX_HISTORY = 5
 class ContextManager():
 
     def __init__(self):
-        self.senders = {} #conjunto de senders
-        self.dict_msg = {} #multitracker
+        self.name = None
+        self.senders = {} #conjunto de senders {"nro": sender_id}
+        self.dict_msg = {} #multitracker {"sender_id" :{"message": message, "answer": answer}"} Si, un dict de dict
+        self.dic_custom_tracker = {} # {"sender": custom_tracker}
         self.iterator = 0
 
+    def get_name(self):
+        return self.name
+
+    def set_name(self, name):
+        self.name = name
+
+    def set_tracker(self, sender_id,tracker:CustomTracker):
+        if(not self.exist_sender(sender_id)):
+            self.add_sender(sender_id)
+        self.dic_custom_tracker[sender_id] = tracker
+
+    def get_tracker(self, sender) -> CustomTracker:
+        return self.dic_custom_tracker[sender]
+
     def add_sender(self, sender_id):
-        """ Add sender to list senders """
+        """ 
+        Add sender to list senders
+            key: integer
+            value: sender_id
+        """
         self.senders[len(self.senders)] = sender_id
             
 
@@ -62,7 +84,7 @@ class ContextManager():
 
     def exist_sender(self, sender_id):
         """ Return True if senders contains sender_id """
-        return self.senders.count(sender_id) > 0
+        return sender_id in self.senders.values()
     
     def re_randomize(self):
         if(self.iterator <= 2):
@@ -73,7 +95,7 @@ class ContextManager():
             self.iterator = int(4*self.iterator - self.iterator/2)
         
     
-    def add_messege(self, sender_id, messege, answer):
+    def add_messege(self, sender_id, message, answer):
         """
             This method save all message that bot recived.
             sender_id: is bot that send message.
@@ -95,12 +117,14 @@ class ContextManager():
             idx = self.iterator % len(self.dict_msg)
             sender_to_respond = self.senders.get(idx)
             self.re_randomize() 
-            return self.dict_msg.get(sender_to_respond).get("answer")
+            answer = self.dict_msg.get(sender_to_respond) #answer = {"message:" 'textoA', "answer": 'textoB'}
+            return answer #esto retorna {"message:" 'textoA', "answer": 'textoB'}
         else:
-            for key, val in self.dict_msg.items():
-                ret = val #devuelvo el map {msg, answer}. SEGURO HAY UNA FORMA MEJOR
-            return ret.get("answer")
+            answer = self.dict_msg.popitem() #esto retorna (sender_id,{"message:" 'textoA', "answer": 'textoB'})
+            #answer = {"message:" 'textoA', "answer": 'textoB'}
+            return answer[1] 
     
+        
     def del_message(self):
         self.dict_msg = {}
 
@@ -118,6 +142,7 @@ class TestPolicy(Policy):
         super().__init__(featurizer, priority, **kwargs)
         self.answered = False
         self.context_manager = ContextManager()
+        
 
     def train(
         self,
@@ -133,10 +158,6 @@ class TestPolicy(Policy):
             domain: the :class:`rasa.shared.core.domain.Domain`
             interpreter: Interpreter which can be used by the polices for featurization.
         """
-
-        #name = training_trackers.get_slot('name')
-        #print(name)
-
         pass
 
     def predict_action_probabilities(
@@ -146,17 +167,40 @@ class TestPolicy(Policy):
         interpreter: NaturalLanguageInterpreter,
         **kwargs: Any,
     ) -> PolicyPrediction:
+        print("------------> BUENO ESTE ES EL LEN EN LA POLICY AL INICIO: "+ str(len(self.context_manager.senders)))
+        if(self.answered):  
+            result = confidence_scores_for('action_listen', 1.0, domain)
+            self.answered = False
+            return self._prediction(result) 
+
+        sender_id = tracker.current_state()['sender_id']
         
-        if(not self.slots_was_set(tracker, ['sender', 'my_name'])): #esto setea los slots si no estan seteados
-            self.set_slots(tracker)       
+        if(self.context_manager.exist_sender(sender_id)):
+            custom_tracker = self.context_manager.get_tracker(sender_id)
+            
+        else:
+            custom_tracker = CustomTracker(
+                            tracker.sender_id,
+                            tracker.slots.values(),
+                            tracker._max_event_history,
+                            tracker.sender_source,
+                            tracker.is_rule_tracker
+                            )
+           
+        custom_tracker.update_tracker(tracker)    
+        
+        
+        if(not self.slots_was_set(custom_tracker, ['sender', 'my_name'])): 
+            self.set_slots(custom_tracker,self.context_manager) #esto setea los slots si no estan seteados
+            print("------ENTRO A SETEAR LOS SLOTS-------")
+        
+        my_name = custom_tracker.get_slot('my_name')#name del bot
+        sender = custom_tracker.get_slot('sender')#name del bot que envia el mensaje
 
-        my_name = tracker.get_slot('my_name')#name del bot
-        sender = tracker.get_slot('sender')#name del bot que envia el mensaje
-
-        if(tracker.latest_message.intent.get(INTENT_NAME_KEY) != "out_of_scope"): #si entendio y dio una rta coherente. CREAR EL INTENT
+        if(custom_tracker.latest_message.intent.get(INTENT_NAME_KEY) != "out_of_scope"): #si entendio y dio una rta coherente. CREAR EL INTENT
             style_answer = self.get_style_answer(my_name)
             rta = 'utter_'
-            intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
+            intent = custom_tracker.latest_message.intent.get(INTENT_NAME_KEY)
             rta += intent + style_answer
         else:
             self.answered = True
@@ -165,50 +209,24 @@ class TestPolicy(Policy):
         #dos prints de control        
         print("---------------------> SENDER:" + str(sender))
         print("---------------------> NOMBRE:" + str(my_name))
-        last_message = tracker.latest_message.text
-
-        if(sender != my_name):
-            #answer = self.respond(tracker)
-            self.context_manager.add_messege(sender, last_message, rta)
-            #self.answered = True
         
-        
+        last_message_text = custom_tracker.latest_message.text
+        self.context_manager.add_messege(sender, last_message_text, rta)       
 
-        if(self.last_message(tracker)): #if is last msg choose rta
+        if(self.last_message(custom_tracker)): #if is last msg choose rta
             final_answer = self.context_manager.decide_context()
             self.context_manager.del_message()
             print("LA ANSWER FINAL ES: " + final_answer.get("answer"))
             result = confidence_scores_for(final_answer.get("answer"),1.0,domain)
         else:
             result = confidence_scores_for('action_listen', 1.0, domain)
-            
 
-        """
-        if (sender != my_name): #si el que envio el mensaje es distinto a mí, debo responder
-            #agg que si el mensaje esta destinado a una persona y yo no soy esa persona, no debería respoder
-            #agg tambien a lo anterior que si soy atrevido y me gusta entrometerme pueda o no meterme en la conversacion
-            if(not self.answered): 
-                if (intent == 'doYouHaveProblem'): #esto es porque un developer puede tener un problema y debe responder como dicta su estilo de animo
-                    prox = 'action_tipo' + style_answer 
-                    result = confidence_scores_for(prox,1.0,domain)
-                
-                elif(intent == 'agradecimiento'): #esto es para que corte y dejen de hablar, que de una respuesta vacia = ''
-                    result = confidence_scores_for('action_listen', 1.0, domain)
-                
-                else:    
-                    result = confidence_scores_for(rta, 1.0, domain)
-                    
-                self.answered = True
-            
-            else:
-                self.answered = False
-        
-        else:
-            result = confidence_scores_for('action_listen', 1.0, domain)
-            self.answered = True
-        """
         self.answered = True
+ 
+        self.context_manager.set_tracker(sender_id,custom_tracker)
+        print("------------> BUENO ESTE ES EL LEN EN LA POLICY AL FINAL: "+ str(len(self.context_manager.senders)))
         return self._prediction(result)
+
 
     def _metadata(self) -> Dict[Text, Any]:   
         return {
@@ -219,22 +237,19 @@ class TestPolicy(Policy):
     def _metadata_filename(cls) -> Text:
         return "test_policy.json"
 
-    def get_flag(self, tracker):
+    def get_flag(self, tracker : CustomTracker):
         """
             This method return flag value from recived on message.
         
         """
         var = tracker.latest_message
         metadata = var.get_metadata()
-        print("ESTE ES EL METADATA V2 "+ str(metadata))
         metadata2 = metadata["flag"]
-        print("ESTE ES EL METADATA V2 "+ str(metadata2))
-        #ret = metadata["metadata"]["flag"]
-        #print("ESTE ES EL LATEST_MESSAGE: "+str(ret))
+        print("ESTE ES EL VALOR DEL FLAG  "+ str(metadata2))        
        
         return metadata2
 
-    def last_message(self, tracker):
+    def last_message(self, tracker : CustomTracker):
         """ Return True when flag is 1. That means is last message """
         return self.get_flag(tracker) == 1
 
@@ -272,25 +287,31 @@ class TestPolicy(Policy):
         return [0.35,0.4,0.1,0.05,0.3]
         
 
-    def slots_was_set(self, tracker, list_slots_to_answer) -> bool:
+    def slots_was_set(self, tracker:CustomTracker, list_slots_to_answer) -> bool:
         for slot in list_slots_to_answer:
             if(tracker.get_slot(slot) == None):
-                print("esto es el valor que tiene el slot"+ str(tracker.get_slot(slot)))
                 return False        
         return True
 
 
-    def set_slots(self, tracker):
+    def set_slots(self, tracker : CustomTracker, context_manager: ContextManager):
 
         nameTracker = next(tracker.get_latest_entity_values("name"), None)
-        tracker.set_slot("my_name", nameTracker)   
-        #test = tracker.get_slot('my_name')
-        #print("NOMBRE GUARDADO: " + str(test))       
+        if(nameTracker != None and context_manager.get_name() == None):
+            context_manager.set_name(nameTracker)
+            tracker.set_slot("my_name", nameTracker)   
+        else:
+            tracker.set_slot("my_name", context_manager.get_name())
+            
+            
+        test = tracker.get_slot('my_name')
+        print("NOMBRE GUARDADO: " + str(test))       
         sender_id = tracker.current_state()['sender_id']
         tracker.set_slot("sender", sender_id)   
-        self.context_manager.add_sender(sender_id)
-        #test2 = tracker.get_slot('sender')
-        #print("SENDER GUARDADO: " + str(test2))    
+        #self.context_manager.add_sender(sender_id)
+        test2 = tracker.get_slot('sender')
+        print("SENDER GUARDADO: " + str(test2))    
+
         
     """
     comentarios de la politica generales y auxiliares
@@ -303,4 +324,27 @@ class TestPolicy(Policy):
       and intent == 'presentation_user'):
       nombrev2 = tracker.current_state()['name']
       print("----> nombrev2" + nombrev2)
+        
+    if (sender != my_name): #si el que envio el mensaje es distinto a mí, debo responder
+        #agg que si el mensaje esta destinado a una persona y yo no soy esa persona, no debería respoder
+        #agg tambien a lo anterior que si soy atrevido y me gusta entrometerme pueda o no meterme en la conversacion
+        if(not self.answered): 
+            if (intent == 'doYouHaveProblem'): #esto es porque un developer puede tener un problema y debe responder como dicta su estilo de animo
+                prox = 'action_tipo' + style_answer 
+                result = confidence_scores_for(prox,1.0,domain)
+            
+            elif(intent == 'agradecimiento'): #esto es para que corte y dejen de hablar, que de una respuesta vacia = ''
+                result = confidence_scores_for('action_listen', 1.0, domain)
+            
+            else:    
+                result = confidence_scores_for(rta, 1.0, domain)
+                
+            self.answered = True
+        
+        else:
+            self.answered = False
+    
+        else:
+            result = confidence_scores_for('action_listen', 1.0, domain)
+            self.answered = True
     """

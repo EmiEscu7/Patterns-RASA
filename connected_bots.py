@@ -36,16 +36,16 @@ class Bot():
         #    return True
         #return False
     
-    def send_message(self, msg, sender, flag, other=None):
+    def send_message(self, msg, sender, flag=1, other=None):
         """
-        if(rol == 'Respondeme' and self.get_name() != "Scrum Master"):
-            data = {"sender":self.get_name(), "message": msg}
-        elif (self.get_name() == "Scrum Master"):
-            data = {"sender":other.get_name(), "message": msg}
-        else:
-            data = {"sender":'Escucha', "message": msg}
+        msg = mensaje a enviar
+        sender = quien envia el mensaje
+        Flag = 0 -> No responde (porque interpreta como que no es el ultimo mensaje que debe recibir)
+        Flag = 1 -> Responde (porque interpreta la politica que es el ultimo mensaje que debe recibir)
+        other = info extra
+        
         """
-        data = {"sender": sender, "message": msg, "metadata": { "flag": flag } }
+        data = {"sender": sender.get_name(), "message": msg, "metadata": { "flag": flag } }
         x = requests.post(self.get_url(), json = data)
         rta = x.json()
         text = ""
@@ -82,70 +82,69 @@ class Mediator():
     def notifyAll(self,origen, message, destino):
         answer_queue = [] #lista de las rta's que recibe el mediator
         for sc in self.scrum:
-            if(sc == destino):
-                rta = sc.send_message(message,'Respondeme', other=origen)
-                if(rta != ''):
-                    answer_queue.append([rta,sc])
-                else:
-                    print("-----> El SM:" + sc.get_name() +"que le tocaba responder dijo vacio <-----")
-            elif(sc != origen):
-                rta = sc.send_message(message,'Escucha', other=origen)
-                if(rta != ''):
-                    answer_queue.insert(0,[rta,sc])
-
-        for dev in self.developers: #recorre la lista dev y les pide que genern una rta al message
-            if(dev == destino):
-                rta = dev.send_message(message,'Respondeme')
+            if(sc != origen):
+                rta = sc.send_message(message,sc)
                 if(rta == ''):
-                    print("-----> El DEV: " + dev.get_name() + " que le tocaba responder dijo vacio <-----")
+                    print("-----> El SM:" + sc.get_name() + " dijo vacio <-----")
+                else:
+                    answer_queue.append([rta,sc])                 
+            
+        for dev in self.developers: #recorre la lista dev y les pide que genern una rta al message
+            if(dev != origen):
+                rta = dev.send_message(message,dev)
+                if(rta == ''):
+                    print("-----> El DEV: " + dev.get_name() + " dijo vacio <-----")
                 else:
                     answer_queue.append([rta,dev])
-                
-                #esto es una "interrupcion"
-            elif(dev != origen):  
-                rta = dev.send_message(message,'Escucha')
-                if(rta != ''):
-                    answer_queue.insert(0,[rta,dev])
-                else:
-                    print(dev.get_name() + ": " + rta)
 
             
         #en este punto en la answer_queue tenes todas las respuestas a 'message'
 
-        while (len(answer_queue) != 0): #ahora recorremos la lista de rtas enviando todo al que origino
-            variable = answer_queue.pop(0) #la invocacion del notifyAll
-            print(variable[1].get_name() + ": " + variable[0])
-            self.notifyAll(variable[1],variable[0], origen)          
-            #si el mensaje es chau, no llamo a recursion
-            #esto corta cuando se vacia la queue o todos lanzan ''. Para que lancen '' los dev's cuando
-            #hay una interrupción, luego del agradecimiento que dispare un action_listen entonces no se
-            #agregaria nada a queue
+        while (len(answer_queue) > 0): 
+            """
+            ahora recorremos la lista de respuestas enviando todo al que origino
+            la invocacion del notifyAll
+            """
             
-            #para mentirle a rasa: si en la cola tenes mas de un elemento es porque tenes una "interrupcion"
-            #osea te respondio uno que tenia que 'Escuchar' por lo tanto a Rasa le podes mentir diciendole
-            #al segundo bot "Hubo una interrumcion" o algo por el estilo y que él internamente resuelva
-            #eso y se plantee la nueva pregunta que va a hacerle. Ejemplo: esta hablando Emi - Scrum, Emi dice
-            #tuve un problema entonces por casualidad un DEV dice 'Resolvelo así..' y al mismo tiempo el Scrum
-            #dice algo como 'Que pena...', en la cola tenes 2 elementos, lanzas primero el del DEV
-            #para que siga ese hilo conversacional el dev con Emi (gracias por la ayuda bla bla bla)
-            #y al ser recursivo cuando esto vuelva va a seguir teniendo un elemento la queue, el mensaje del SC
-            #entonces si vos invertis el mensaje, es decir ahora se lo mandas al Scrum en vez a Emi pero con
-            #una especie de clave o algo por el estilo le estas avisando al SC que hubo una "interrupcion"
-            #en su conversacion, por lo que su logica interna resolverá que hacer, si preguntar otra cosa o lo q se le cante
+            prox_sms = answer_queue.pop(0)  # prox_sms = [answer,dev/scrum]
+            print(prox_sms[1].get_name() + ": " + prox_sms[0])
 
-            if(len(answer_queue) == 1): #es decir queda un solo bot, el SM. Esto es para que retome la conversacion
-                scrum_master = answer_queue.pop(0)##un paso más adelante de como habia quedado tras la interrupcion
-                rta = scrum_master[1].send_message(scrum_master[0], "Respondeme")
-                #answer_queue.append([rta,scrum_master[0]])
-                scrum_master[1].notifyAll(rta, self, scrum_master[0]) #entro en recurrencia al notifyAll del SM
-
+            if(len(answer_queue) == 1):
+                self.notifyAll(prox_sms[1],prox_sms[0], origen,1)   
+            else:
+                self.notifyAll(prox_sms[1],prox_sms[0], origen,0)            
+      
+        """
+        esto corta cuando se vacia la queue o todos lanzan ''. Para que lancen '' los dev's cuando
+        hay una interrupción, luego del agradecimiento que dispare un action_listen entonces no se
+        agregaria nada a queue
+        
+        para mentirle a rasa: si en la cola tenes mas de un elemento es porque tenes una "interrupcion"
+        osea te respondio uno que tenia que 'Escuchar' por lo tanto a Rasa le podes mentir diciendole
+        al segundo bot "Hubo una interrumcion" o algo por el estilo y que él internamente resuelva
+        eso y se plantee la nueva pregunta que va a hacerle. Ejemplo: esta hablando Emi - Scrum, Emi dice
+        tuve un problema entonces por casualidad un DEV dice 'Resolvelo así..' y al mismo tiempo el Scrum
+        dice algo como 'Que pena...', en la cola tenes 2 elementos, lanzas primero el del DEV
+        para que siga ese hilo conversacional el dev con Emi (gracias por la ayuda bla bla bla)
+        y al ser recursivo cuando esto vuelva va a seguir teniendo un elemento la queue, el mensaje del SC
+        entonces si vos invertis el mensaje, es decir ahora se lo mandas al Scrum en vez a Emi pero con
+        una especie de clave o algo por el estilo le estas avisando al SC que hubo una "interrupcion"
+        en su conversacion, por lo que su logica interna resolverá que hacer, si preguntar otra cosa o lo q se le cante
+        
+        
+        Codigo viejo:
+        scrum_master = answer_queue.pop(0)##un paso más adelante de como habia quedado tras la interrupcion
+        rta = scrum_master[1].send_message(scrum_master[0], "Respondeme")
+        #answer_queue.append([rta,scrum_master[0]])
+        scrum_master[1].notifyAll(rta, self, scrum_master[0]) #entro en recurrencia al notifyAll del SM
+        """
 
 mediator = Mediator("mediator")
 
 emi = Bot("Emiliano", 5005, mediator)
-#matiB = Bot("MatiasB", 5006, mediator)
+matiB = Bot("MatiasB", 5006, mediator)
 #sm = Bot("Scrum Master", 5007, mediator)
-#pedro = Bot("Pedro", 5008, mediator)
+pedro = Bot("Pedro", 5008, mediator)
 
 #mediator.set_developers([emi,matiB,pedro])
 #mediator.set_scrum([sm])
@@ -153,16 +152,12 @@ emi = Bot("Emiliano", 5005, mediator)
 #sm.notifyAll("Con que trabajaste el dia de ayer?",pedro)
 #sm.notifyAllMeeting("Con que trabajaste ayer?",[pedro,emi,matiB])
 
-emi.send_message("hola Emiliano","Emiliano", 1)
-emi.send_message("test","Emiliano", 1)
-#emi.send_message("Como andas?","Emiliano")
-emi.send_message("test","Matias", 0) 
-emi.send_message("test","Pedro", 1) 
-emi.send_message("test","Emiliano", 1)
-emi.send_message("test","Matias", 1)
-
-
-
+emi.send_message("test",matiB, 0) 
+emi.send_message("test",pedro, 1)
+emi.send_message("hola Emiliano",emi, 1)
+emi.send_message("test",emi, 1) 
+emi.send_message("test",emi, 1)
+emi.send_message("test",matiB, 1)
 #escuchador = Bot("Escucha", 1111)
 # Puertos donde tienen que estar corriendo los dos chatbots
 

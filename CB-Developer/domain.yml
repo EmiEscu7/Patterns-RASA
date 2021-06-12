@@ -202,7 +202,13 @@ responses:
   - text: "valores -> {my_name} - {sender}"
   utter_test_comun:
   - text: "valores -> {my_name} - {sender}"
-  
+
+  utter_out_of_scope_formal:
+  - text: "Disculpame, creo que no logre entenderte"
+  utter_out_of_scope_informal:
+  - text: "No te entiendo centenialito"
+  utter_out_of_scope_comun:
+  - text: "No te entendi"
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
