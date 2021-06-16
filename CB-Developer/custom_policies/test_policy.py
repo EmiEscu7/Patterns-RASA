@@ -117,12 +117,13 @@ class ContextManager():
             idx = self.iterator % len(self.dict_msg)
             sender_to_respond = self.senders.get(idx)
             self.re_randomize() 
-            answer = self.dict_msg.get(sender_to_respond) #answer = {"message:" 'textoA', "answer": 'textoB'}
-            return answer #esto retorna {"message:" 'textoA', "answer": 'textoB'}
+            answer = list(self.dict_msg.get(sender_to_respond)) #answer = {"message:" 'textoA', "answer": 'textoB'}
+            return answer.pop() #esto retorna {"message:" 'textoA', "answer": 'textoB'}
         else:
-            answer = self.dict_msg.popitem() #esto retorna (sender_id,{"message:" 'textoA', "answer": 'textoB'})
+            answer = list(self.dict_msg.values()) #esto retorna (sender_id,{"message:" 'textoA', "answer": 'textoB'})
             #answer = {"message:" 'textoA', "answer": 'textoB'}
-            return answer[1] 
+            #print("ESTO ES LA ANSWER DE 1 RTA --> " + str(answer))
+            return answer.pop()
     
         
     def del_message(self):
@@ -168,10 +169,12 @@ class TestPolicy(Policy):
         **kwargs: Any,
     ) -> PolicyPrediction:
         print("------------> BUENO ESTE ES EL LEN EN LA POLICY AL INICIO: "+ str(len(self.context_manager.senders)))
-        if(self.answered):  
+        if(self.answered):
+            print("ENTRO AL PRIMER IF SELF.ANSWRED")  
             result = confidence_scores_for('action_listen', 1.0, domain)
             self.answered = False
             return self._prediction(result) 
+            #return confidence_scores_for('action_listen', 1.0, domain)
 
         sender_id = tracker.current_state()['sender_id']
         
@@ -204,7 +207,8 @@ class TestPolicy(Policy):
             rta += intent + style_answer
         else:
             self.answered = True
-            return confidence_scores_for('action_listen', 1.0, domain)
+            result = confidence_scores_for('action_listen', 1.0, domain)
+            return self._prediction(result)
         
         #dos prints de control        
         print("---------------------> SENDER:" + str(sender))
@@ -216,12 +220,12 @@ class TestPolicy(Policy):
         if(self.last_message(custom_tracker)): #if is last msg choose rta
             final_answer = self.context_manager.decide_context()
             self.context_manager.del_message()
-            print("LA ANSWER FINAL ES: " + final_answer.get("answer"))
+            print("LA ANSWER FINAL ES: " + str(final_answer.get("answer")))
             result = confidence_scores_for(final_answer.get("answer"),1.0,domain)
+            self.answered = True
         else:
             result = confidence_scores_for('action_listen', 1.0, domain)
 
-        self.answered = True
  
         self.context_manager.set_tracker(sender_id,custom_tracker)
         print("------------> BUENO ESTE ES EL LEN EN LA POLICY AL FINAL: "+ str(len(self.context_manager.senders)))
