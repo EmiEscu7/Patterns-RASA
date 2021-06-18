@@ -13,6 +13,7 @@ from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet, FollowupAction, SessionStarted, ActionExecuted, EventType
 from random import random
 
+
 #
 #
 # class ActionHelloWorld(Action):
@@ -27,6 +28,8 @@ from random import random
 #         dispatcher.utter_message(text="Hello World!")
 #
 #         return []
+
+
 class Respuesta(Action):
 
     def name(self) -> Text:

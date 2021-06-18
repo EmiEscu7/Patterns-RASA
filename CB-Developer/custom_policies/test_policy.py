@@ -1,8 +1,16 @@
+import zlib
+
+
+import base64
 import json
+import sys
 import logging
+
 from tqdm import tqdm
 from typing import Optional, Any, Dict, List, Text
 
+import rasa.utils.io
+import rasa.shared.utils.io
 from rasa.shared.constants import DOCS_URL_POLICIES
 from rasa.shared.core.domain import State, Domain
 from rasa.shared.core.events import ActionExecuted
@@ -21,12 +29,29 @@ from rasa.core.channels.channel import InputChannel #clase que hace l rest. Me v
 from rasa.core.policies.policy import confidence_scores_for, PolicyPrediction
 from rasa.shared.nlu.constants import INTENT_NAME_KEY
 from rasa.shared.core.events import SlotSet
+from rasa.shared.nlu.constants import (
+    ENTITY_ATTRIBUTE_VALUE,
+    ENTITY_ATTRIBUTE_TYPE,
+    ENTITY_ATTRIBUTE_GROUP,
+    ENTITY_ATTRIBUTE_ROLE,
+    ACTION_TEXT,
+    ACTION_NAME,
+    ENTITIES,
+)
+from rasa.shared.core.constants import (
+    ACTION_LISTEN_NAME,
+    LOOP_NAME,
+    SHOULD_NOT_BE_SET,
+    PREVIOUS_ACTION,
+    ACTIVE_LOOP,
+    LOOP_REJECTED,
+    TRIGGER_MESSAGE,
+    LOOP_INTERRUPTED,
+    ACTION_SESSION_START_NAME,
+    FOLLOWUP_ACTION,
+)
 
-
-from custom_tracker import CustomTracker
-
-
-logger = logging.getLogger(__name__)
+from .custom_tracker import CustomTracker
 
 # temporary constants to support back compatibility
 MAX_HISTORY_NOT_SET = -1
@@ -174,8 +199,8 @@ class TestPolicy(Policy):
                             tracker.sender_source,
                             tracker.is_rule_tracker
                             )
+
         custom_tracker.update_tracker(tracker)       
-        
         if(not self.slots_was_set(custom_tracker, ['sender', 'my_name'])): 
             self.set_slots(custom_tracker) #esto setea los slots si no estan seteado 
         
@@ -279,7 +304,7 @@ class TestPolicy(Policy):
             la personalidad de un bot tal que pueda tener este comportamiento de 
             entrometido en la conversacion y responder cuando no le toca.
         """ 
-        with open("./file/personalities.json", "r") as file:
+        with open("personalities.json", "r") as file:
             personality = json.load(file)[name]
         for key, value in personality.items():
             if(key == "nosy"):
@@ -287,7 +312,7 @@ class TestPolicy(Policy):
 
     def get_style_answer(self, name) -> Text:  
         
-        with open("./file/personalities.json", "r") as file:
+        with open("personalities.json", "r") as file:
             personality = json.load(file)[name]
         vector_personalities = []
         for key, value in personality.items():
@@ -324,9 +349,9 @@ class TestPolicy(Policy):
                 return False        
         return True
 
-    def set_slots(self, tracker : DialogueStateTracker):
+    def set_slots(self, tracker : CustomTracker):
+
         nameTracker = next(tracker.get_latest_entity_values("name"), None)       
-        
         if(nameTracker != None and self.context_manager.get_name() == None):
             tracker.update(SlotSet("my_name", nameTracker))
             self.context_manager.set_name(nameTracker)
@@ -335,7 +360,8 @@ class TestPolicy(Policy):
             
         sender_id = tracker.current_state()['sender_id']
         tracker.update(SlotSet("sender",  sender_id))   
-        
+
+      
     """
     comentarios de la politica generales y auxiliares
       result = self._default_predictions(domain)

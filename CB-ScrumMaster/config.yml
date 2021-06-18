@@ -16,11 +16,9 @@ pipeline:
      max_ngram: 4
    - name: DIETClassifier
      epochs: 100
-     constrain_similarities: true
    - name: EntitySynonymMapper
    - name: ResponseSelector
      epochs: 100
-     constrain_similarities: true
    - name: FallbackClassifier
      threshold: 0.3
      ambiguity_threshold: 0.1
@@ -31,11 +29,9 @@ policies:
 # # No configuration for policies was provided. The following default policies were used to train your model.
 # # If you'd like to customize them, uncomment and adjust the policies.
 # # See https://rasa.com/docs/rasa/policies for more information.
-   - name: MemoizationPolicy
-   - name: TEDPolicy
-     max_history: 5
-     epochs: 100
-     constrain_similarities: true
-   - name: RulePolicy
-   - name: "custom_policies.test_policy.TestPolicy"
-     priority: 4
+  - name: MemoizationPolicy #sigue el flujo del stories, predice tal cual la story
+  - name: TEDPolicy
+    max_history: 5
+    epochs: 10
+  - name: "custom_policies.test_policy.TestPolicy"
+    priority: 4
