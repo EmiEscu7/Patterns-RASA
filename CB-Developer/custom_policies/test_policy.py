@@ -1,15 +1,8 @@
-import zlib
-
-
-import base64
 import json
 import logging
-
 from tqdm import tqdm
 from typing import Optional, Any, Dict, List, Text
 
-import rasa.utils.io
-import rasa.shared.utils.io
 from rasa.shared.constants import DOCS_URL_POLICIES
 from rasa.shared.core.domain import State, Domain
 from rasa.shared.core.events import ActionExecuted
@@ -27,17 +20,10 @@ from rasa.core.constants import MEMOIZATION_POLICY_PRIORITY
 from rasa.core.channels.channel import InputChannel #clase que hace l rest. Me va a devolver la metadata
 from rasa.core.policies.policy import confidence_scores_for, PolicyPrediction
 from rasa.shared.nlu.constants import INTENT_NAME_KEY
-from rasa_sdk.events import SlotSet
-from rasa.shared.nlu.constants import (
-    ENTITY_ATTRIBUTE_VALUE,
-    ENTITY_ATTRIBUTE_TYPE,
-    ENTITY_ATTRIBUTE_GROUP,
-    ENTITY_ATTRIBUTE_ROLE,
-    ACTION_TEXT,
-    ACTION_NAME,
-    ENTITIES,
-)
-from .custom_tracker import CustomTracker
+from rasa.shared.core.events import SlotSet
+
+
+from custom_tracker import CustomTracker
 
 
 logger = logging.getLogger(__name__)
@@ -105,7 +91,7 @@ class ContextManager():
         """
         self.dict_msg[sender_id] = {"message": message, "answer": answer}
 
-    def decide_context(self):
+    def decide_context(self) -> Dict:
         """
             This method decide that message respond
 
@@ -115,17 +101,16 @@ class ContextManager():
 
         if(len(self.dict_msg) > 1):
             idx = self.iterator % len(self.dict_msg)
+            if(idx == 0):
+                idx += 1
             sender_to_respond = self.senders.get(idx)
             self.re_randomize() 
-            answer = list(self.dict_msg.get(sender_to_respond)) #answer = {"message:" 'textoA', "answer": 'textoB'}
-            return answer.pop() #esto retorna {"message:" 'textoA', "answer": 'textoB'}
+            answer = self.dict_msg.get(sender_to_respond) #answer = {"message:" 'textoA', "answer": 'textoB'}
+            return answer #esto retorna {"message:" 'textoA', "answer": 'textoB'}
         else:
             answer = list(self.dict_msg.values()) #esto retorna (sender_id,{"message:" 'textoA', "answer": 'textoB'})
-            #answer = {"message:" 'textoA', "answer": 'textoB'}
-            #print("ESTO ES LA ANSWER DE 1 RTA --> " + str(answer))
-            return answer.pop()
-    
-        
+            return answer.pop()   
+
     def del_message(self):
         self.dict_msg = {}
 
@@ -144,7 +129,6 @@ class TestPolicy(Policy):
         self.answered = False
         self.context_manager = ContextManager()
         
-
     def train(
         self,
         training_trackers: List[TrackerWithCachedStates],
@@ -168,19 +152,20 @@ class TestPolicy(Policy):
         interpreter: NaturalLanguageInterpreter,
         **kwargs: Any,
     ) -> PolicyPrediction:
-        print("------------> BUENO ESTE ES EL LEN EN LA POLICY AL INICIO: "+ str(len(self.context_manager.senders)))
+        
         if(self.answered):
-            print("ENTRO AL PRIMER IF SELF.ANSWRED")  
-            result = confidence_scores_for('action_listen', 1.0, domain)
-            self.answered = False
+            if (tracker.latest_action_name != 'utter_send_destination'):
+                result = confidence_scores_for('utter_send_destination', 1.0, domain)
+                self.answered = True
+            else:
+                result = confidence_scores_for('action_listen', 1.0, domain)
+                self.answered = False
             return self._prediction(result) 
-            #return confidence_scores_for('action_listen', 1.0, domain)
-
+            
         sender_id = tracker.current_state()['sender_id']
         
         if(self.context_manager.exist_sender(sender_id)):
             custom_tracker = self.context_manager.get_tracker(sender_id)
-            
         else:
             custom_tracker = CustomTracker(
                             tracker.sender_id,
@@ -189,47 +174,60 @@ class TestPolicy(Policy):
                             tracker.sender_source,
                             tracker.is_rule_tracker
                             )
-           
-        custom_tracker.update_tracker(tracker)    
-        
+        custom_tracker.update_tracker(tracker)       
         
         if(not self.slots_was_set(custom_tracker, ['sender', 'my_name'])): 
-            self.set_slots(custom_tracker,self.context_manager) #esto setea los slots si no estan seteados
-            print("------ENTRO A SETEAR LOS SLOTS-------")
+            self.set_slots(custom_tracker) #esto setea los slots si no estan seteado 
         
         my_name = custom_tracker.get_slot('my_name')#name del bot
         sender = custom_tracker.get_slot('sender')#name del bot que envia el mensaje
-
-        if(custom_tracker.latest_message.intent.get(INTENT_NAME_KEY) != "out_of_scope"): #si entendio y dio una rta coherente. CREAR EL INTENT
-            style_answer = self.get_style_answer(my_name)
-            rta = 'utter_'
-            intent = custom_tracker.latest_message.intent.get(INTENT_NAME_KEY)
-            rta += intent + style_answer
-        else:
-            self.answered = True
-            result = confidence_scores_for('action_listen', 1.0, domain)
-            return self._prediction(result)
-        
         #dos prints de control        
         print("---------------------> SENDER:" + str(sender))
         print("---------------------> NOMBRE:" + str(my_name))
-        
-        last_message_text = custom_tracker.latest_message.text
-        self.context_manager.add_messege(sender, last_message_text, rta)       
 
+        if(self.i_am_destiny(custom_tracker) or (self.i_am_nosy(str(my_name)))):
+            if(custom_tracker.get_latest_message().intent.get(INTENT_NAME_KEY) != "out_of_scope"): #si entendio y dio una rta coherente. CREAR EL INTENT
+                style_answer = self.get_style_answer(my_name)
+                rta = 'utter_'
+                intent = custom_tracker.get_latest_message().intent.get(INTENT_NAME_KEY)
+                rta += intent + style_answer
+        else:
+            result = confidence_scores_for('action_listen', 1.0, domain)
+            return self._prediction(result)
+        
+
+
+        last_message_text = custom_tracker.get_latest_message().text
+        self.context_manager.add_messege(sender, last_message_text, rta)
+        """
+        HASTA ACA RECIBO UN MSJ Y LO PROCESO
+        ------------------------------------------------------------
+        A PARTIR DE ACA VEO SI TENGO QUE CONTESTAR O SIGO ESCUCHANDO
+        """
         if(self.last_message(custom_tracker)): #if is last msg choose rta
             final_answer = self.context_manager.decide_context()
             self.context_manager.del_message()
             print("LA ANSWER FINAL ES: " + str(final_answer.get("answer")))
-            result = confidence_scores_for(final_answer.get("answer"),1.0,domain)
+            rta = str(final_answer.get("answer"))
+        else:
+            rta = 'action_listen'
+
+        result = self._default_predictions(domain)
+
+        if(not self.answered):
+            result =  confidence_scores_for(rta, 1.0, domain)
             self.answered = True
         else:
-            result = confidence_scores_for('action_listen', 1.0, domain)
+            self.answered = False
 
- 
         self.context_manager.set_tracker(sender_id,custom_tracker)
-        print("------------> BUENO ESTE ES EL LEN EN LA POLICY AL FINAL: "+ str(len(self.context_manager.senders)))
+        
+        tracker.update(custom_tracker.get_latest_event(), domain) #actualiza el tracker que viene como parametro
+        tracker.update(SlotSet("my_name",custom_tracker.get_slot("my_name"))) #for slot in custom_Tracker.slots: tracker.update
+        tracker.update(SlotSet("sender", custom_tracker.get_slot("sender")))
+        
         return self._prediction(result)
+
 
 
     def _metadata(self) -> Dict[Text, Any]:   
@@ -246,20 +244,50 @@ class TestPolicy(Policy):
             This method return flag value from recived on message.
         
         """
-        var = tracker.latest_message
+        var = tracker.get_latest_message()
         metadata = var.get_metadata()
-        metadata2 = metadata["flag"]
-        print("ESTE ES EL VALOR DEL FLAG  "+ str(metadata2))        
+        flag = metadata["flag"]
+        print("ESTE ES EL VALOR DEL FLAG  "+ str(flag))        
        
-        return metadata2
+        return flag
+
+
+    def i_am_destiny(self, tracker: CustomTracker):
+        """
+            This method return 1 when the bot is the destiny.
+        """
+        var = tracker.get_latest_message()
+        metadata = var.get_metadata()
+        print("---------> esto es metadata" + str(metadata))
+        to_me = metadata["toMe"]
+        print("ESTE ES EL VALOR DEL toMe  "+ str(to_me))
+        return to_me
+
+
 
     def last_message(self, tracker : CustomTracker):
         """ Return True when flag is 1. That means is last message """
         return self.get_flag(tracker) == 1
 
+    def i_am_nosy(self, name) -> bool:  
+        """
+            determina si mi personalidad es entrometida para yo responder
+            cuando no soy el destinatario del input
+            Actualmente funciona con el personalities.json que tiene un atributo
+            que dice true/false si es nosy o no.
+            A futuro, deberia ser un algoritmo de matchine learning que determine
+            la personalidad de un bot tal que pueda tener este comportamiento de 
+            entrometido en la conversacion y responder cuando no le toca.
+        """ 
+        with open("./file/personalities.json", "r") as file:
+            personality = json.load(file)[name]
+        for key, value in personality.items():
+            if(key == "nosy"):
+                return value
+
     def get_style_answer(self, name) -> Text:  
         
-        with open("personalities.json", "r") as file:
+        with open("./file/personalities.json", "r") as file:
             personality = json.load(file)[name]
         vector_personalities = []
         for key, value in personality.items():
@@ -289,7 +317,6 @@ class TestPolicy(Policy):
             pesos determinados, que modelan los valores esperados del algoritmo
         """
         return [0.35,0.4,0.1,0.05,0.3]
-        
 
     def slots_was_set(self, tracker:CustomTracker, list_slots_to_answer) -> bool:
         for slot in list_slots_to_answer:
@@ -297,25 +324,17 @@ class TestPolicy(Policy):
                 return False        
         return True
 
-
-    def set_slots(self, tracker : CustomTracker, context_manager: ContextManager):
-
-        nameTracker = next(tracker.get_latest_entity_values("name"), None)
-        if(nameTracker != None and context_manager.get_name() == None):
-            context_manager.set_name(nameTracker)
-            tracker.set_slot("my_name", nameTracker)   
+    def set_slots(self, tracker : DialogueStateTracker):
+        nameTracker = next(tracker.get_latest_entity_values("name"), None)       
+        
+        if(nameTracker != None and self.context_manager.get_name() == None):
+            tracker.update(SlotSet("my_name", nameTracker))
+            self.context_manager.set_name(nameTracker)
         else:
-            tracker.set_slot("my_name", context_manager.get_name())
+            tracker.update(SlotSet("my_name", self.context_manager.get_name()))
             
-            
-        test = tracker.get_slot('my_name')
-        print("NOMBRE GUARDADO: " + str(test))       
         sender_id = tracker.current_state()['sender_id']
-        tracker.set_slot("sender", sender_id)   
-        #self.context_manager.add_sender(sender_id)
-        test2 = tracker.get_slot('sender')
-        print("SENDER GUARDADO: " + str(test2))    
-
+        tracker.update(SlotSet("sender",  sender_id))   
         
     """
     comentarios de la politica generales y auxiliares

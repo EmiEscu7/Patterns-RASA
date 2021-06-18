@@ -63,6 +63,11 @@ stories:
   - action: utter_goodbye_comun
 
 
+- story: respuestadeveloper
+  steps:
+  - intent: developer_can_help_me
+  - action: utter_developer_can_help_me_comun
+
   
 
 #- story: test
