@@ -4,34 +4,39 @@
         "maldad": 0.35,
         "soledad": 0.28,
         "felicidad": 0.3,
-        "irritez": 0.15
+        "irritez": 0.15,
+        "nosy": true
     },
     "MatiasB": {
         "amabilidad": 0.79,
         "maldad": 0.43,
         "soledad": 0.68,
         "felicidad": 0.61,
-        "irritez": 0.15
+        "irritez": 0.15,
+        "nosy": false
     },
     "Emiliano": {
         "amabilidad": 0.82,
         "maldad": 0.54,
         "soledad": 0.66,
         "felicidad": 0.69,
-        "irritez": 0.22
+        "irritez": 0.22,
+        "nosy": true
     },
     "MatiasG": {
         "amabilidad": 0.68,
         "maldad": 0.10,
         "soledad": 0.32,
         "felicidad": 0.61,
-        "irritez": 0.15
+        "irritez": 0.15,
+        "nosy": false
     },
     "Agustin": {
         "amabilidad": 0.49,
         "maldad": 0.33,
         "soledad": 0.45,
         "felicidad": 0.76,
-        "irritez": 0.10
+        "irritez": 0.10,
+        "nosy": false
     }
 }
