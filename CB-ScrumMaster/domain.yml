@@ -23,14 +23,16 @@ intents:
   - answer_problem 
 
 entities:
-  - name
-  - tema
+  - _name
 
 slots:
-  name:
+  my_name:
     type: text
-  
-  rta:
+    auto_fill: false
+  sender:
+    type: text
+    auto_fill: false
+  tipoRta:
     type: text
 
 
@@ -67,15 +69,15 @@ responses:
   - text: "Bien, continuá así"
 
   utter_presentation_user_formal:
-  - text: "Un gusto {name}, con que trabajaste el dia de ayer "
-  - text: "Un  placer {name} que estuviste haciendo el dia de ayer"
-  - text: "Un placer encontrarte de nuevo {name}, que hiciste el dia de ayer"
+  - text: "Un gusto {my_name}, con que trabajaste el dia de ayer "
+  - text: "Un  placer {my_name} que estuviste haciendo el dia de ayer"
+  - text: "Un placer encontrarte de nuevo {my_name}, que hiciste el dia de ayer"
   utter_presentation_user_comun:
-  - text: "Hola {name} que estuviste haciendo ayer?"
-  - text: "Que tal {name}, que hiciste ayer?"
-  - text: "Como te va {name}, que hiciste ayer?"  
+  - text: "Hola {my_name} que estuviste haciendo ayer?"
+  - text: "Que tal {my_name}, que hiciste ayer?"
+  - text: "Como te va {my_name}, que hiciste ayer?"  
   utter_presentation_user_informal:
-  - text: "Que onda gato, que hiciste ayer {name}"
+  - text: "Que onda gato, que hiciste ayer {my_name}"
   - text: "Que pasa, calabaza, que anduviste haciendo ayer?"
   - text: "Que haces centenialito, que hiciste ayer??"
 
@@ -86,9 +88,9 @@ responses:
   - text: "Se te complico con algo rey?"
   - text: "Y que onda? tuviste algun problemita mientras hacias las cosas?" 
   utter_answer_done_formal:
-  - text: "¿Has tenido algun inconveniente, {name}?"
-  - text: "¿Te has encontrado con algun problema, {name}?"
-  - text: "¿Has tenido problemas mientras hacias tu tarea, {name}?"
+  - text: "¿Has tenido algun inconveniente, {my_name}?"
+  - text: "¿Te has encontrado con algun problema, {my_name}?"
+  - text: "¿Has tenido problemas mientras hacias tu tarea, {my_name}?"
   utter_answer_done_comun:
   - text: "¿Se te complico algo?"
   - text: "¿Tuviste algun problema?"
@@ -108,7 +110,7 @@ responses:
   - text: "Gran noticia. Con que vas a seguir?"
 
   utter_have_problem_yes_informal:
-  - text: "Uuh, mal ahi! Con que se te complico {name}?"
+  - text: "Uuh, mal ahi! Con que se te complico {my_name}?"
   - text: "Uuh, que mala noticia bro. Con que tuviste problema?"
   - text: "Noo bajon perrito. Con que se te complico?"
   utter_have_problem_yes_formal:
@@ -117,34 +119,34 @@ responses:
   - text: "Una lastima oir eso. Por favor cuentame cual ha sido tu problema"
   utter_have_problem_yes_comun:
   - text: "No te preocupes, que se te complico?"
-  - text: "¿Que se te complica {name}?"
+  - text: "¿Que se te complica {my_name}?"
   - text: "¿En que podemos ayudar?"
 
   utter_going_to_do_informal:
-  - text: "Me parece perfecto gato, nos vemos mañana {name}"
-  - text: "Joya amigo nos vemos mañana {name}"
+  - text: "Me parece perfecto gato, nos vemos mañana {my_name}"
+  - text: "Joya amigo nos vemos mañana {my_name}"
   - text: "Dale perro nos vemos mañana"
   utter_going_to_do_formal:
   - text: "Gran charla, nos vemos mañana a la misma hora"
   - text: "Un gusto dialogar contigo, nos vemos mañana"
   - text: "Un placer como siempre dialogar contigo, hasta mañana"
   utter_going_to_do_comun:
-  - text: "Genial {name}, nos vemos mañana"
+  - text: "Genial {my_name}, nos vemos mañana"
   - text: "Si no hay mas cosas por decir. Nos vemos mañana"
-  - text: "{name}, nos vemos mañana!"
+  - text: "{my_name}, nos vemos mañana!"
 
 
   utter_helped_informal:
-  - text: "Si eso no te ayudo avisame perrito. Con que pensas seguir hoy, {name}?"
+  - text: "Si eso no te ayudo avisame perrito. Con que pensas seguir hoy, {my_name}?"
   - text: "Si con eso no te ayudo decimelo despues bro. Que pensas hacer hoy?"
   - text: "Bro, si eso no te sirvio avisame que despues lo vemos. Que tenes pensado hacer hoy?"
   utter_helped_formal:
   - text: "Espero que te haya servido eso. Con que vas a continuar el dia de hoy?"
-  - text: "Espero que te haya servido. En que te vas a centra el dia de hoy, {name}?"
+  - text: "Espero que te haya servido. En que te vas a centra el dia de hoy, {my_name}?"
   - text: "Espero que te sriva. Cual es el objetivo de hoy?"
   utter_helped_comun:
   - text: "Me alegra haberte ayudado. Cualquier cosa me comentas. Que vas a hacer hoy?"
-  - text: "Espero haberte ayudado {name}. Me vas comentando. Que vas a hacer hoy?"
+  - text: "Espero haberte ayudado {my_name}. Me vas comentando. Que vas a hacer hoy?"
   - text: "Comentame cualquier cosa. Que tenes pensado hacer ahora?"
 
   utter_dk_to_do_informal:
@@ -156,9 +158,9 @@ responses:
   - text: "Finalizaste la tarea que tenias asignada?"
   - text: "Pudo terminar la tarea que le asigne?"
   utter_dk_to_do_comun:
-  - text: "{name} hiciste la task que tenias?"
-  - text: "{name} ya terminaste la tarea que te asigne?"
-  - text: "{name} terminaste lo asignado?"
+  - text: "{my_name} hiciste la task que tenias?"
+  - text: "{my_name} ya terminaste la tarea que te asigne?"
+  - text: "{my_name} terminaste lo asignado?"
 
 
   utter_answer_problem_informal:
@@ -191,16 +193,19 @@ responses:
 
   utter_affirm_informal:
   - text: "toma trabaja con esta task que es de db pelotudo"
-  - text: "y bueno, que haces q no estas haciendo nada mas {name}"
+  - text: "y bueno, que haces q no estas haciendo nada mas {my_name}"
   - text: "y estas esperando un cafe o que? Ponete a hacer algo mas"
   utter_affirm_formal:
   - text: "Perfecto. Quizas podrias trabajar con Unity"
-  - text: "Muy bien {name}!, quizas podrias trabajar con Rasa"
+  - text: "Muy bien {my_name}!, quizas podrias trabajar con Rasa"
   - text: "Magnifico. Que te parece trabajar en Unreal"
   utter_affirm_comun:
   - text: "Genial! Te gustaria trabajar con Unity?"
   - text: "Piola, Como te ves laburando con Rasa"
   - text: "Re bienn, Queres sumarte a lo que estan haciendo en Metasploit?"
+
+  utter_send_destination:
+  - text: "{sender}"
 
 
 actions:

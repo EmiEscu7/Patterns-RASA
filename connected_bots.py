@@ -116,8 +116,8 @@ class Mediator():
                 
   
         #en este punto en la answer_queue tenes todas las respuestas a 'message'
-        print("---A fines de control imprimo la lista de answer---")
-        print(answer_queue)
+        #print("---A fines de control imprimo la lista de answer---")
+        #print(answer_queue)
         
         while (len(answer_queue) > 1): 
             """
@@ -139,8 +139,9 @@ class Mediator():
             #Por lo tanto en en answer_dev[0] tenemos el mensaje que respondió el bot y va dirigido hacia 
             # answer_dev[1] = sended to
             
-            bot = self.give_me_bot(answer_dev[1]['text'])
-            if(bot in metiches.keys()):
+            bot = self.give_me_bot(answer_dev[1])
+            print(str(origen.get_name()) + ": " + str(bot.get_name()) + ", " + answer_dev[0])
+            if(bot in metiches.keys() and bot != destino):
                 self.notifyAll(bot, metiches[bot], origen) 
             else:
                 self.notifyAll(origen, answer_dev[0], bot)
@@ -165,13 +166,13 @@ mediator = Mediator("mediator")
 #port_SM = 5007
 emi = Bot("Emiliano", 5005, mediator)
 matiB = Bot("MatiasB", 5006, mediator)
-sm = Bot("Scrum Master", 5007, mediator)
+sm = Bot("MatiasG", 5007, mediator)
 pedro = Bot("Pedro", 5008, mediator)
 
 mediator.set_developers([emi,matiB,pedro])
 mediator.set_scrum([sm])
 
-matiB.notifyAll("Con que trabajaste el dia de ayer?",pedro)
+sm.notifyAll("Con que trabajaste el dia de ayer?",pedro)
 sm.notifyAllMeeting("Con que trabajaste ayer?",[pedro,emi,matiB])
 
 

@@ -138,6 +138,13 @@ responses:
   - text: "Hubo ahi par de problemitas ahi, si"
   - text: "Si, lamentablemente si. Se me complico con un par de cositas"
 
+  utter_doYouHaveProblem_informal:
+    - text: No, amigo, todo joya!
+  utter_doYouHaveProblem_formal:
+    - text: Por suerte no.
+  utter_doYouHaveProblem_comun:
+  - text: Nono, salio todo bien
+
   utter_whatYouDoToday_informal:
   - text: "Voy a terminar mi task que aun me falta un poco bro"
   - text: "Voy a terminar lo que estaba haciendo bro"

@@ -163,6 +163,8 @@ nlu:
 
 - intent: answer_done
   examples: |
+    - Mi tarea era hacer
+    - Tuve que hacer
     - Tuve que optimizar la funcionalidad de la [plataforma](tema)
     - Termine de crear las vistas para la [base de datos](tema)
     - Logre arreglar el algoritmo de [machine learning](tema) 
@@ -214,7 +216,6 @@ nlu:
     - Ayudar a [Agustin](name) con un problema que tuvo
     - Lograr terminar mi tarea
     - Fijarme si lo que hice funciona correctamente
-    - Ya casi termino mi task. Voy a ponerme con eso
     
 - intent: dk_to_do
   examples: |

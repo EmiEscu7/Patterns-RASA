@@ -25,10 +25,12 @@ from rasa.shared.core.generator import TrackerWithCachedStates
 from rasa.shared.utils.io import is_logging_disabled
 from rasa.core.constants import MEMOIZATION_POLICY_PRIORITY
 #importaciones nuevas
+from.context_executor import ContexExecutor
 from rasa.core.channels.channel import InputChannel #clase que hace l rest. Me va a devolver la metadata
 from rasa.core.policies.policy import confidence_scores_for, PolicyPrediction
 from rasa.shared.nlu.constants import INTENT_NAME_KEY
 from rasa.shared.core.events import SlotSet
+from .custom_tracker import CustomTracker
 from rasa.shared.nlu.constants import (
     ENTITY_ATTRIBUTE_VALUE,
     ENTITY_ATTRIBUTE_TYPE,
@@ -51,11 +53,11 @@ from rasa.shared.core.constants import (
     FOLLOWUP_ACTION,
 )
 
-from .custom_tracker import CustomTracker
 
 # temporary constants to support back compatibility
 MAX_HISTORY_NOT_SET = -1
 OLD_DEFAULT_MAX_HISTORY = 5
+PERSONALITIES = "PERSONALITIES.json"
 
 class ContextManager():
 
@@ -65,6 +67,17 @@ class ContextManager():
         self.dict_msg = {} #multitracker {"sender_id" :{"message": message, "answer": answer}"} Si, un dict de dict
         self.dic_custom_tracker = {} # {"sender": custom_tracker}
         self.iterator = 0
+        self.respondio = False
+        self.context_executor = None
+
+    
+
+
+    def give_sender(self):
+        return self.respondio
+    
+    def change_give_sender(self):
+        self.respondio = not self.respondio
 
     def get_name(self):
         return self.name
@@ -72,7 +85,7 @@ class ContextManager():
     def set_name(self, name):
         self.name = name
 
-    def set_tracker(self, sender_id,tracker:CustomTracker):
+    def set_tracker(self, sender_id, tracker:CustomTracker):
         if(not self.exist_sender(sender_id)):
             self.add_sender(sender_id)
         self.dic_custom_tracker[sender_id] = tracker
@@ -122,8 +135,8 @@ class ContextManager():
 
             En un futuro cada bot decidirá algún mensaje dado algún criterio personalizado.
             Ahora sólo elige uno al azar.
-        """
-
+        
+        print("ESTE ES EL DICT MESSAGE --> " + str(self.dict_msg))
         if(len(self.dict_msg) > 1):
             idx = self.iterator % len(self.dict_msg)
             if(idx == 0):
@@ -135,6 +148,8 @@ class ContextManager():
         else:
             answer = list(self.dict_msg.values()) #esto retorna (sender_id,{"message:" 'textoA', "answer": 'textoB'})
             return answer.pop()   
+        """
+
 
     def del_message(self):
         self.dict_msg = {}
@@ -177,16 +192,16 @@ class TestPolicy(Policy):
         interpreter: NaturalLanguageInterpreter,
         **kwargs: Any,
     ) -> PolicyPrediction:
-        
-        if(self.answered):
+
+        """if(self.answered and self.context_manager.give_sender()):
             if (tracker.latest_action_name != 'utter_send_destination'):
                 result = confidence_scores_for('utter_send_destination', 1.0, domain)
                 self.answered = True
             else:
                 result = confidence_scores_for('action_listen', 1.0, domain)
                 self.answered = False
-            return self._prediction(result) 
-            
+            return self._prediction(result)
+        else:"""
         sender_id = tracker.current_state()['sender_id']
         
         if(self.context_manager.exist_sender(sender_id)):
@@ -229,28 +244,40 @@ class TestPolicy(Policy):
         ------------------------------------------------------------
         A PARTIR DE ACA VEO SI TENGO QUE CONTESTAR O SIGO ESCUCHANDO
         """
-        if(self.last_message(custom_tracker)): #if is last msg choose rta
-            final_answer = self.context_manager.decide_context()
-            self.context_manager.del_message()
-            print("LA ANSWER FINAL ES: " + str(final_answer.get("answer")))
-            rta = str(final_answer.get("answer"))
+        result = self._default_predictions(domain)
+        print("ANTES DEL SELF.ANSWERED")
+        if(not self.answered):
+            print("DENTRO DEL SELF.ANSWERED")
+            if(self.context_manager.give_sender()):
+                print("ENTRO A GIVE SENDER")
+                rta = 'utter_send_destination'
+                self.context_manager.change_give_sender()
+                self.answered = True
+            elif(self.last_message(custom_tracker)): #if is last msg choose rta
+                print("GENERANDO RESPUESTA...")
+                final_answer = self.context_manager.decide_context()
+                self.context_manager.del_message()
+                self.context_manager.change_give_sender()
+                print("LA ANSWER FINAL ES: " + str(final_answer.get("answer")))
+                rta = str(final_answer.get("answer"))                
+            else:
+                print("DESPUES DEL SELF.ANSWERED")
+                self.answered = False
+                rta = 'action_listen'
         else:
             rta = 'action_listen'
-
-        result = self._default_predictions(domain)
-
-        if(not self.answered):
-            result =  confidence_scores_for(rta, 1.0, domain)
-            self.answered = True
-        else:
             self.answered = False
+        print("DESPUES DEL SELF.ANSWERED")
 
-        self.context_manager.set_tracker(sender_id,custom_tracker)
+        result =  confidence_scores_for(rta, 1.0, domain)
+
+        self.context_manager.set_tracker(sender_id, custom_tracker)
         
         tracker.update(custom_tracker.get_latest_event(), domain) #actualiza el tracker que viene como parametro
         tracker.update(SlotSet("my_name",custom_tracker.get_slot("my_name"))) #for slot in custom_Tracker.slots: tracker.update
         tracker.update(SlotSet("sender", custom_tracker.get_slot("sender")))
-        
+        #self.context_manager.change_give_sender()        
+
         return self._prediction(result)
 
 
@@ -298,13 +325,13 @@ class TestPolicy(Policy):
         """
             determina si mi personalidad es entrometida para yo responder
             cuando no soy el destinatario del input
-            Actualmente funciona con el personalities.json que tiene un atributo
+            Actualmente funciona con el PERSONALITIES.json que tiene un atributo
             que dice true/false si es nosy o no.
             A futuro, deberia ser un algoritmo de matchine learning que determine
             la personalidad de un bot tal que pueda tener este comportamiento de 
             entrometido en la conversacion y responder cuando no le toca.
         """ 
-        with open("personalities.json", "r") as file:
+        with open(PERSONALITIES, "r") as file:
             personality = json.load(file)[name]
         for key, value in personality.items():
             if(key == "nosy"):
@@ -312,17 +339,17 @@ class TestPolicy(Policy):
 
     def get_style_answer(self, name) -> Text:  
         
-        with open("personalities.json", "r") as file:
+        with open(PERSONALITIES, "r") as file:
             personality = json.load(file)[name]
-        vector_personalities = []
+        vector_PERSONALITIES = []
         for key, value in personality.items():
-            vector_personalities.append(value)
+            vector_PERSONALITIES.append(value)
 
         priorty_mood = self.get_priority_mood()
 
         relation = float(0.0)
         for i in range(4):
-            relation += vector_personalities[i] * priorty_mood[i]
+            relation += vector_PERSONALITIES[i] * priorty_mood[i]
 
         res = [ [float(0.3), "_formal"], 
                 [float(0.6), "_comun"], 
