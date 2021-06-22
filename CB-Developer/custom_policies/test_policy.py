@@ -30,6 +30,7 @@ from rasa.core.policies.policy import confidence_scores_for, PolicyPrediction
 from rasa.shared.nlu.constants import INTENT_NAME_KEY
 from rasa.shared.core.events import SlotSet
 from .custom_tracker import CustomTracker
+#from .custom_tracker import CustomTracker
 from rasa.shared.nlu.constants import (
     ENTITY_ATTRIBUTE_VALUE,
     ENTITY_ATTRIBUTE_TYPE,
@@ -79,7 +80,7 @@ class ContextManager():
     def set_name(self, name):
         self.name = name
 
-    def set_tracker(self, sender_id,tracker:CustomTracker):
+    def set_tracker(self, sender_id, tracker:CustomTracker):
         if(not self.exist_sender(sender_id)):
             self.add_sender(sender_id)
         self.dic_custom_tracker[sender_id] = tracker
@@ -145,7 +146,6 @@ class ContextManager():
 
     def del_message(self):
         self.dict_msg = {}
-
 
 
 class TestPolicy(Policy):

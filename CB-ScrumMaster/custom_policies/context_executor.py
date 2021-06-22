@@ -15,6 +15,8 @@ class ContexExecutor():
             self.interruptions[bot] = 1
 
     def exhausted(self):
+        # FALTARIA FIJARSE SI ES UNA INTERRUPCION DE MOLESTO 
+        # O UNA QUE TIENE SENTIDO Y APORTA A LA CONVERSACION
         for bot, value in self.interruptions.items():
             if(not value < self.personality["paciencia"]):
                 return [True, bot]

@@ -2,53 +2,75 @@ version: "2.0"
 
 stories:
 
-- story: give new task
-  steps:
+#- story: give new task
+#  steps:
   #- intent: notify_finishing_task
   #- action: utter_end_task
-  - intent: give_me_new_task
-  - action: utter_accept_task
-  - action: utter_goodbye
+#  - intent: give_me_new_task
+#  - action: utter_accept_task
+#  - action: utter_goodbye_comun
+
+- story: saludo
+  steps:
+  - intent: greet
+  - slot_was_set:
+    - name: Emiliano
+  - action: utter_greet_comun
 
 - story: dialy happy
   steps:
   - intent: whatYouDo
-  - action: utter_my_task_done
+  - action: utter_whatYouDo_comun
   - intent: doYouHaveProblem
-  - action: utter_my_problem_no
-  - intent: whatYouDoToday
-  - action: utter_my_next_to_do
-  - intent: goodbye
-  - action: utter_goodbye
+  - checkpoint: c_have_problem
 
-
+  
 - story: dialy unHappy Yes Problem
   steps:
-  - intent: whatYouDo
-  - action: utter_my_task_done
-  - intent: doYouHaveProblem
-  - action: utter_my_problem_yes
+  - checkpoint: c_have_problem
+  - action: action_dar_respuesta
   - intent: whatIsYourProblem
-  - action: utter_my_problem_is
+  - action: utter_whatIsYourProblem_comun
   - intent: ScrumHelpMe
-  - action: utter_thanks_help
-  - intent: whatYouDoToday
-  - action: utter_my_next_to_do
-  - intent: goodbye
+  - action: utter_ScrumHelpMe_comun
+  - checkpoint: c_what_you_do_today
 
-  - action: utter_goodbye
+- story: dialy unHappy No Problem
+  steps:
+  - checkpoint: c_have_problem
+  - action: action_dar_respuesta
+  - checkpoint: c_what_you_do_today
+
+
+- story: what you do today continue
+  steps:
+  - checkpoint: c_what_you_do_today
+  - intent: whatYouDoToday
+  - action: utter_whatYouDoToday_comun
+  - intent: goodbye
+  - action: utter_goodbye_comun
 
 - story: dialy unHappy Idk Next To Do
   steps:
-  - intent: whatYouDo
-  - action: utter_my_task_done
-  - intent: doYouHaveProblem
-  - action: utter_my_problem_no
-  - intent: whatYouDoToday
-  - action: utter_idk_to_do
+  ##esto en realidad tiene que hacerse como el action_dar_respuesta para saber si 
+  ##sabe que le toca hacer hoy o no
+  - action: utter_idk_to_do_comun
   - intent: pendientTask
-  - action: utter_finish_task_no
+  - action: utter_pendientTask_no_comun
   - intent: ScrumSendMeToWork
-  - action: utter_accept_task
+  - action: utter_ScrumSendMeToWork_comun
   - intent: goodbye
-  - action: utter_goodbye
+  - action: utter_goodbye_comun
+
+
+- story: respuestadeveloper
+  steps:
+  - intent: developer_can_help_me
+  - action: utter_developer_can_help_me_comun
+
+  
+
+#- story: test
+#  steps: 
+#  - intent: test
+#  - action: utter_test
