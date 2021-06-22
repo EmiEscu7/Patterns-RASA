@@ -108,7 +108,7 @@ class Mediator():
                     rta = dev.send_message(message, origen, toMe=1)
                     if(rta[0] != ''):
                         answer_queue.append([dev, rta[0]])
-                else:
+                else:   
                     rta = dev.send_message(message, origen, toMe=0)
                     if(rta[0] != ''):#alguien que no tenia que responder, respondio
                         metiches[dev] = rta #{key= dev, value= [rta,a quien le respondio eso]}
@@ -173,7 +173,7 @@ mediator.set_developers([emi,matiB,pedro])
 mediator.set_scrum([sm])
 
 sm.notifyAll("Con que trabajaste el dia de ayer?",pedro)
-sm.notifyAllMeeting("Con que trabajaste ayer?",[pedro,emi,matiB])
+#sm.notifyAllMeeting("Con que trabajaste ayer?",[pedro,emi,matiB])
 
 
 """

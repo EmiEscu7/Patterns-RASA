@@ -11,7 +11,6 @@ nlu:
     - vamos
     - hey bro
     - bro
-
 - intent: goodbye
   examples: |
     - hasta la proxima
@@ -24,7 +23,6 @@ nlu:
     - que tengas un buen dia
     - nos vemos luego
     - chau chau
-
 - intent: affirm
   examples: |
     - si
@@ -54,7 +52,6 @@ nlu:
     - no concuerdo
     - no me parece
     - no estoy de acuerdo
-
 - intent: mood_great
   examples: |
     - prefect
@@ -70,7 +67,6 @@ nlu:
     - tan tan perfecto
     - tan bien
     - tan perfecto
-
 - intent: mood_happy
   examples: |
     - mi dia fue genial
@@ -79,7 +75,6 @@ nlu:
     - todo perfecto
     - en perfectas condiciones
    
-
 - intent: mood_unhappy
   examples: |
     - mi dia fue horrible
@@ -95,14 +90,12 @@ nlu:
     - no muy bien
     - extremadamente trsite
     - tan triste
-
 - intent: bot_challenge
   examples: |
     - ¿Sos un bot?
     - ¿Sos un humano?
     - ¿Estoy hablando con un bot?
     - ¿Estoy hablando con un humano?
-
 - intent: developer_finish_task
   examples: |
     - Terminé la tarea
@@ -110,14 +103,12 @@ nlu:
     - Creo que finalicé la tarea
     - Terminé la tarea que me diste
     - Ya está terminada mi tarea
-
 - intent: accept_task
   examples: |
     - Genial, hago eso
     - hago la nueva tarea
     - voy a hacerla
     - Genial, hago esa tarea
-
 - intent: verify_state
   examples: |
     - voy bien
@@ -128,14 +119,21 @@ nlu:
     - más o menos
     - estoy yendo joya
     - voy perfecto
-
+    - estoy yendo bien
+    - esta yendo todo bien
+    - todo va joya
 - intent: presentation_user
   examples: |
     - Hola soy [Emiliano](name)
     - Buenas, me llamo [Matias](name)
     - Que tal, soy [Pedro](name)
     - Que onda, soy [Agustin](name) 
-  
+    - Como te va soy, soy [Matias](name)
+    - Que onda, me llamo [Matias](name)
+    - Me dicen [Matias](name)
+    - Que pasa bro, soy [Emiliano](name)
+    - Buen dia caballero, soy Emiliano(name)
+    - Como estas?, Soy [Agustin](name)
 - intent: answer_problem
   examples: |
     - problemas con la [base de datos](tema)
@@ -146,7 +144,11 @@ nlu:
     - trabado con el [modo oscuro](tema)
     - serie de problemas con la [base de datos](tema)
     - varios problemas con la [plataforma](tema)
-
+    - el problema estuvo con la [base de datos](tema)
+    - se me rompio toda la [plataforma](tema)
+    - Hubo varias complicaciones con [machine learning](tema)
+    - tuve un lio ahi con la base de datos
+    - tuve un par de lios con el sistema
 - intent: answer_done
   examples: |
     - Tuve que optimizar la funcionalidad de la [plataforma](tema)
@@ -156,25 +158,38 @@ nlu:
     - hice la conexion entre la [base de datos](tema) y la [interfaz](tema)
     - termine con lo que me tocaba
     - realice la parte de la
+    - hice el modo oscuro de la aplicacion
     - estuve con la [base de datos](tema)
+    - mi task era de añadir el login y toda la logica que lleva con la db
+    - me tocaba la parte de la conexion a los servidores externos de la empresa
+    - Hice varias cosas, pero me centre en la optimizacion de la bd
     
-- intent: no_problem
+- intent: have_problem_no
   examples: |
     - nono, todo joya
+    - No bro no tuve problema todo va joya
+    - No tuve incovenientes bro
     - no hubo ningun problema
     - por suerte no tuve ningun problema
     - No me produjo ninguna complicacion
     - No tuve ningun inconveniente
-
-- intent: have_problem
+    - no tuve problemas
+    - no me encontre con ningun problema
+    - por suerte, no tuve problemas
+    - tuve la suerte de no encontrarme con ningun problema
+- intent: have_problem_yes
   examples: |
     - Si, tuve problemas
+    - Si tuve un par de problemas broda
+    - Se me complico un toque bro
     - Se me complico demasiado
     - tuve complejidades trabajando
     - Hubo inconvenientes
     - Se me presentaron algunas complicaciones
     - Surgieron algunos obstaculos
-
+    - Si, lamentablemente me trabe con un temita
+    - Si estoy trabado ahi con un tema que no me sale
+    - Si estoy trabado con una porqueria que no la puedo resolver
 - intent: going_to_do
   examples: |
     - Terminar mi task
@@ -183,7 +198,10 @@ nlu:
     - Hacer un chequeo de que todo lo que hice para verificar que funcione correctamente
     - Terminar de darle los ultimos detalles a mi task
     - Ayudar a [Agustin](name) con un problema que tuvo
-
+    - Lograr terminar mi tarea
+    - Fijarme si lo que hice funciona correctamente
+    - Ya casi termino mi task. Voy a ponerme con eso
+    
 - intent: dk_to_do
   examples: |
     - La verdad que no tengo idea
@@ -192,8 +210,11 @@ nlu:
     - No se me ocurre con que podria seguir
     - Estoy en duda de con que podria seguir
     - No tengo nada en mente
-   
-
+    - no tengo ni puta idea que hacer
+    - no se con que continuar
+    - no se que me toca hacer
+    - no tengo ni idea cual es mi proxima tarea
+    - no se que me toca hacer ahora en este momento   
 - intent: helped
   examples: |
     - gracias por la ayuda
@@ -203,3 +224,9 @@ nlu:
     - ahhh, voy a probarlo
     - intento con eso
     - buena idea
+    - dale no se me habia ocurrido esa
+    - dale gracias por la ayuda te agradezco
+    - dale gracias por la info la voy a tener en cuenta
+    - dale me parece buena idea voy a tenerla en cuenta
+    - gracias por la info
+    - lo podes hacer asi ...
