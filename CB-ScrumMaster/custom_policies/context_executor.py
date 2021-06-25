@@ -1,37 +1,80 @@
+import random as rd
 
 
+class IContextExecutor():
 
-class ContexExecutor():
+    def __init__(self):
+        pass
 
-    def __init__(self, patienece):
-        self.patienece = patienece
-        self.interruptions = {} #dict que va a contener el bot como key, y la cantidad de interrupciones que hizo
+    def decide_next(self, message):
+        """
+            This method will decide the next answer
+            Depending on the type of context executor
+            message:
+                - In the first position (index = 0) the message is found
+                - In the second position (index = 1) the intent is found
+                - In the third position (index = 2) the utter/action (answer) is found
+        """
+        pass
+
+
+class ContextExecutorGoodPerson(IContextExecutor):
+
+    def __init__(self):
+        self.super().__init__()
 
     
-    def there_is_interruption(self, bot) -> None:
-        if(bot in self.interruptions):
-            self.interruptions[bot] += 1
-        else:
-            self.interruptions[bot] = 1
+    def decide_next(self, message):
+        """
+            This method represent the behaviour of a good person.
+        """
 
-    def exhausted(self):
-        # FALTARIA FIJARSE SI ES UNA INTERRUPCION DE MOLESTO 
-        # O UNA QUE TIENE SENTIDO Y APORTA A LA CONVERSACION
-        for bot, value in self.interruptions.items():
-            if(not value < self.personality["paciencia"]):
-                return [True, bot]
-        return [False, None]
-
-    def get_answer(self, answers, destiny):
-        exh = self.exhausted
-        rta_interurp = None
-        if(exh[0]):
-            rta_interurp = ["utter_do_not_interrupt", exh[1]]
-            self.interruptions = {} #elimino todas las interrupciones. 
-                                    #PODRIA SER QUE NO, YA QUE NORMALEMNTE ES ACUMULATIVO. 
-                                    #PERO DE TESTEO ESTO VA BIEN
-        #### DEVUELVO LA RTA QUE ME DIO EL BOT DESTINO
-        rta_destiny = answers[destiny]
-        return [rta_destiny, rta_interurp]
+        rtas = []
+        for sender in message.keys():
+            rtas.append(message[sender][2]) #le responde a todos
         
+        return rtas
+
+
+class ContextExecutorNormalPerson(IContextExecutor):
+
+    def __init__(self):
+        self.super().__init__()
+
+    
+    def decide_next(self, message):
+        """
+            This method represent the behaviour of a normal person.
+        """
+
+        rtas = []
+        for sender in message.keys():
+            ult_sender = sender
+
+        rtas.append(message[ult_sender][2]) #Le respone a la ultima persona que le mando un msj
+        
+        return rtas
+
+
+class ContextExecutorBadPerson(IContextExecutor):
+
+    def __init__(self):
+        self.super().__init__()
+
+    
+    def decide_next(self, message):
+        """
+            This method represent the behaviour of a bad person.
+        """
+
+        rtas = []
+        the_chosen_one = rd.randint(0, (len(message)-1))
+        i = 0
+        senders = message.keys()
+        for i in range(the_chosen_one + 1):
+            ult_sender = senders[i]
+
+        rtas.append(message[ult_sender][2]) #Le respone a una persona al azar. Porque le gusta generar quilombo
+        
+        return rtas
         

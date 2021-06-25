@@ -37,5 +37,5 @@ policies:
      epochs: 100
      constrain_similarities: true
    - name: RulePolicy
-   - name: "custom_policies.test_policy.TestPolicy"
+   - name: "custom_policies.developer_policy.DeveloperPolicy"
      priority: 4

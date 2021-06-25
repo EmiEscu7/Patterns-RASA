@@ -206,6 +206,9 @@ responses:
   utter_send_destination:
   - text: "{sender}"
 
+  utter_do_not_interrupt:
+  - text: "{sender} no interrumpas por favor"
+
 actions:
   - action_consultar_estado
 
