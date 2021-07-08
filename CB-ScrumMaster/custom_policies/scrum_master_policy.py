@@ -97,24 +97,39 @@ class ContextManager():
         return self.name
 
     def set_name(self, name):
+        """
+            Este metodo ademas de setear el nombre, llama a la funcion privada _give_context_executor() que genera en base a la personalidad, COMO respondera el bot
+        """
         self.name = name
         self._give_context_executor()
 
     def set_tracker(self, sender_id, tracker: CustomTracker):
+        """
+            Este metodo verifica si el sender_id existe en el diccionario dic_custom_tracker.
+            En caso de que no exista, lo agrega como valor de key. Por ultimo, le asigna a ese sender el tracker pasado por parametro como valor de key
+        """
         if(not self.exist_sender(sender_id)):
             self.add_sender(sender_id)
         self.dic_custom_tracker[sender_id] = tracker
 
     def get_tracker(self, sender) -> CustomTracker:
+        """
+            Retorno el custom tracker asociado al sender pasado por parametro
+        """
         return self.dic_custom_tracker[sender]
 
     def exist_sender(self, sender_id):
-        """ Return True if senders contains sender_id """
+
+        """ 
+            Retorno True si existe el "sender_id" pasado por parametro en el diccionario que tiene los senders y sus custom tracker asociados
+            
+        """
         return sender_id in self.dic_custom_tracker.keys()
            
     
     def add_messege(self, sender_id, bot_predict: UserBotUtteredEvent):
         """
+
             This method save all message that bot recived.
             sender_id: is bot that send message.
             message: is message sended to bot.
@@ -183,29 +198,43 @@ class ScrumMasterPolicy(Policy):
             result = confidence_scores_for(rta, 1.0, domain)
             return self._prediction(result)
         else:
+            #Obtengo el id de la persona que envio el mensaje
             sender_id = tracker.current_state()['sender_id']
-            
+
+            #Obtengo un custom tracker actualizado de la conversacion.
             custom_tracker = self.obtener_tracker(sender_id, tracker)
 
+            #verifico que los slots "sender" y "my_name" hayan sido seteados en el custom tracker. En caso de que no, los seteo.
             if(not self.slots_was_set(custom_tracker, ['sender', 'my_name'])): 
-                self.set_slots(custom_tracker) # esto setea los slots si no estan seteado 
+                self.set_slots(custom_tracker) 
             
+
+            #Ya seteados los valores en el custom tracker, los obtengo.
             my_name = custom_tracker.get_slot('my_name')# name del bot
             sender = custom_tracker.get_slot('sender')# name del bot que envia el mensaje
 
+            #Si soy el destino del mensaje (i_am_destiny) o soy metiche (i_am_nosy), genero una respuesta. En caso contrario, hago un action listen.
             if(self.i_am_destiny(custom_tracker) or (self.i_am_nosy(str(my_name)))):
                 rta = self.generar_mensaje(custom_tracker, my_name)
             else:
                 result = confidence_scores_for('action_listen', 1.0, domain)
                 return self._prediction(result)
-            
+
+
+            #agrego la respuesta que le genero al sender al manejador de contexto
             self.context_manager.add_messege(sender, rta)
         
+            #Agrego al context manager, el sender y el custom tracker generado para ese sender.
             self.context_manager.set_tracker(sender_id, custom_tracker)       
-            tracker.update(custom_tracker.get_latest_event(), domain) # act el tracker que viene como parametro
-            tracker.update(SlotSet("my_name", custom_tracker.get_slot("my_name"))) # for slot in custom_Tracker.slots: tracker.update
+
+            # actualizo el tracker que viene como parametro
+            tracker.update(custom_tracker.get_latest_event(), domain) 
+            # for slot in custom_Tracker.slots: tracker.update
+            tracker.update(SlotSet("my_name", custom_tracker.get_slot("my_name"))) 
+
             tracker.update(SlotSet("sender", custom_tracker.get_slot("sender")))
         
+            #Si es el ulitmo mensaje, retorno la respuesta. Caso contrario hago action listen
             if(self.last_message(custom_tracker)):
                 self.answered = True
                 [rtas, sender_id] = self.decide_context() 
@@ -228,8 +257,15 @@ class ScrumMasterPolicy(Policy):
 
 
     def generar_mensaje(self, custom_tracker: CustomTracker, my_name):
+
+        """
+            Agarro el intent del ultimo mensaje que tiene el custom tracker. En base a mi personalidad busco el estilo del a respuesta y genero una respuesta en base al intent y a la personalidad obtenidas
+
+        """
+
         rta = ''
-        if(custom_tracker.get_latest_message().intent.get(INTENT_NAME_KEY) != "out_of_scope"): #si entendio y dio una rta coherente. CREAR EL INTENT
+        
+        if(custom_tracker.get_latest_message().intent.get(INTENT_NAME_KEY) != "out_of_scope"): 
             style_answer = self.get_style_answer(my_name)
             rta = 'utter'
             intent = custom_tracker.get_latest_message().intent.get(INTENT_NAME_KEY)
@@ -237,6 +273,14 @@ class ScrumMasterPolicy(Policy):
         return rta        
 
     def obtener_tracker(self, sender_id, tracker: DialogueStateTracker):
+
+        """ 
+            Este metodo dado un "sender id" obtiene un custom tracker para esa conversacion. Si esta conversacion ya existia, devuelve el tracker obtenido a partir del context manager, en caso contrario (no habia una conversacion previa con esa persona),se genera un nuevo.
+            Independientemente de lo anterior, se utiliza "tracker" original de la conversacion (no el custom) para actualizar los campos del custom tracker
+
+            Retorna: Un custom tracker actualizado.
+        
+        """
 
         #Si ya habia una conversacion con la persona que tiene ese id, busco el tracker 
         if(self.context_manager.exist_sender(sender_id)):
@@ -259,7 +303,8 @@ class ScrumMasterPolicy(Policy):
 
     def get_flag(self, tracker : CustomTracker):
         """
-            This method return flag value from recived on message.
+            Este metodo retorna el valor del flag recibido en el mensaje
+            
         
         """
         var = tracker.get_latest_message()
@@ -272,7 +317,8 @@ class ScrumMasterPolicy(Policy):
 
     def i_am_destiny(self, tracker: CustomTracker):
         """
-            This method return 1 when the bot is the destiny.
+            Este metodo obtiene la metadata del ultimo mensaje y verifica si este mensaje esta referido para mi
+            Retorna: 1 cuando el bot que lo llama es el destino del mensaje
         """
         var = tracker.get_latest_message()
         metadata = var.get_metadata()
@@ -284,12 +330,15 @@ class ScrumMasterPolicy(Policy):
 
 
     def last_message(self, tracker : CustomTracker):
-        """ Return True when flag is 1. That means is last message """
+        """ 
+            Retorno True cuando el flag es 1. Eso significa que es el ultimo mensaje
+            
+        """
         return self.get_flag(tracker) == 1
 
     def i_am_nosy(self, name) -> bool:  
         """
-            determina si mi personalidad es entrometida para yo responder
+            Determina si mi personalidad es entrometida para yo responder
             cuando no soy el destinatario del input
             Actualmente funciona con el personalities.json que tiene un atributo
             que dice true/false si es nosy o no.
@@ -304,6 +353,12 @@ class ScrumMasterPolicy(Policy):
                 return value
 
     def get_style_answer(self, name) -> Text:  
+        """ 
+            En el archivo personalities.json tenemos todas las personalidades de los TeamBots. Se obtiene la personalidad de "name" (parametro) y luego se genera el estilo de respuesta en base a su personalidad.
+            Se utiliza tambien la funcion get_priority_mood() para darle mas relevancia a un atributo de la personalidad que a otro.
+
+
+        """
         
         with open("personalities.json", "r") as file:
             personality = json.load(file)[name]
@@ -324,7 +379,7 @@ class ScrumMasterPolicy(Policy):
         while (relation > res[i][0]):
             i+=1
 
-        return res[i][1] #esto retorna "_formal" ó "_comun" ó "_informal" segun corresponda con la personality
+        return res[i][1] #esto retorna "_formal" , "_comun" ó "_informal" segun corresponda con la personality
         
 
     def get_priority_mood(self):
@@ -337,12 +392,32 @@ class ScrumMasterPolicy(Policy):
         return [0.35,0.4,0.1,0.05,0.3]
 
     def slots_was_set(self, tracker:CustomTracker, list_slots_to_answer) -> bool:
+        """
+            Dados los slots pasados en la lista "list_slots_to_answer", este metodo verifica que si el tracker pasado por parametro los tiene seteados con algun valor.  
+
+            Nota: El metodo get_slot no es de la clase CustomTracker propia, sino que lo hereda de DialogueStateTracker
+
+            Retorna: - Falso: Hay algun slot sin setear
+                    - True: Todos los slots fueron seteados
+
+        """
         for slot in list_slots_to_answer:
             if(tracker.get_slot(slot) == None):
                 return False        
         return True
 
     def set_slots(self, tracker : CustomTracker):
+        
+        """
+            If you are only interested in the first entity of a given type use next(tracker.get_latest_entity_values(&quot;my_entity_name&quot;), None). If no entity is found None is the default result
+
+            Este metodo obtiene la primer entidad del tipo "name" del tracker original, y la setea en los Slots del tracker y el context manager.En caso de que ya hubiera un nombre seteado previamente en el context manager, lo actualiza.
+
+            Ademas, tambien actualiza el Slot "sender" del tracker
+
+            Retorna: No retorna nada, actualiza los valores del tracker.
+        
+        """
 
         nameTracker = next(tracker.get_latest_entity_values("name"), None)       
         if(nameTracker != None and self.context_manager.get_name() == None):

@@ -46,7 +46,10 @@ from rasa.shared.core.events import BotUttered, Event, UserUttered
 from rasa.shared.core.trackers import DialogueStateTracker
 from rasa.shared.core.slots import Slot
 
-class CustomTracker(DialogueStateTracker):
+class CustomTracker(DialogueStateTracker): 
+    """
+        Este tracker es generado para poder darle aun mas funcionalidad y control al tracker original de RASA, lo cual era necesario para poder lograr interrupciones con exito. Gran parte de los metodos, son metodos propios del DialogueStateTracker, pero algunos como el update_tracker fueron agregados manualmente.
+    """
 
     def __init__(
         self,
@@ -111,6 +114,9 @@ class CustomTracker(DialogueStateTracker):
             self.active_loop = {}
 
     def update_tracker(self, tracker: DialogueStateTracker) -> None:
+        """
+            En base a otro tracker (que hasta ahora siempre fue el tracker original de RASA para esa conversacion), se actualizan los atributos que son importantes para el funcionamiento del mismo.
+        """
         self.set_active_loop(tracker.active_loop)
         self.set_followup_action(tracker.followup_action)
         self.set_latest_action(tracker.latest_action)
