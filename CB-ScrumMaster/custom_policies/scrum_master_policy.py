@@ -1,5 +1,7 @@
 import zlib
 
+import numpy as np
+import pandas as pd
 
 import base64
 import json
@@ -259,16 +261,17 @@ class ScrumMasterPolicy(Policy):
     def generar_mensaje(self, custom_tracker: CustomTracker, my_name):
 
         """
-            Agarro el intent del ultimo mensaje que tiene el custom tracker. En base a mi personalidad busco el estilo del a respuesta y genero una respuesta en base al intent y a la personalidad obtenidas
-
+            Agarro el intent del ultimo mensaje que tiene el custom tracker. 
+            En base a mi personalidad busco el estilo del a respuesta y genero una 
+            respuesta en base al intent y a la personalidad obtenidas
         """
 
         rta = ''
+        intent = custom_tracker.get_latest_message().intent.get(INTENT_NAME_KEY)
         
-        if(custom_tracker.get_latest_message().intent.get(INTENT_NAME_KEY) != "out_of_scope"): 
+        if(intent != "out_of_scope"): 
             style_answer = self.get_style_answer(my_name)
             rta = 'utter'
-            intent = custom_tracker.get_latest_message().intent.get(INTENT_NAME_KEY)
             rta += intent + style_answer
         return rta        
 
@@ -366,30 +369,59 @@ class ScrumMasterPolicy(Policy):
         for key, value in personality.items():
             vector_personalities.append(value)
 
-        priorty_mood = self.get_priority_mood()
 
-        relation = float(0.0)
-        for i in range(4):
-            relation += vector_personalities[i] * priorty_mood[i]
+        vector_personalities = self.transform_dict_to_vector(personality)   
 
-        res = [ [float(0.3), "_formal"], 
-                [float(0.6), "_comun"], 
-                [float(1.0), "_informal"] ]
-        i = 0 
-        while (relation > res[i][0]):
-            i+=1
+        neighbour = self.get_neighbour(vector_personalities) #obtiene el vector + parecido
+        #neighbour = [nro,[numpyArray]]
+        vector = np.take(neighbour, 1)
 
-        return res[i][1] #esto retorna "_formal" , "_comun" ó "_informal" segun corresponda con la personality
+        return np.take(vector, len(vector)-1) #retorna si era "_formal" ó "_comun" ó "_informal"
         
 
-    def get_priority_mood(self):
+    def get_neighbour(self, input) -> np.ndarray:
         """
-            La idea de esta funcion es que un algoritmo de machine learning determine
-            la importancia que se le deba dar a c/u de los parametros que definen el 
-            estado de animo de una persona. Actualmente devolvemos un vector con unos
-            pesos determinados, que modelan los valores esperados del algoritmo
+            Este algoritmo obtiene la distancia entre "vector" y todos los vectores de familia
+            Retorna: Una distancia (mientras mas chica mejor, ya que queremos ver que tan parecidos son a los vectores que tenemos definidos como personalidad)
+             
         """
-        return [0.35,0.4,0.1,0.05,0.3]
+        
+        input_numpy = np.array(input)
+        
+        min_dist_formal = self.compare_to_neighbour(input_numpy, "_formal")
+        min_dist_informal = self.compare_to_neighbour(input_numpy, "_informal")
+        min_dist_comun = self.compare_to_neighbour(input_numpy, "_comun")
+        
+        return (min(min_dist_comun, min_dist_formal, min_dist_informal))
+
+    def compare_to_neighbour(self, vector_input:np.ndarray, neighbour:Text) -> list:
+        
+        dataframe_examples = pd.read_csv(r"examples_personalities.csv",sep=';')
+        min_vector = dataframe_examples.values[0] #el primero del dataframe
+        min_vector_no_string = np.array(np.delete(min_vector,min_vector.size -1))
+        min_dist = 0
+        cant = 0
+
+        for example in dataframe_examples.values: #example = [1,1,1,1,1,STRING]
+            if(str(np.take(example, len(example)-1)) == neighbour):
+                example_no_string = np.delete(example,example.size - 1) #quita el string
+                dist_actual = np.linalg.norm(vector_input-example_no_string)
+                if(min_dist < dist_actual):
+                    min_vector = example
+                min_dist += dist_actual
+                cant += 1
+
+        return [(min_dist/cant), min_vector]
+
+    def transform_dict_to_vector(self, dict):
+        vector = []
+        vector.append(dict["Neuroticism"])
+        vector.append(dict["Extraversion"])
+        vector.append(dict["Openness"])
+        vector.append(dict["Agreeableness"])
+        vector.append(dict["Conscientiousness"])
+
+        return vector
 
     def slots_was_set(self, tracker:CustomTracker, list_slots_to_answer) -> bool:
         """
@@ -427,41 +459,4 @@ class ScrumMasterPolicy(Policy):
             tracker.update(SlotSet("my_name", self.context_manager.get_name()))
             
         sender_id = tracker.current_state()['sender_id']
-        tracker.update(SlotSet("sender",  sender_id))   
-
-      
-    """
-    comentarios de la politica generales y auxiliares
-      result = self._default_predictions(domain)
-      sender_id = tracker.sender_id
-      print("sender ID =" + sender_id2)
-      latest = tracker.latest_message.get('text')
-      print("latest: "+ latest)
-      intent = tracker.latest_message.intent.get(INTENT_NAME_KEY)
-      and intent == 'presentation_user'):
-      nombrev2 = tracker.current_state()['name']
-      print("----> nombrev2" + nombrev2)
-        
-    if (sender != my_name): #si el que envio el mensaje es distinto a mí, debo responder
-        #agg que si el mensaje esta destinado a una persona y yo no soy esa persona, no debería respoder
-        #agg tambien a lo anterior que si soy atrevido y me gusta entrometerme pueda o no meterme en la conversacion
-        if(not self.answered): 
-            if (intent == 'doYouHaveProblem'): #esto es porque un developer puede tener un problema y debe responder como dicta su estilo de animo
-                prox = 'action_tipo' + style_answer 
-                result = confidence_scores_for(prox,1.0,domain)
-            
-            elif(intent == 'agradecimiento'): #esto es para que corte y dejen de hablar, que de una respuesta vacia = ''
-                result = confidence_scores_for('action_listen', 1.0, domain)
-            
-            else:    
-                result = confidence_scores_for(rta, 1.0, domain)
-                
-            self.answered = True
-        
-        else:
-            self.answered = False
-    
-        else:
-            result = confidence_scores_for('action_listen', 1.0, domain)
-            self.answered = True
-    """
+        tracker.update(SlotSet("sender",  sender_id))  
