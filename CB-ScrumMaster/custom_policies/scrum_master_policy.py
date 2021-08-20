@@ -28,13 +28,14 @@ from rasa.shared.core.generator import TrackerWithCachedStates
 from rasa.shared.utils.io import is_logging_disabled
 from rasa.core.constants import MEMOIZATION_POLICY_PRIORITY
 #importaciones nuevas
-from rasa.core.channels.channel import InputChannel #clase que hace l rest. Me va a devolver la metadata
+#from rasa.core.channels.channel import InputChannel #clase que hace l rest. Me va a devolver la metadata
 from rasa.core.policies.policy import confidence_scores_for, PolicyPrediction
 from rasa.shared.nlu.constants import INTENT_NAME_KEY
 from rasa.shared.core.events import SlotSet
 from .custom_tracker import CustomTracker
-from .context_executor import IContextExecutor
+from .context_executor import ContextExecutorGoodPerson, ContextExecutorNormalPerson, ContextExecutorBadPerson
 from .custom_user_bot_uttered import UserBotUttered
+from .rest_custom import RestCustom
 #from .custom_tracker import CustomTracker
 from rasa.shared.nlu.constants import (
     ENTITY_ATTRIBUTE_VALUE,
@@ -78,6 +79,7 @@ class ContextManager():
                                    'ContextExecutorBadPerson']
 
         index = self.give_context_personality()
+        print("PERSONALITY --->" + different_personalities[index])
         
         type = eval(different_personalities[index] + "()")
         
@@ -105,13 +107,21 @@ class ContextManager():
         self.name = name
         self._give_context_executor()
 
+    def add_sender(self, sender_id):
+        """ 
+        Add sender to list senders
+            key: integer
+            value: sender_id
+        """
+        self.senders[len(self.senders)] = sender_id
+
     def set_tracker(self, sender_id, tracker: CustomTracker):
         """
             Este metodo verifica si el sender_id existe en el diccionario dic_custom_tracker.
             En caso de que no exista, lo agrega como valor de key. Por ultimo, le asigna a ese sender el tracker pasado por parametro como valor de key
         """
-        if(not self.exist_sender(sender_id)):
-            self.add_sender(sender_id)
+        #if(not self.exist_sender(sender_id)):
+        #    self.add_sender(sender_id)
         self.dic_custom_tracker[sender_id] = tracker
 
     def get_tracker(self, sender) -> CustomTracker:
@@ -129,7 +139,7 @@ class ContextManager():
         return sender_id in self.dic_custom_tracker.keys()
            
     
-    def add_messege(self, sender_id, bot_predict: UserBotUtteredEvent):
+    def add_messege(self, sender_id, bot_predict: UserBotUttered):
         """
 
             This method save all message that bot recived.
@@ -147,7 +157,7 @@ class ContextManager():
             Ahora sólo elige uno al azar.
         """
 
-        [rta, destiny] = self.context_executor.get_answer(self.dict_msg)
+        [rta, destiny] = self.context_executor.decide_next(self.dict_msg)
         # rta = [bot_destino, msj]. Lo mismo interruption
         return [rta, destiny]
 
@@ -168,6 +178,7 @@ class ScrumMasterPolicy(Policy):
         super().__init__(featurizer, priority, **kwargs)
         self.answered = False
         self.context_manager = ContextManager()
+        self.rtas = []
         
     def train(
         self,
@@ -192,11 +203,12 @@ class ScrumMasterPolicy(Policy):
         interpreter: NaturalLanguageInterpreter,
         **kwargs: Any,
     ) -> PolicyPrediction:        
-        
+        print("SELF.ANSWERED -----------> " + str(self.answered))
         if(self.answered):
-            rta = self.rtas.pop(0)
-            if(len(rta)==0):
+            print("self.rtas -----> " + str(self.rtas))
+            if(len(self.rtas) == 1):
                 self.answered = False
+            rta = self.rtas.pop(0)
             result = confidence_scores_for(rta, 1.0, domain)
             return self._prediction(result)
         else:
@@ -214,6 +226,8 @@ class ScrumMasterPolicy(Policy):
             #Ya seteados los valores en el custom tracker, los obtengo.
             my_name = custom_tracker.get_slot('my_name')# name del bot
             sender = custom_tracker.get_slot('sender')# name del bot que envia el mensaje
+            print("my_name: ", my_name)
+            print("sender: ", sender)
 
             #Si soy el destino del mensaje (i_am_destiny) o soy metiche (i_am_nosy), genero una respuesta. En caso contrario, hago un action listen.
             if(self.i_am_destiny(custom_tracker) or (self.i_am_nosy(str(my_name)))):
@@ -239,8 +253,9 @@ class ScrumMasterPolicy(Policy):
             #Si es el ulitmo mensaje, retorno la respuesta. Caso contrario hago action listen
             if(self.last_message(custom_tracker)):
                 self.answered = True
-                [rtas, sender_id] = self.decide_context() 
-                result = confidence_scores_for(rtas.pop(0), 1.0, domain)
+                [self.rtas, sender_id] = self.context_manager.decide_context() 
+                print("RTAS ----> " + str(self.rtas))
+                result = confidence_scores_for(self.rtas.pop(0), 1.0, domain)
             else:
                 result = confidence_scores_for('action_listen', 1.0, domain)
 
@@ -268,12 +283,13 @@ class ScrumMasterPolicy(Policy):
 
         rta = ''
         intent = custom_tracker.get_latest_message().intent.get(INTENT_NAME_KEY)
-        
+        print("intent: ", intent)
         if(intent != "out_of_scope"): 
             style_answer = self.get_style_answer(my_name)
-            rta = 'utter'
+            rta = 'utter_'
             rta += intent + style_answer
-        return rta        
+        user_bot = UserBotUttered(custom_tracker.get_latest_message(), rta)
+        return user_bot 
 
     def obtener_tracker(self, sender_id, tracker: DialogueStateTracker):
 
@@ -457,6 +473,6 @@ class ScrumMasterPolicy(Policy):
             self.context_manager.set_name(nameTracker)
         else:
             tracker.update(SlotSet("my_name", self.context_manager.get_name()))
-            
+        
         sender_id = tracker.current_state()['sender_id']
-        tracker.update(SlotSet("sender",  sender_id))  
+        tracker.update(SlotSet("sender",  sender_id))   

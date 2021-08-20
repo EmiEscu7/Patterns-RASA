@@ -15,5 +15,6 @@ class RestCustom(RestInput):
         return "rest_custom"
 
     def get_metadata(self, request: Request) -> Optional[Dict[Text, Any]]:
+        #.get("metadata")
         return request.json.get("metadata") or self.name()
     

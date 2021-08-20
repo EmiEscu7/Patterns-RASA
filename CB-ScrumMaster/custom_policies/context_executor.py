@@ -4,8 +4,8 @@ import random as rd
 class IContextExecutor():
 
     def __init__(self):
-        self.answers = ['utter_send_destination', 'action-listen']
-        pass
+        self.answers = ['utter_send_destination', 'action_listen']
+        #pass
 
     def decide_next(self, messages):
         """
@@ -20,7 +20,7 @@ class IContextExecutor():
 class ContextExecutorGoodPerson(IContextExecutor):
 
     def __init__(self):
-        self.super().__init__()
+        IContextExecutor.__init__(self)
 
     
     def decide_next(self, messages):
@@ -28,17 +28,19 @@ class ContextExecutorGoodPerson(IContextExecutor):
             This method represent the behaviour of a good person.
             Currently, this bot answer everyone.
         """
+        rtas = self.answers.copy()
         destinies = []
         for sender in messages.keys():
-            self.answers.insert(0, messages[sender].get_bot_predict())         
-            self.destinies.insert(0, sender)
-        return [self.answers, destinies] #rtas y destino. 
+            rtas.insert(0, messages[sender].get_bot_predict())         
+            destinies.insert(0, sender)
+        print("RESPUESTAS ---> " + str(rtas))
+        return [rtas, destinies] #rtas y destino. 
 
 
 class ContextExecutorNormalPerson(IContextExecutor):
 
     def __init__(self):
-        self.super().__init__()
+        IContextExecutor.__init__(self)
 
     
     def decide_next(self, messages):
@@ -48,16 +50,16 @@ class ContextExecutorNormalPerson(IContextExecutor):
         """
 
         the_chosen_one = list(messages.keys())[-1]
-
-        self.answers.insert(0, messages[the_chosen_one].get_bot_predict()) 
-        
-        return [self.answers, the_chosen_one]
+        rtas = self.answers.copy()
+        rtas.insert(0, messages[the_chosen_one].get_bot_predict()) 
+        print("RESPUESTAS ---> " + str(rtas))
+        return [rtas, the_chosen_one]
 
 
 class ContextExecutorBadPerson(IContextExecutor):
 
     def __init__(self):
-        self.super().__init__()
+        IContextExecutor.__init__(self)
 
     
     def decide_next(self, messages):
@@ -66,12 +68,11 @@ class ContextExecutorBadPerson(IContextExecutor):
             Choose random message
         """
 
-        rtas = []
-        random_select = rd.randint(0, (len(messages)))
+        random_select = rd.randint(0, (len(messages)-1))
         i = 0
-        senders = messages.keys()
+        senders = list(messages.keys())
         the_chosen_one = senders[random_select]
-
+        rtas = self.answers.copy()
         rtas.insert(0, messages[the_chosen_one].get_bot_predict()) #Le respone a una persona al azar. Porque le gusta generar quilombo
-        
+        print("RESPUESTAS ---> " + str(rtas))
         return [rtas, the_chosen_one]

@@ -75,13 +75,13 @@ class CustomTracker(DialogueStateTracker):
     def set_slot(self, key: Text, value: Any) -> None:
         super()._set_slot(key, value)
 
-    def set_paused(self,value):
+    def set_paused(self, value):
         self._paused = value
 
-    def set_followup_action(self,action):
+    def set_followup_action(self, action):
         self.followup_action = action
 
-    def set_latest_action(self,action):
+    def set_latest_action(self, action):
         self.latest_action = action
 
     def add_latest_message(self, msg: Optional[UserUttered]):
@@ -98,6 +98,7 @@ class CustomTracker(DialogueStateTracker):
 
     def set_active_loop(self,loop_name: Optional[Text]):
         self._change_loop_to(loop_name)
+        
     def _change_loop_to(self, loop_name: Optional[Text]) -> None:
         """Set the currently active loop.
         Args:
@@ -112,6 +113,33 @@ class CustomTracker(DialogueStateTracker):
             }
         else:
             self.active_loop = {}
+    
+    def get_latest_entity_values(
+        self,
+        entity_type: Text,
+        entity_role: Optional[Text] = None,
+        entity_group: Optional[Text] = None,
+    ) -> Iterator[Text]:
+        """Get entity values found for the passed entity type and optional role and
+        group in latest message.
+        If you are only interested in the first entity of a given type use
+        `next(tracker.get_latest_entity_values("my_entity_name"), None)`.
+        If no entity is found `None` is the default result.
+        Args:
+            entity_type: the entity type of interest
+            entity_role: optional entity role of interest
+            entity_group: optional entity group of interest
+        Returns:
+            Entity values.
+        """
+        latest_message = self.get_latest_message()
+        return (
+            x.get(ENTITY_ATTRIBUTE_VALUE)
+            for x in latest_message.entities
+            if x.get(ENTITY_ATTRIBUTE_TYPE) == entity_type
+            and x.get(ENTITY_ATTRIBUTE_GROUP) == entity_group
+            and x.get(ENTITY_ATTRIBUTE_ROLE) == entity_role
+        )
 
     def update_tracker(self, tracker: DialogueStateTracker) -> None:
         """

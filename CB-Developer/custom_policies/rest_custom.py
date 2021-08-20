@@ -15,5 +15,10 @@ class RestCustom(RestInput):
         return "rest_custom"
 
     def get_metadata(self, request: Request) -> Optional[Dict[Text, Any]]:
+        #.get("metadata")
+        """metadata = request.json.get("metadata")
+        file = open("metadata.txt", "w")
+        file.write(str(metadata))
+        file.close()"""
         return request.json.get("metadata") or self.name()
     
