@@ -8,7 +8,7 @@ class Bot():
     def __init__(self, name, port, mediator):
         self.name = name
         self.port = port  
-        self.url =  'http://localhost:'+str(port)+'/webhooks/rest/webhook'
+        self.url =  'http://localhost:'+str(port)+'/webhooks/rest_custom/webhook'
         self.mediator = mediator
         if(name != "Scrum Master"):
             self.__instance_chatbot()
@@ -36,7 +36,7 @@ class Bot():
 
     def __instance_chatbot(self):
         #El objetivo de este metodo es instanciar los slots del bot RASA
-        data = {"sender": self.get_name(), "message": "Hola "+self.get_name(), "metadata": { "flag": 1 , "toMe": 1}}
+        data = {"sender": self.get_name(), "message": "Hola "+ self.get_name(), "metadata": { "flag": 1 , "toMe": 1}}
         x = requests.post(self.get_url(), json = data)
  
     def send_message(self, msg, sender, flag=1, toMe=1):

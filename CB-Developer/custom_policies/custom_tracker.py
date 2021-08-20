@@ -46,7 +46,10 @@ from rasa.shared.core.events import BotUttered, Event, UserUttered
 from rasa.shared.core.trackers import DialogueStateTracker
 from rasa.shared.core.slots import Slot
 
-class CustomTracker(DialogueStateTracker):
+class CustomTracker(DialogueStateTracker): 
+    """
+        Este tracker es generado para poder darle aun mas funcionalidad y control al tracker original de RASA, lo cual era necesario para poder lograr interrupciones con exito. Gran parte de los metodos, son metodos propios del DialogueStateTracker, pero algunos como el update_tracker fueron agregados manualmente.
+    """
 
     def __init__(
         self,
@@ -72,13 +75,13 @@ class CustomTracker(DialogueStateTracker):
     def set_slot(self, key: Text, value: Any) -> None:
         super()._set_slot(key, value)
 
-    def set_paused(self,value):
+    def set_paused(self, value):
         self._paused = value
 
-    def set_followup_action(self,action):
+    def set_followup_action(self, action):
         self.followup_action = action
 
-    def set_latest_action(self,action):
+    def set_latest_action(self, action):
         self.latest_action = action
 
     def add_latest_message(self, msg: Optional[UserUttered]):
@@ -95,6 +98,7 @@ class CustomTracker(DialogueStateTracker):
 
     def set_active_loop(self,loop_name: Optional[Text]):
         self._change_loop_to(loop_name)
+        
     def _change_loop_to(self, loop_name: Optional[Text]) -> None:
         """Set the currently active loop.
         Args:
@@ -109,7 +113,7 @@ class CustomTracker(DialogueStateTracker):
             }
         else:
             self.active_loop = {}
-
+    
     def get_latest_entity_values(
         self,
         entity_type: Text,
@@ -118,16 +122,13 @@ class CustomTracker(DialogueStateTracker):
     ) -> Iterator[Text]:
         """Get entity values found for the passed entity type and optional role and
         group in latest message.
-
         If you are only interested in the first entity of a given type use
         `next(tracker.get_latest_entity_values("my_entity_name"), None)`.
         If no entity is found `None` is the default result.
-
         Args:
             entity_type: the entity type of interest
             entity_role: optional entity role of interest
             entity_group: optional entity group of interest
-
         Returns:
             Entity values.
         """
@@ -141,6 +142,9 @@ class CustomTracker(DialogueStateTracker):
         )
 
     def update_tracker(self, tracker: DialogueStateTracker) -> None:
+        """
+            En base a otro tracker (que hasta ahora siempre fue el tracker original de RASA para esa conversacion), se actualizan los atributos que son importantes para el funcionamiento del mismo.
+        """
         self.set_active_loop(tracker.active_loop)
         self.set_followup_action(tracker.followup_action)
         self.set_latest_action(tracker.latest_action)

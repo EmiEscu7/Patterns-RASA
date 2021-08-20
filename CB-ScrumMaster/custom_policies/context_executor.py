@@ -1,37 +1,78 @@
+import random as rd
 
 
+class IContextExecutor():
 
-class ContexExecutor():
+    def __init__(self):
+        self.answers = ['utter_send_destination', 'action_listen']
+        #pass
 
-    def __init__(self, patienece):
-        self.patienece = patienece
-        self.interruptions = {} #dict que va a contener el bot como key, y la cantidad de interrupciones que hizo
+    def decide_next(self, messages):
+        """
+            This method will decide the next answer
+            Depending on the type of context executor
+            message args is a dict where the key is a sender and 
+            the value is UserBotUttered object
+        """
+        pass
+
+
+class ContextExecutorGoodPerson(IContextExecutor):
+
+    def __init__(self):
+        IContextExecutor.__init__(self)
 
     
-    def there_is_interruption(self, bot) -> None:
-        if(bot in self.interruptions):
-            self.interruptions[bot] += 1
-        else:
-            self.interruptions[bot] = 1
+    def decide_next(self, messages):
+        """
+            This method represent the behaviour of a good person.
+            Currently, this bot answer everyone.
+        """
+        rtas = self.answers.copy()
+        destinies = []
+        for sender in messages.keys():
+            rtas.insert(0, messages[sender].get_bot_predict())         
+            destinies.insert(0, sender)
+        print("RESPUESTAS ---> " + str(rtas))
+        return [rtas, destinies] #rtas y destino. 
 
-    def exhausted(self):
-        # FALTARIA FIJARSE SI ES UNA INTERRUPCION DE MOLESTO 
-        # O UNA QUE TIENE SENTIDO Y APORTA A LA CONVERSACION
-        for bot, value in self.interruptions.items():
-            if(not value < self.personality["paciencia"]):
-                return [True, bot]
-        return [False, None]
 
-    def get_answer(self, answers, destiny):
-        exh = self.exhausted
-        rta_interurp = None
-        if(exh[0]):
-            rta_interurp = ["utter_do_not_interrupt", exh[1]]
-            self.interruptions = {} #elimino todas las interrupciones. 
-                                    #PODRIA SER QUE NO, YA QUE NORMALEMNTE ES ACUMULATIVO. 
-                                    #PERO DE TESTEO ESTO VA BIEN
-        #### DEVUELVO LA RTA QUE ME DIO EL BOT DESTINO
-        rta_destiny = answers[destiny]
-        return [rta_destiny, rta_interurp]
-        
-        
+class ContextExecutorNormalPerson(IContextExecutor):
+
+    def __init__(self):
+        IContextExecutor.__init__(self)
+
+    
+    def decide_next(self, messages):
+        """
+            This method represent the behaviour of a normal person.
+            The bot that is normal, responds the last message that recieve
+        """
+
+        the_chosen_one = list(messages.keys())[-1]
+        rtas = self.answers.copy()
+        rtas.insert(0, messages[the_chosen_one].get_bot_predict()) 
+        print("RESPUESTAS ---> " + str(rtas))
+        return [rtas, the_chosen_one]
+
+
+class ContextExecutorBadPerson(IContextExecutor):
+
+    def __init__(self):
+        IContextExecutor.__init__(self)
+
+    
+    def decide_next(self, messages):
+        """
+            This method represent the behaviour of a bad person.
+            Choose random message
+        """
+
+        random_select = rd.randint(0, (len(messages)-1))
+        i = 0
+        senders = list(messages.keys())
+        the_chosen_one = senders[random_select]
+        rtas = self.answers.copy()
+        rtas.insert(0, messages[the_chosen_one].get_bot_predict()) #Le respone a una persona al azar. Porque le gusta generar quilombo
+        print("RESPUESTAS ---> " + str(rtas))
+        return [rtas, the_chosen_one]
